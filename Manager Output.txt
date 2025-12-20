@@ -1,0 +1,87 @@
+
+Enter username:
+janesmith
+Enter password:
+password456
+Manager has 2000 credits!
+Manager Credits reset to 2000
+
+---- Booking System Menu ----
+1. Admin Menu
+2. Manager Menu
+3. Member Menu
+4. Exit
+Choose your option: 2
+
+---- Manager Menu ----
+1. View All Rooms
+2. View All Amenities
+3. Book Meeting with Default Room
+4. Book Meeting with Custom Room
+5. View All Meetings
+6. Back to Main Menu
+Choose your option: 1
+Room{id=1, name='Conference Room A', seatingCapacity=10}
+Room{id=2, name='Conference Room B', seatingCapacity=20}
+Room{id=3, name='Executive Room', seatingCapacity=5}
+Room{id=4, name='Andromeda', seatingCapacity=26}
+
+---- Manager Menu ----
+1. View All Rooms
+2. View All Amenities
+3. Book Meeting with Default Room
+4. Book Meeting with Custom Room
+5. View All Meetings
+6. Back to Main Menu
+Choose your option: 2
+Amenity{id=1, name='Projector', cost=10}
+Amenity{id=2, name='Whiteboard', cost=5}
+Amenity{id=3, name='Coffee Machine', cost=15}
+Amenity{id=4, name='Video Conferencing', cost=25}
+
+---- Manager Menu ----
+1. View All Rooms
+2. View All Amenities
+3. Book Meeting with Default Room
+4. Book Meeting with Custom Room
+5. View All Meetings
+6. Back to Main Menu
+Choose your option: 3
+Enter Meeting ID:
+4
+Enter Room ID:
+4
+Enter date and time (yyyy-MM-dd HH:mm:ss) :
+2024-09-03 14:35:00
+Enter date and time (yyyy-MM-dd HH:mm:ss) :
+2024-09-03 15:35:00
+Choose Default Room Option:
+CLASSROOM_TRAINING - Whiteboard, Projector - 10 credits
+ONLINE_TRAINING - Wifi, Projector - 15 credits
+CONFERENCE_CALL - Conference Call - 15 credits
+BUSINESS_CALL - Projector - 5 credits
+BUSINESS_CALL
+Credits updated successfully.
+Meeting booked successfully with default room: BUSINESS_CALL. Total cost: 5 credits. Remaining credits: 1995
+
+---- Manager Menu ----
+1. View All Rooms
+2. View All Amenities
+3. Book Meeting with Default Room
+4. Book Meeting with Custom Room
+5. View All Meetings
+6. Back to Main Menu
+Choose your option: 5
+Meeting{id=1, roomId=1, managerId=2, startTime=2024-08-20 09:00:00.0, endTime=2024-08-20 10:00:00.0, status='Scheduled'}
+Meeting{id=2, roomId=2, managerId=2, startTime=2024-08-21 14:00:00.0, endTime=2024-08-21 15:30:00.0, status='Scheduled'}
+Meeting{id=3, roomId=3, managerId=2, startTime=2024-08-22 11:00:00.0, endTime=2024-08-22 12:00:00.0, status='Scheduled'}
+Meeting{id=4, roomId=4, managerId=2, startTime=2024-09-03 14:35:00.0, endTime=2024-09-03 15:35:00.0, status='Scheduled'}
+
+---- Manager Menu ----
+1. View All Rooms
+2. View All Amenities
+3. Book Meeting with Default Room
+4. Book Meeting with Custom Room
+5. View All Meetings
+6. Back to Main Menu
+Choose your option: 6
