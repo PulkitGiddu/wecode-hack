@@ -1,0 +1,310 @@
+/* The sidebar menu */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1040;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    
+}
+
+/* .hero{
+    background-image: url("./../assets/img/bgimg2.jpg");
+    background-repeat: no-repeat;
+    background-size: 80vw 80vh;
+    height: 100vh;
+    background-position: 10vw 10vw;
+} */
+
+/* Sidebar links */
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+/* Sidebar links on hover */
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* The "open" button */
+.navbar-toggler-icon {
+    cursor: pointer;
+}
+
+/* loader */
+#myloader{
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Style page content - use this if you want content to be on the same line as the sidebar when opened */
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+    /* height: 20px; */
+    /* background-image: url("./../assets/img/backgroundimages.jpeg");
+    background-repeat: no-repeat; */
+    /* background-attachment: fixed; */
+    /* background-position: center;
+    background-size: 100vw 100vh; */
+}
+
+#main2{
+    /* position: absolute;
+    top: 0px; */
+    height: 70px;
+    /* height: 20px; */
+    transition: margin-left .5s;
+    padding: 16px;
+    /* position: relative; */
+}
+
+.giveTextColorBluish{
+    color: rgb(11, 53, 88);
+}
+
+.customeLoginBtn{
+    color: white;
+    /* background-color: rgb(11, 53, 88); */
+    background: rgba(11, 53, 88);
+    border-color: rgb(11, 53, 88);
+}
+
+.customeLoginBtn:hover{
+    color: white;
+    /* background-color: rgb(11, 53, 88); */
+    background: rgba(11, 53, 88);
+    border-color: rgba(11, 53, 88);
+}
+
+.customeLoginBtn2{
+    color: black;
+    /* background-color: rgb(11, 53, 88); */
+    background: transparent;
+    border-color: rgb(11, 53, 88);
+    width: 50%;
+    border-radius: 30px;
+}
+
+.customeLoginBtn2:hover{
+    color: #ffffff;
+    /* background-color: rgb(11, 53, 88); */
+    background: rgb(11, 53, 88);
+    border-color: rgb(11, 53, 88);
+}
+
+.giveCardStyle{
+    /* background: #261739; */
+    background: #fff5f5;
+    /* padding: 40px 40px; */
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    /* width: 30%; */
+}
+
+.giveCardStyle::before{
+    content: "";
+    /* background: #322048; */
+    background: #ffdbdb;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    border-radius: 50%;
+    right: -20%;
+    top: -30%;
+    z-index: -1;
+}
+
+.giveCardStyle:hover, .giveCardStyle2:hover, .giveCardStyle3:hover, .giveCardStyle4:hover{
+    transform: scale(1.1);
+    transition-duration: 0.51s;
+    transition-timing-function: ease-out;
+}
+
+
+.giveCardStyle2{
+    /* background: #261739; */
+    background: #f0f9ff;
+    /* padding: 40px 40px; */
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    /* width: 30%; */
+}
+
+.giveCardStyle2::before{
+    content: "";
+    /* background: #322048; */
+    background: #d0ecff;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    border-radius: 50%;
+    right: -20%;
+    top: -30%;
+    z-index: -1;
+}
+.giveCardStyle3{
+    /* background: #261739; */
+    background: #fff9e6;
+    /* padding: 40px 40px; */
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    /* width: 30%; */
+}
+
+.giveCardStyle3::before{
+    content: "";
+    /* background: #322048; */
+    background: #feefbe;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    border-radius: 50%;
+    right: -20%;
+    top: -30%;
+    z-index: -1;
+}
+
+.giveCardStyle4{
+    /* background: #261739; */
+    background: #f3ffe6;
+    /* padding: 40px 40px; */
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    /* width: 30%; */
+}
+
+.giveCardStyle4::before{
+    content: "";
+    /* background: #322048; */
+    background: #d9ffb1;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    border-radius: 50%;
+    right: -20%;
+    top: -30%;
+    z-index: -1;
+}
+
+
+/* .changeColorOnHover{
+    color: rgb(0, 0, 0) !important;
+}
+.changeColorOnHover:hover{
+    color: #0003a9 !important;
+} */
+
+/* giving bg image */
+.givebg{
+    /* position: fixed; */
+    /* top: 20px; */
+    /* position: absolute;
+    top: 70px; */
+    height: calc(100vh - 70px);
+    /* height: 100vh; */
+    width: 100vw;
+    display: flex;
+    /* background-image: url("./../assets/img/jhj15.jpg"); */
+    background-image: url("./../assets/img/hhyttr\ 9.jpg");
+
+    background-size: 100vw 100vh;
+
+}
+
+.vector1style{
+    width: 100%;
+    height: 100%;
+}
+
+
+footer {
+    background: #222;
+    color: #fff;
+    width: 100vw;
+}
+
+footer h5 {
+    color: #fff;
+    font-weight: bold;
+}
+
+footer a {
+    color: #bbb;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #fff;
+}
+
+footer .list-inline-item .btn {
+    border-radius: 50%;
+    color: #fff;
+    border-color: #fff;
+}
+
+footer .list-inline-item .btn:hover {
+    color: #fff;
+    background-color: #666;
+}
+
+
+/* # below css for  */
+header {
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030; /* Ensures the header stays on top of other content */
+    border-bottom: 1px solid #ccc; /* Optional: adds a bottom border to the header */
+}
+
+.container-fluid {
+    max-width: 100%;
+    padding: 0 20px; /* Adjust padding as necessary */
+}
+
+.navbar-brand {
+    margin-right: auto;
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.navbar-toggler {
+    margin-left: auto;
+}
+
+@media (min-width: 992px) {
+    .navbar-toggler {
+        display: none; /* Hide the toggle button on larger screens */
+    }
+}

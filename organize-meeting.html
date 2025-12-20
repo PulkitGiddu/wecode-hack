@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- favicon cdn -->
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+    <link rel="stylesheet" href="./css/homepage.css">
+
+
+    <title>Organize Meeting </title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .mandatory-amenities {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar bg-light">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <!-- <a href="homepage.html">Products</a>
+        <a href="homepage.html">Solutions</a>
+        <a href="homepage.html">Pricing</a>
+        <a href="homepage.html">Resources</a>
+        <a href="homepage.html">Company</a>
+        <a href="homepage.html">Contact Us</a> -->
+        <a href="homepage.html">Main Page</a>
+        <a href="manager-dashboard.html">Manager Dashboard</a>
+        <a href="homepage.html#highlights">Highlights</a>
+        <a href="homepage.html#working">See Working</a>
+        <a href="homepage.html#features">Features</a>
+    </div>  
+
+    <!-- Main content -->
+    <div id="main">
+        <!-- Header Section -->
+        <header class="bg-light py-2 w-100 position-fixed">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
+                    <a class="navbar-brand me-auto" href="./homepage.html">
+                        <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
+                            <li class="nav-item"><a class="nav-link" href="manager-dashboard.html">Manager Dashboard</a></li>
+                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
+                            <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>   
+    </div>  
+<!-- Main content -->
+<div id="main">
+    <!-- Organize Meeting Content -->
+    <section class="organize-meeting py-5 my-3">
+        <div class="container">
+            <h2 class="text-center mb-4">Organize Meeting</h2>
+            <form id="organizeMeetingForm">
+                <div class="mb-3">
+                    <label for="meetingTitle" class="form-label">Meeting Title</label>
+                    <input type="text" class="form-control" id="meetingTitle" required>
+                </div>
+                <div class="mb-3">
+                    <label for="meetingDate" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="meetingDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="meetingTime" class="form-label">Time</label>
+                    <input type="time" class="form-control" id="meetingTime" required>
+                </div>
+                <div class="mb-3">
+                    <label for="meetingDuration" class="form-label">Duration (hours)</label>
+                    <input type="number" class="form-control" id="meetingDuration" min="1" required>
+                </div>
+                <div class="mb-3">
+                    <label for="roomSelection" class="form-label">Select Room</label>
+                    <select class="form-select" id="roomSelection" required>
+                        <option value="Room 1">Room 1</option>
+                        <option value="Room 2">Room 2</option>
+                        <option value="Room 3">Room 3</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="meetingType" class="form-label">Meeting Type</label>
+                    <select class="form-select" id="meetingType" required>
+                        <option value="">Select Meeting Type</option>
+                        <option value="Classroom Training">Classroom Training</option>
+                        <option value="Online Training">Online Training</option>
+                        <option value="Business Call">Business Call</option>
+                        <option value="Conference Call">Conference Call</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Amenities</label><br>
+                    <input type="checkbox" id="wifi" value="WiFi">
+                    <label for="wifi">WiFi</label><br>
+                    <input type="checkbox" id="conferenceCallFacility" value="Conference Call Facility">
+                    <label for="conferenceCallFacility">Conference Call Facility</label><br>
+                    <input type="checkbox" id="waterDispenser" value="Water Dispenser">
+                    <label for="waterDispenser">Water Dispenser</label><br>
+                    <input type="checkbox" id="tv" value="TV">
+                    <label for="tv">TV</label><br>
+                    <input type="checkbox" id="coffeeMachine" value="Coffee Machine">
+                    <label for="coffeeMachine">Coffee Machine</label><br>
+                    <input type="checkbox" id="whiteboard" value="Whiteboard">
+                    <label for="whiteboard">Whiteboard</label><br>
+                    <input type="checkbox" id="projector" value="Projector">
+                    <label for="projector">Projector</label>
+                </div>
+                <div class="mb-3">
+                    <label for="seatingCapacity" class="form-label">Seating Capacity</label>
+                    <input type="number" class="form-control" id="seatingCapacity" min="1" required>
+                </div>
+                <div id="creditWarning" class="alert alert-warning d-none">
+                    <p>Insufficient credits. Please adjust your booking or contact support.</p>
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="window.location.href = 'manager-dashboard.html';" >Book</button>
+            </form>
+        </div>
+    </section>
+</div>
+    <!-- Footer Section -->
+    <footer class="bg-dark text-light pt-2">
+        <div class="container text-center text-md-left">
+
+            <!-- Legal Links and Social Media Icons -->
+            <div class="row align-items-center">
+                <!-- Legal Links -->
+                <div class="col-md-7 col-lg-8">
+                    <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
+                        <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
+                        <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
+                        <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
+                    </p>
+                </div>
+
+                <!-- Social Media Icons -->
+                <div class="col-md-5 col-lg-4">
+                    <div class="text-center text-md-right">
+                        <ul class="list-unstyled list-inline">
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-facebook-f"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-twitter"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-linkedin-in"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-instagram"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('meetingType').addEventListener('change', function() {
+            const meetingType = this.value;
+            const amenities = {
+                'Classroom Training': ['whiteboard', 'projector'],
+                'Online Training': ['wifi', 'projector'],
+                'Business Call': ['projector'],
+                'Conference Call': ['conferenceCallFacility']
+            };
+
+            // Clear all amenities checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.disabled = false;
+            });
+
+            if (meetingType) {
+                // Get mandatory amenities based on meeting type
+                const mandatoryAmenities = amenities[meetingType] || [];
+                
+                // Automatically select mandatory amenities and disable them
+                mandatoryAmenities.forEach(amenity => {
+                    document.getElementById(amenity).checked = true;
+                    document.getElementById(amenity).disabled = true;
+                });
+            }
+        });
+
+        document.getElementById('organizeMeetingForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Initial credits
+        let userCredits = 2000;
+        
+        // Credit values for amenities
+        const creditValues = {
+            'WiFi': 10,
+            'Conference Call Facility': 15,
+            'Water Dispenser': 5,
+            'TV': 10,
+            'Coffee Machine': 10,
+            'Whiteboard': 5,
+            'Projector': 5
+        };
+        
+        // Meeting duration and credits calculation
+        const meetingDuration = parseInt(document.getElementById('meetingDuration').value);
+        const creditsForDuration = meetingDuration * 2; // Example calculation
+
+        // Calculate total credits required for the meeting
+        let creditsRequired = creditsForDuration;
+        const meetingType = document.getElementById('meetingType').value;
+        const amenities = {
+            'Classroom Training': ['Whiteboard', 'Projector'],
+            'Online Training': ['WiFi', 'Projector'],
+            'Business Call': ['Projector'],
+            'Conference Call': ['Conference Call Facility']
+        };
+
+        // Calculate credits for selected amenities
+        const selectedAmenities = [];
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+            selectedAmenities.push(checkbox.value);
+        });
+        
+        selectedAmenities.forEach(amenity => {
+            if (creditValues[amenity]) {
+                creditsRequired += creditValues[amenity];
+            }
+        });
+
+        const seatingCapacity = parseInt(document.getElementById('seatingCapacity').value);
+        if(seatingCapacity>10){
+            creditsRequired+=20;
+        }
+        else if (seatingCapacity>5 && seatingCapacity<=10){
+            creditsRequired+=10;
+        }
+
+        // Calculate credits used
+        const creditsUsed = creditsRequired;
+
+        // Check if user has sufficient credits
+        if (userCredits < creditsUsed) {
+            document.getElementById('creditWarning').classList.remove('d-none');
+            return;
+        }
+        
+        // Update available credits
+        userCredits -= creditsUsed;
+
+        // Hide warning and show success message
+        document.getElementById('creditWarning').classList.add('d-none');
+        
+        // Show booking success message with credits used and available credits
+        alert(`Meeting booked successfully!\nCredits Used: ${creditsUsed}\nAvailable Credits: ${userCredits}`);
+    });
+    </script>
+    <script>
+        feather.replace();
+    </script>
+
+    <!-- js for bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- custom js file import -->
+    <script src="./js/homepage.js"></script>
+
+    <!-- fontawsome  -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        function logout() {
+            window.location.href = 'homepage.html';
+        }
+    </script>
+
+</body>
+</html>

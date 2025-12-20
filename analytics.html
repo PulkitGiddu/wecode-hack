@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- favicon cdn -->
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+    <link rel="stylesheet" href="./css/homepage.css">
+
+
+    <title>View Analytics </title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar bg-light">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <!-- <a href="homepage.html">Products</a>
+        <a href="homepage.html">Solutions</a>
+        <a href="homepage.html">Pricing</a>
+        <a href="homepage.html">Resources</a>
+        <a href="homepage.html">Company</a>
+        <a href="homepage.html">Contact Us</a> -->
+        <a href="homepage.html">Main Page</a>
+        <a href="manager-dashboard.html">Manager Dashboard</a>
+        <a href="homepage.html#highlights">Highlights</a>
+        <a href="homepage.html#working">See Working</a>
+        <a href="homepage.html#features">Features</a>
+    </div> 
+    <!-- Main content -->
+    <div id="main">
+        <!-- Header Section -->
+        <header class="bg-light py-2 w-100 position-fixed">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
+                    <a class="navbar-brand me-auto" href="./homepage.html">
+                        <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
+                            <li class="nav-item"><a class="nav-link" href="manager-dashboard.html">Manager Dashboard</a></li>
+                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
+                            <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>   
+    </div>
+    <div class="container py-5 my-5">
+        <h2>View Analytics</h2>
+        <form id="viewAnalyticsForm">
+            <div class="mb-3">
+                <label for="analyticsRoom" class="form-label">Select Room</label>
+                <select class="form-select" id="analyticsRoom">
+                    <option value="Room 1">Room 1</option>
+                    <option value="Room 2">Room 2</option>
+                    <option value="Room 3">Room 3</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">View Analytics</button>
+        </form>
+
+        <!-- Analytics Data Section -->
+        <div id="analyticsData" class="mt-4" style="display: none;">
+            <h3>Analytics Data</h3>
+            <div id="dataContent">
+                <!-- Data will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <a href="manager-dashboard.html" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    </div>
+    <!-- Footer Section -->
+    <footer class="bg-dark text-light pt-2 position-fixed fixed-bottom">
+        <div class="container text-center text-md-left">
+
+            <!-- Legal Links and Social Media Icons -->
+            <div class="row align-items-center">
+                <!-- Legal Links -->
+                <div class="col-md-7 col-lg-8">
+                    <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
+                        <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
+                        <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
+                        <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
+                    </p>
+                </div>
+
+                <!-- Social Media Icons -->
+                <div class="col-md-5 col-lg-4">
+                    <div class="text-center text-md-right">
+                        <ul class="list-unstyled list-inline">
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-facebook-f"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-twitter"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-linkedin-in"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-instagram"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        const analyticsData = {
+            "Room 1": {
+                "Occupancy Rate": "85%",
+                "Average Booking Duration": "1.5 hours",
+                "Total Bookings": "120"
+            },
+            "Room 2": {
+                "Occupancy Rate": "75%",
+                "Average Booking Duration": "2 hours",
+                "Total Bookings": "95"
+            },
+            "Room 3": {
+                "Occupancy Rate": "90%",
+                "Average Booking Duration": "1 hour",
+                "Total Bookings": "150"
+            }
+        };
+
+        document.getElementById('viewAnalyticsForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const selectedRoom = document.getElementById('analyticsRoom').value;
+            const data = analyticsData[selectedRoom];
+            
+            let dataContent = `<h4>Data for ${selectedRoom}</h4>
+                <ul class="list-group">`;
+            
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    dataContent += `<li class="list-group-item">${key}: ${data[key]}</li>`;
+                }
+            }
+            
+            dataContent += `</ul>`;
+            
+            document.getElementById('dataContent').innerHTML = dataContent;
+            document.getElementById('analyticsData').style.display = 'block';
+        });
+    </script>
+    <script>
+        feather.replace();
+    </script>
+
+<script>
+    function logout() {
+        window.location.href = 'homepage.html';
+    }
+</script>
+
+    <!-- js for bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- custom js file import -->
+    <script src="./js/homepage.js"></script>
+
+    <!-- fontawsome  -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

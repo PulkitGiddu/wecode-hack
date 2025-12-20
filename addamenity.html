@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- title -->
+    <title>Admin Dashboard - Add Amenities</title>
+
+    <!-- favicon cdn -->
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+
+    <!-- bootstrap css cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- custome css -->
+    <link rel="stylesheet" href="./css/addamenity.css">
+    <!-- <link rel="stylesheet" href="./css/homepage.css"> -->
+
+    <!-- featherly icons cdn -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+</head>
+<body>
+    
+
+    <!-- loader -->
+    <div id="myloader" class="preloader">
+        <img id="myloader" class="preloader-image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHN0eWxlPSItLWFuaW1hdGlvbi1zdGF0ZTogcnVubmluZzsiPgo8c3R5bGU+CiAgICAgICAgOnJvb3QgewogICAgICAgICAgLS1hbmltYXRpb24tc3RhdGU6IHBhdXNlZDsKICAgICAgICB9CgogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgd2hlcmUgdGhlICJyZWd1bGFyIiBzY2hlbWUgaXMgZGFyayAqLwogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgYSBsaWdodCBzY2hlbWUgYW5kIGFsc28gZW5hYmxlZCBhIGRhcmsgc2NoZW1lICovCgogICAgICAgIC8qIGRlYWwgd2l0aCBsaWdodCBzY2hlbWUgZmlyc3QgKi8KICAgICAgICBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBsaWdodCkgewogICAgICAgICAgOnJvb3QgewogICAgICAgICAgICAtLXByaW1hcnk6ICMwMDAwMDA7CiAgICAgICAgICAgIC0tc2Vjb25kYXJ5OiAjZmZmZmZmOwogICAgICAgICAgICAtLXRlcnRpYXJ5OiAjMzM2OUZGOwogICAgICAgICAgICAtLWhpZ2hsaWdodDogIzMzNjlGRjsKICAgICAgICAgICAgLS1zdWNjZXNzOiAjM2Q4NTRkOwogICAgICAgICAgfQogICAgICAgIH0KCiAgICAgICAgLyogdGhlbiBkZWFsIHdpdGggZGFyayBzY2hlbWUgKi8KICAgICAgICBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSB7CiAgICAgICAgICA6cm9vdCB7CiAgICAgICAgICAgIC0tcHJpbWFyeTogIzAwMDAwMDsKICAgICAgICAgICAgLS1zZWNvbmRhcnk6ICNmZmZmZmY7CiAgICAgICAgICAgIC0tdGVydGlhcnk6ICMzMzY5RkY7CiAgICAgICAgICAgIC0taGlnaGxpZ2h0OiAjMzM2OUZGOwogICAgICAgICAgICAtLXN1Y2Nlc3M6ICMzZDg1NGQ7CiAgICAgICAgICB9CiAgICAgICAgfQoKICAgICAgICAvKiB0aGVzZSBzdHlsZXMgbmVlZCB0byBsaXZlIGhlcmUgYmVjYXVzZSB0aGUgU1ZHIGhhcyBhIGRpZmZlcmVudCBzY29wZSAqLwogICAgICAgIC5kb3RzIHsKICAgICAgICAgIGFuaW1hdGlvbi1uYW1lOiBsb2FkZXI7CiAgICAgICAgICBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBlYXNlLWluLW91dDsKICAgICAgICAgIGFuaW1hdGlvbi1kdXJhdGlvbjogM3M7CiAgICAgICAgICBhbmltYXRpb24taXRlcmF0aW9uLWNvdW50OiBpbmZpbml0ZTsKICAgICAgICAgIGFuaW1hdGlvbi1wbGF5LXN0YXRlOiB2YXIoLS1hbmltYXRpb24tc3RhdGUpOwogICAgICAgICAgc3Ryb2tlOiAjZmZmOwogICAgICAgICAgc3Ryb2tlLXdpZHRoOiAwLjVweDsKICAgICAgICAgIHRyYW5zZm9ybS1vcmlnaW46IGNlbnRlcjsKICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICByOiBtYXgoMXZ3LCAxMXB4KTsKICAgICAgICAgIGN5OiA1MCU7CiAgICAgICAgICBmaWx0ZXI6IHNhdHVyYXRlKDIpIG9wYWNpdHkoMC44NSk7CiAgICAgICAgICBmaWxsOiB2YXIoLS10ZXJ0aWFyeSk7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoMikgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjE1czsKICAgICAgICB9CgogICAgICAgIC5kb3RzOm50aC1jaGlsZCgzKSB7CiAgICAgICAgICBhbmltYXRpb24tZGVsYXk6IDAuM3M7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoNCkgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjQ1czsKICAgICAgICB9CgogICAgICAgIC5kb3RzOm50aC1jaGlsZCg1KSB7CiAgICAgICAgICBhbmltYXRpb24tZGVsYXk6IDAuNnM7CiAgICAgICAgfQoKICAgICAgICBAa2V5ZnJhbWVzIGxvYWRlciB7CiAgICAgICAgICAwJSB7CiAgICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICAgIHRyYW5zZm9ybTogc2NhbGUoMSk7CiAgICAgICAgICB9CiAgICAgICAgICA0NSUgewogICAgICAgICAgICBvcGFjaXR5OiAxOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDAuNyk7CiAgICAgICAgICB9CiAgICAgICAgICA2NSUgewogICAgICAgICAgICBvcGFjaXR5OiAxOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDAuNyk7CiAgICAgICAgICB9CiAgICAgICAgICAxMDAlIHsKICAgICAgICAgICAgb3BhY2l0eTogMDsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgxKTsKICAgICAgICAgIH0KICAgICAgICB9CiAgICAgIDwvc3R5bGU+CjxnIGNsYXNzPSJjb250YWluZXIiPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iMzB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNDB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNTB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNjB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNzB2dyIvPgo8L2c+Cjwvc3ZnPg==" alt="Stape Community">
+    </div>
+
+    <!-- Sidebar -->
+    <!-- <div id="mySidebar" class="sidebar bg-light">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="homepage.html">Main Page</a>
+        <a href="homepage.html#highlights">Highlights</a>
+        <a href="homepage.html#working">See Working</a>
+        <a href="homepage.html#features">Features</a>
+    </div>  -->
+
+
+    <!-- Main content -->
+    <div id="main">
+        <!-- Header Section -->
+        <header class="bg-light py-2 w-100">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
+                    <a class="navbar-brand me-auto" href="./homepage.html">
+                        <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
+                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
+                            <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
+                            <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>  
+
+
+        <!-- Admin Dashboard Layout -->
+        <div class="d-flex">
+            <!-- Sidebar -->
+            <div id="sidebar" class="bg-dark text-light p-3">
+                <h4>Admin Dashboard</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <button class="nav-link text-light" onclick="window.location.href='admindashboard.html';" data-toggle="tooltip" data-placement="right" title="Admin Dashboard" >Dashboard</button>
+                    </li>   
+                </ul>
+            </div>
+            <!-- Main Content Area -->
+            <div id="content" class="p-4 min-vh-100">
+                <div class="container">
+
+                    
+                    <div class="mb-4">
+                        <h3>Add an amenity</h3>
+
+                            
+                        <!-- select amenity to remove -->
+                        <div class="mb-3">
+                            <label for="selectRoom" class="form-label">Add an Amenity</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Enter Amenity Name" disabled>
+                                <input type="text" value="" class="form-control" placeholder="Enter Amenity Name" required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Enter Credits" disabled>
+                                <input type="number" value="0" min="0" class="form-control" placeholder="Enter Credits" required>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="addAmenity()" data-toggle="modal" data-target="#exampleModal">Add Amenity</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-light pt-2 position-fixed fixed-bottom">
+        <div class="container text-center text-md-left">
+
+            <!-- Legal Links and Social Media Icons -->
+            <div class="row align-items-center">
+                <!-- Legal Links -->
+                <div class="col-md-7 col-lg-8">
+                    <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
+                        <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
+                        <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
+                        <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
+                    </p>
+                </div>
+
+                <!-- Social Media Icons -->
+                <div class="col-md-5 col-lg-4">
+                    <div class="text-center text-md-right">
+                        <ul class="list-unstyled list-inline">
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-facebook-f"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-twitter"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-linkedin-in"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
+                                    <!-- <i class="fab fa-instagram"></i> -->
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        feather.replace();
+    </script>
+
+    <!-- js for bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- custom js file import -->
+    <script src="./js/addamenity.js"></script>
+    <script src="./js/homepage.js"></script>
+
+    <!-- fontawsome  -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <script>
+        function logout() {
+            window.location.href = 'homepage.html';
+        }
+    </script>
+
+</body>
+</html>
