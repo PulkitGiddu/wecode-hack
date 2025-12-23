@@ -1,4 +1,3 @@
-hjk
 Enter username:
 janesmith
 Enter password:

@@ -1,9 +1,9 @@
 package com.wecode.bookit;
 
 import com.wecode.bookit.dao.UserDAO;
-import com.wecode.bookit.domain.Users;
+import com.wecode.bookit.model.Users;
 import com.wecode.bookit.exceptions.AccessDeniedException;
-import com.wecode.bookit.services.UserServiceImpl;
+import com.wecode.bookit.services.serviceImpl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

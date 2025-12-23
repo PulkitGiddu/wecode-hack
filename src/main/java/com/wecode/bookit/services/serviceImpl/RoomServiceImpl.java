@@ -1,9 +1,10 @@
-package com.wecode.bookit.services;
+package com.wecode.bookit.services.serviceImpl;
 
 import com.wecode.bookit.dao.RoomDAO;
 import com.wecode.bookit.dao.RoomDAOImpl;
-import com.wecode.bookit.domain.Rooms;
-import com.wecode.bookit.domain.Users;
+import com.wecode.bookit.model.Rooms;
+import com.wecode.bookit.model.Users;
+import com.wecode.bookit.services.RoomService;
 
 import java.util.Calendar;
 

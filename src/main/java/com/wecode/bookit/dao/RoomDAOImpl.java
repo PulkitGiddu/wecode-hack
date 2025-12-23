@@ -1,6 +1,6 @@
 package com.wecode.bookit.dao;
 
-import com.wecode.bookit.domain.Rooms;
+import com.wecode.bookit.model.Rooms;
 import com.wecode.bookit.exceptions.DuplicateEntryException;
 import com.wecode.bookit.util.ConManager;
 

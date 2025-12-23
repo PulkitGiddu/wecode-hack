@@ -1,8 +1,9 @@
 package com.wecode.bookit.services;
 
-import com.wecode.bookit.domain.Meetings;
-import com.wecode.bookit.domain.Rooms;
+import com.wecode.bookit.model.Meetings;
+import com.wecode.bookit.model.Rooms;
 import com.wecode.bookit.exceptions.SameDateTimeException;
+import com.wecode.bookit.services.serviceImpl.MeetingServiceImpl;
 
 import java.sql.Timestamp;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.wecode.bookit.dao;
 
-import com.wecode.bookit.domain.Amenities;
+import com.wecode.bookit.model.Amenities;
 import com.wecode.bookit.util.ConManager;
 
 import java.sql.*;

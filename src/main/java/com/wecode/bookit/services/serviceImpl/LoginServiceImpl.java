@@ -1,8 +1,9 @@
-package com.wecode.bookit.services;
+package com.wecode.bookit.services.serviceImpl;
 
 import com.wecode.bookit.dao.LoginDAO;
 import com.wecode.bookit.dao.LoginDAOImpl;
-import com.wecode.bookit.domain.Users;
+import com.wecode.bookit.model.Users;
+import com.wecode.bookit.services.LoginService;
 
 import java.util.Calendar;
 

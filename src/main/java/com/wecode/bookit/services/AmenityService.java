@@ -1,6 +1,6 @@
 package com.wecode.bookit.services;
 
-import com.wecode.bookit.domain.Amenities;
+import com.wecode.bookit.model.Amenities;
 
 import java.util.List;
 

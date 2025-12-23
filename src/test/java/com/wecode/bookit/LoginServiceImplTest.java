@@ -1,8 +1,8 @@
 package com.wecode.bookit;
 
 import com.wecode.bookit.dao.LoginDAO;
-import com.wecode.bookit.domain.Users;
-import com.wecode.bookit.services.LoginServiceImpl;
+import com.wecode.bookit.model.Users;
+import com.wecode.bookit.services.serviceImpl.LoginServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

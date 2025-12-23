@@ -1,4 +1,4 @@
-package com.wecode.bookit.domain;
+package com.wecode.bookit.model;
 
 import java.util.Date;
 import java.util.Objects;

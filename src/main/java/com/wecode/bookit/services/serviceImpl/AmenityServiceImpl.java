@@ -1,16 +1,17 @@
-package com.wecode.bookit.services;
+package com.wecode.bookit.services.serviceImpl;
 
 import com.wecode.bookit.dao.AmenityDAO;
 import com.wecode.bookit.dao.AmenityDAOImpl;
-import com.wecode.bookit.domain.Amenities;
-import com.wecode.bookit.domain.Users;
+import com.wecode.bookit.model.Amenities;
+import com.wecode.bookit.model.Users;
 import com.wecode.bookit.exceptions.AmenitiesNotFoundException;
+import com.wecode.bookit.services.AmenityService;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AmenityServiceImpl implements AmenityService{
+public class AmenityServiceImpl implements AmenityService {
 
 
     private final AmenityDAO amenityDAO = new AmenityDAOImpl();

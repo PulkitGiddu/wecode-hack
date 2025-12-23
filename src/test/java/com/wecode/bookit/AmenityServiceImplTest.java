@@ -1,9 +1,9 @@
 package com.wecode.bookit;
 
 import com.wecode.bookit.dao.AmenityDAO;
-import com.wecode.bookit.domain.Amenities;
+import com.wecode.bookit.model.Amenities;
 import com.wecode.bookit.exceptions.AmenitiesNotFoundException;
-import com.wecode.bookit.services.AmenityServiceImpl;
+import com.wecode.bookit.services.serviceImpl.AmenityServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

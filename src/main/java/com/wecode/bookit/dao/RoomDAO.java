@@ -1,6 +1,6 @@
 package com.wecode.bookit.dao;
 
-import com.wecode.bookit.domain.Rooms;
+import com.wecode.bookit.model.Rooms;
 
 import java.util.List;
 

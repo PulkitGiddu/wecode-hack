@@ -1,6 +1,6 @@
 package com.wecode.bookit.dao;
 
-import com.wecode.bookit.domain.Users;
+import com.wecode.bookit.model.Users;
 import com.wecode.bookit.exceptions.CreditResetException;
 import com.wecode.bookit.util.ConManager;
 

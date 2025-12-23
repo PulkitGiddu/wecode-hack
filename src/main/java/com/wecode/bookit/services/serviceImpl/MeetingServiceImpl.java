@@ -1,12 +1,13 @@
-package com.wecode.bookit.services;
+package com.wecode.bookit.services.serviceImpl;
 
 import com.wecode.bookit.dao.*;
-import com.wecode.bookit.domain.Meetings;
-import com.wecode.bookit.domain.Rooms;
-import com.wecode.bookit.domain.Users;
+import com.wecode.bookit.model.Meetings;
+import com.wecode.bookit.model.Rooms;
+import com.wecode.bookit.model.Users;
 import com.wecode.bookit.exceptions.AccessDeniedException;
 import com.wecode.bookit.exceptions.NotEnoughCreditsException;
 import com.wecode.bookit.exceptions.SameDateTimeException;
+import com.wecode.bookit.services.MeetingService;
 
 import java.sql.Timestamp;
 import java.util.List;

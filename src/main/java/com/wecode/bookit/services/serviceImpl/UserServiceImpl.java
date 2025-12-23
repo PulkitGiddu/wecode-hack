@@ -1,9 +1,10 @@
-package com.wecode.bookit.services;
+package com.wecode.bookit.services.serviceImpl;
 
 import com.wecode.bookit.dao.UserDAO;
 import com.wecode.bookit.dao.UserDAOImpl;
-import com.wecode.bookit.domain.Users;
+import com.wecode.bookit.model.Users;
 import com.wecode.bookit.exceptions.AccessDeniedException;
+import com.wecode.bookit.services.UserService;
 
 import java.util.List;
 

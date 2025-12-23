@@ -9,10 +9,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.wecode.bookit.dao.RoomDAO;
-import com.wecode.bookit.domain.Rooms;
-import com.wecode.bookit.domain.Users;
-import com.wecode.bookit.services.RoomServiceImpl;
-import com.wecode.bookit.services.LoginServiceImpl;
+import com.wecode.bookit.model.Rooms;
+import com.wecode.bookit.model.Users;
+import com.wecode.bookit.services.serviceImpl.RoomServiceImpl;
+import com.wecode.bookit.services.serviceImpl.LoginServiceImpl;
 
 public class RoomServiceImplTest {
 

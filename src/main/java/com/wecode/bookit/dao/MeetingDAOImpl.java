@@ -1,6 +1,6 @@
 package com.wecode.bookit.dao;
 
-import com.wecode.bookit.domain.Meetings;
+import com.wecode.bookit.model.Meetings;
 import com.wecode.bookit.exceptions.MeetingAlreadyExistsException;
 import com.wecode.bookit.util.ConManager;
 

@@ -1,11 +1,12 @@
 package com.wecode.bookit;
 
-import com.wecode.bookit.domain.Amenities;
-import com.wecode.bookit.domain.Meetings;
-import com.wecode.bookit.domain.Users;
+import com.wecode.bookit.model.Amenities;
+import com.wecode.bookit.model.Meetings;
+import com.wecode.bookit.model.Users;
 import com.wecode.bookit.exceptions.SameDateTimeException;
 import com.wecode.bookit.exceptions.WrongDateFormatException;
 import com.wecode.bookit.services.*;
+import com.wecode.bookit.services.serviceImpl.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
