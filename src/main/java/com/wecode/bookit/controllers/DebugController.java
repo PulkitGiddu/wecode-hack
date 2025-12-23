@@ -17,7 +17,7 @@ public class DebugController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> body) {
         logger.info("Received login body: {}", body);
-        System.out.println("Received login body: " + body);
+        System.out.println("Received login body : " + body);
         // Echo back the exact JSON received
         return ResponseEntity.ok(body);
     }
