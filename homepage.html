@@ -3,407 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- title -->
-    <title>Bookit Automated Meeting Room Management</title>
-
-    <!-- favicon cdn -->
+    <title>Bookit - Automated Meeting Room Management</title>
     <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
-
-    <!-- bootstrap css cdn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- custome css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./css/homepage.css">
-
-    <!-- featherly icons cdn -->
-    <script src="https://unpkg.com/feather-icons"></script>
-
-
 </head>
 <body>
-
-    <!-- loader -->
-    <div id="myloader" class="preloader">
-        <img id="myloader" class="preloader-image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHN0eWxlPSItLWFuaW1hdGlvbi1zdGF0ZTogcnVubmluZzsiPgo8c3R5bGU+CiAgICAgICAgOnJvb3QgewogICAgICAgICAgLS1hbmltYXRpb24tc3RhdGU6IHBhdXNlZDsKICAgICAgICB9CgogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgd2hlcmUgdGhlICJyZWd1bGFyIiBzY2hlbWUgaXMgZGFyayAqLwogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgYSBsaWdodCBzY2hlbWUgYW5kIGFsc28gZW5hYmxlZCBhIGRhcmsgc2NoZW1lICovCgogICAgICAgIC8qIGRlYWwgd2l0aCBsaWdodCBzY2hlbWUgZmlyc3QgKi8KICAgICAgICBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBsaWdodCkgewogICAgICAgICAgOnJvb3QgewogICAgICAgICAgICAtLXByaW1hcnk6ICMwMDAwMDA7CiAgICAgICAgICAgIC0tc2Vjb25kYXJ5OiAjZmZmZmZmOwogICAgICAgICAgICAtLXRlcnRpYXJ5OiAjMzM2OUZGOwogICAgICAgICAgICAtLWhpZ2hsaWdodDogIzMzNjlGRjsKICAgICAgICAgICAgLS1zdWNjZXNzOiAjM2Q4NTRkOwogICAgICAgICAgfQogICAgICAgIH0KCiAgICAgICAgLyogdGhlbiBkZWFsIHdpdGggZGFyayBzY2hlbWUgKi8KICAgICAgICBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSB7CiAgICAgICAgICA6cm9vdCB7CiAgICAgICAgICAgIC0tcHJpbWFyeTogIzAwMDAwMDsKICAgICAgICAgICAgLS1zZWNvbmRhcnk6ICNmZmZmZmY7CiAgICAgICAgICAgIC0tdGVydGlhcnk6ICMzMzY5RkY7CiAgICAgICAgICAgIC0taGlnaGxpZ2h0OiAjMzM2OUZGOwogICAgICAgICAgICAtLXN1Y2Nlc3M6ICMzZDg1NGQ7CiAgICAgICAgICB9CiAgICAgICAgfQoKICAgICAgICAvKiB0aGVzZSBzdHlsZXMgbmVlZCB0byBsaXZlIGhlcmUgYmVjYXVzZSB0aGUgU1ZHIGhhcyBhIGRpZmZlcmVudCBzY29wZSAqLwogICAgICAgIC5kb3RzIHsKICAgICAgICAgIGFuaW1hdGlvbi1uYW1lOiBsb2FkZXI7CiAgICAgICAgICBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBlYXNlLWluLW91dDsKICAgICAgICAgIGFuaW1hdGlvbi1kdXJhdGlvbjogM3M7CiAgICAgICAgICBhbmltYXRpb24taXRlcmF0aW9uLWNvdW50OiBpbmZpbml0ZTsKICAgICAgICAgIGFuaW1hdGlvbi1wbGF5LXN0YXRlOiB2YXIoLS1hbmltYXRpb24tc3RhdGUpOwogICAgICAgICAgc3Ryb2tlOiAjZmZmOwogICAgICAgICAgc3Ryb2tlLXdpZHRoOiAwLjVweDsKICAgICAgICAgIHRyYW5zZm9ybS1vcmlnaW46IGNlbnRlcjsKICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICByOiBtYXgoMXZ3LCAxMXB4KTsKICAgICAgICAgIGN5OiA1MCU7CiAgICAgICAgICBmaWx0ZXI6IHNhdHVyYXRlKDIpIG9wYWNpdHkoMC44NSk7CiAgICAgICAgICBmaWxsOiB2YXIoLS10ZXJ0aWFyeSk7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoMikgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjE1czsKICAgICAgICB9CgogICAgICAgIC5kb3RzOm50aC1jaGlsZCgzKSB7CiAgICAgICAgICBhbmltYXRpb24tZGVsYXk6IDAuM3M7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoNCkgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjQ1czsKICAgICAgICB9CgogICAgICAgIC5kb3RzOm50aC1jaGlsZCg1KSB7CiAgICAgICAgICBhbmltYXRpb24tZGVsYXk6IDAuNnM7CiAgICAgICAgfQoKICAgICAgICBAa2V5ZnJhbWVzIGxvYWRlciB7CiAgICAgICAgICAwJSB7CiAgICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICAgIHRyYW5zZm9ybTogc2NhbGUoMSk7CiAgICAgICAgICB9CiAgICAgICAgICA0NSUgewogICAgICAgICAgICBvcGFjaXR5OiAxOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDAuNyk7CiAgICAgICAgICB9CiAgICAgICAgICA2NSUgewogICAgICAgICAgICBvcGFjaXR5OiAxOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDAuNyk7CiAgICAgICAgICB9CiAgICAgICAgICAxMDAlIHsKICAgICAgICAgICAgb3BhY2l0eTogMDsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgxKTsKICAgICAgICAgIH0KICAgICAgICB9CiAgICAgIDwvc3R5bGU+CjxnIGNsYXNzPSJjb250YWluZXIiPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iMzB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNDB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNTB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNjB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNzB2dyIvPgo8L2c+Cjwvc3ZnPg==" alt="Stape Community">
+    <!-- Improved Loader -->
+    <div class="preloader" id="preloader">
+        <div class="loader-content">
+            <div class="loader-logo">BOOKIT</div>
+            <div class="loader-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
     </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <!-- Sidebar -->
-    <div id="mySidebar" class="sidebar bg-light">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <!-- <a href="homepage.html">Products</a>
-        <a href="homepage.html">Solutions</a>
-        <a href="homepage.html">Pricing</a>
-        <a href="homepage.html">Resources</a>
-        <a href="homepage.html">Company</a>
-        <a href="homepage.html">Contact Us</a> -->
-        <a href="homepage.html#highlights">Highlights</a>
-        <a href="homepage.html#working">See Working</a>
-        <a href="homepage.html#features">Features</a>
+    <div class="sidebar" id="sidebar">
+        <span class="closebtn" onclick="closeSidebar()">&times;</span>
+        <a href="#highlights">Highlights</a>
+        <a href="#working">See Working</a>
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
         <a href="./login.html">Login</a>
-    </div>  
-
-    <!-- Main content -->
-    <div id="main2 position-sticky">
-        <!-- Header Section -->
-        <header class="bg-transparent w-100 text-white">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
-                    <a class="navbar-brand me-auto" href="./homepage.html">
-                        <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Products</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
-                            <li class="nav-item"><a class="nav-link changeColorOnHover" href="homepage.html#highlights">Highlights</a></li>
-                            <li class="nav-item"><a class="nav-link changeColorOnHover" href="homepage.html#working">See Working</a></li>
-                            <li class="nav-item"><a class="nav-link changeColorOnHover" href="homepage.html#features">Features</a></li>
-                            <li class="nav-item"><a href="./login.html" class="btn btn-primary btn-lg customeLoginBtn ">Login</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </header>   
     </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg">
+                <span class="menu-toggle" onclick="openSidebar()">
+                    <i class="fas fa-bars"></i>
+                </span>
+                <a class="navbar-brand" href="./homepage.html">
+                    <img src="./assets/img/bookitlogo.png" alt="Bookit">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item"><a class="nav-link" href="#highlights">Highlights</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#working">See Working</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                        <li class="nav-item"><a href="./login.html" class="btn btn-login">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
 
     <!-- Hero Section -->
-    <div class="hero text-center givebg position-sticky">
-        <div class="container d-flex align-items-center giveTextColorBluish">
-            <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                <h1 class="display-4">Streamline Your <br> Meeting Room Management</h1>
-                <p class="lead">Efficiently manage your meeting rooms and enhance collaboration with Bookit's Meeting Room Management Solution</p>
-                <a href="./login.html" class="btn btn-primary btn-lg customeLoginBtn2">Login</a>
-
-            </div>
-            <div class="col-0 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                    <img src="./assets/img/businesspeople-working-together.png" draggable="false" class="vector1style" />
-            </div>
-        </div>
-    </div>
-
-    <!-- Key Highlights Section -->
-    <section id="highlights" class="highlights py-5 position-sticky">
-        <div class="container text-center">
-            <h2 class="mb-4">Key Highlights of Bookit's Rooms</h2>
-            <!-- <div class="row">
-                <div class="col-md-4">
-                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/school-circle-check.svg" alt="Assign Amenities" class="mb-3" height="20px" >
-                    <h5>Assign Amenities</h5>
-                    <p>Assign different rooms with different amenities to enable informed decisions.</p>
-                </div>
-                <div class="col-md-4">
-                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/clock.svg" alt="Assign Amenities" class="mb-3" height="20px" >
-
-                    <h5>Customize Room Availability</h5>
-                    <p>Customize room availability by deciding on the days and times for booking.</p>
-                </div>
-                <div class="col-md-4">
-                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/user-group.svg" alt="Set Room Capacity" class="mb-3" height="20px" >
-                    <h5>Set Room Capacity</h5>
-                    <p>Set the maximum number of people the room can occupy.</p>
-                </div>
-            </div> -->
-        </div>
-
-        <div class="container text-center">
-            <div class="card">
-                <div class="card-body d-flex row">
-                    <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 card-body">
-                        <!-- <div id="accordion" class="accordion">
-                            <div class="card">
-                                <div class="card-header" id="headingOne">
-                                    <h5 class="mb-0">
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Collapsible Group Item #1
-                                    </button>
-                                    </h5>
-                                </div>
-                        
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                                    <div class="card-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header" id="headingTwo">
-                                    <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        Collapsible Group Item #2
-                                    </button>
-                                    </h5>
-                                </div>
-                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                                    <div class="card-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header" id="headingThree">
-                                    <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        Collapsible Group Item #3
-                                    </button>
-                                    </h5>
-                                </div>
-                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                                    <div class="card-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <div class="accordion " id="accordionExample">
-                            <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button id="btnOne" class="accordion-button d-flex align-items-center justify-content-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/school-circle-check.svg" alt="Assign Amenities" class="mb-3" height="20px" >
-                                    <h5>Assign Amenities</h5>
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <p>Assign different rooms with different amenities to enable informed decisions.</p>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button id="btnTwo" class="accordion-button collapsed d-flex align-items-center justify-content-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/clock.svg" alt="Assign Amenities" class="mb-3" height="20px" >
-                                    <h5>Customize Room Availability</h5>
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <p>Customize room availability by deciding on the days and times for booking.</p>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button id="btnThree" class="accordion-button collapsed d-flex align-items-center justify-content-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/user-group.svg" alt="Set Room Capacity" class="mb-3" height="20px" >
-                                    <h5>Set Room Capacity</h5>
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <p>Set the maximum number of people the room can occupy.</p>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-0 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                        <div class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <img id="imgTobeSet" class="card-img-right" src="./assets/img/481602-PH02WC-347.jpg" style="width: 100%; height: 100%;" alt="Card image cap">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="working" class="how-it-works py-5 bg-light position-sticky">
+    <section class="hero">
         <div class="container">
-            <h2 class="text-center mb-4">How it works</h2>
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <!-- <img src="step1.png" alt="Create Rooms" class="mb-3"> -->
-                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/house-chimney-medical.svg" alt="Easily Create Rooms" class="mb-3" height="20px" >
-                    <h5>Easily Create Rooms</h5>
-                    <p>Create rooms on Bookit's web portal with all necessary details.</p>
-                </div>
-                <div class="col-md-4">
-                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/calendar-check.svg" alt="Book Meeting Rooms" class="mb-3" height="20px" >
-                    <!-- <img src="step2.png" alt="Book Meeting Rooms" class="mb-3"> -->
-                    <h5>Efficiently Book Meeting Rooms</h5>
-                    <p>Book rooms with ease through the web portal or mobile app.</p>
-                </div>
-                <div class="col-md-4">
-                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/square-poll-vertical.svg" alt="Decisions based on Analytics" class="mb-3" height="20px" >
-                    <!-- <img src="step3.png" alt="Take Informed Decisions" class="mb-3"> -->
-                    <h5>Take Informed Decisions based on Analytics</h5>
-                    <p>Utilize analytics to optimize room usage and booking times.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Key Features Section -->
-    <section id="features" class="features py-5 position-sticky">
-        <div class="container text-center">
-            <h2 class="mb-4">Key Features</h2>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="mt-2 card card-body giveCardStyle">
-                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/calendar-check.svg" alt="Room Booking" class="mb-3" height="20px" >
-                        <h5>Room Booking</h5>
-                        <p>Enable employees to book a meeting room easily.</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="mt-2 card card-body giveCardStyle2">
-                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/school-circle-check.svg" alt="Room Amenities" class="mb-3" height="20px" >
-                        <h5>Room Amenities</h5>
-                        <p>Choose meeting rooms with the required amenities.</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="mt-2 card card-body giveCardStyle3">
-                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/user-plus.svg" alt="Invite Easily" class="mb-3" height="20px" >
-                        <h5>Invite Easily</h5>
-                        <p>Send invites to employees and visitors for the meeting.</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="mt-2 card card-body giveCardStyle4">
-                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/clock.svg" alt="Room Availability" class="mb-3" height="20px" >
-                        <h5>Room Availability</h5>
-                        <p>Quickly find the available times for booking rooms.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq py-5 bg-light mb-4">
-        <div class="container">
-            <h2 class="text-center mb-4">Frequently Asked Questions</h2>
-            <div class="accordion" id="faqAccordion">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="faq1">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                            How does Bookit's Meeting Room Management solution work?
-                        </button>
-                    </h2>
-                    <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Bookit's solution allows you to efficiently manage meeting rooms by providing a centralized platform for booking, analytics, and management.
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="faq2">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                            What kind of reports can Bookit's Meeting Room Management solution generate?
-                        </button>
-                    </h2>
-                    <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            It can generate detailed reports on room usage, booking patterns, and more, helping optimize resource allocation.
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="faq3">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                            How long will it take to implement Bookit's Meeting Room Management system?
-                        </button>
-                    </h2>
-                    <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Implementation time varies depending on the size of your organization and customization needs, but typically it takes a few weeks.
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="faq4">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                            Does Bookit's Meeting Room Management solution require any special hardware or software?
-                        </button>
-                    </h2>
-                    <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            No special hardware is required, but it is recommended to have a modern web browser and internet connection for optimal use.
-                        </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </section>
-
-    <!-- Footer Section -->
-    <footer class="bg-dark text-light pt-2 position-sticky">
-        <div class="container text-center text-md-left">
-
-            <!-- Legal Links and Social Media Icons -->
             <div class="row align-items-center">
-                <!-- Legal Links -->
-                <div class="col-md-7 col-lg-8">
-                    <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
-                        <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
-                        <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
-                        <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
+                <div class="col-lg-6">
+                    <h1>Streamline Your Meeting Room Management</h1>
+                    <p>Efficiently manage your meeting rooms and enhance collaboration with Bookit's Meeting Room Management Solution</p>
+                    <a href="./login.html" class="btn btn-hero">Get Started</a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="./assets/img/businesspeople-working-together.png" alt="Business Meeting" draggable="false">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Improved Key Highlights -->
+    <section id="highlights" class="highlights">
+        <div class="container">
+            <h2 class="text-center">Key Highlights of Bookit's Rooms</h2>
+            <p class="section-subtitle">Discover the powerful features that make room management effortless</p>
+            
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <div class="highlight-icon">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <h4>Assign Amenities</h4>
+                    <p>Assign different rooms with different amenities to enable informed decisions and optimal space utilization. Each room can be configured with specific features like projectors, whiteboards, video conferencing, and more.</p>
+                </div>
+
+                <div class="highlight-card">
+                    <div class="highlight-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>Customize Room Availability</h4>
+                    <p>Customize room availability by deciding on the days and times for booking with flexible scheduling options. Set recurring schedules, block off maintenance periods, and manage availability with ease.</p>
+                </div>
+
+                <div class="highlight-card">
+                    <div class="highlight-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Set Room Capacity</h4>
+                    <p>Set the maximum number of people the room can occupy for better space management. Ensure optimal utilization and prevent overcrowding with intelligent capacity planning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="working" class="how-it-works">
+        <div class="container">
+            <h2 class="text-center">How It Works</h2>
+            <p class="section-subtitle">Simple, efficient, and powerful room management in three steps</p>
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="work-card">
+                        <i class="fas fa-building"></i>
+                        <h5>Easily Create Rooms</h5>
+                        <p>Create rooms on Bookit's web portal with all necessary details and configurations.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="work-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <h5>Efficiently Book Meeting Rooms</h5>
+                        <p>Book rooms with ease through the web portal or mobile app with real-time availability.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="work-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h5>Informed Decisions via Analytics</h5>
+                        <p>Utilize analytics to optimize room usage, booking patterns, and resource allocation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="text-center">Key Features</h2>
+            <p class="section-subtitle">Everything you need for seamless meeting room management</p>
+            <div class="row mt-5">
+                <div class="col-md-3">
+                    <div class="feature-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h5>Room Booking</h5>
+                        <p>Enable employees to book meeting rooms easily with intuitive interface.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h5>Room Amenities</h5>
+                        <p>Choose meeting rooms with the required amenities for your needs.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card">
+                        <i class="fas fa-user-plus"></i>
+                        <h5>Invite Easily</h5>
+                        <p>Send invites to employees and visitors seamlessly for meetings.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card">
+                        <i class="fas fa-clock"></i>
+                        <h5>Room Availability</h5>
+                        <p>Quickly find available times for booking rooms in real-time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Improved FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="text-center">Frequently Asked Questions</h2>
+            <p class="section-subtitle"></p>
+           <p class="section-subtitle"></p>
+            <p class="section-subtitle"></p>
+            
+            <div class="faq-container">
+                <div class="faq-item active">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h5 class="faq-question-text">How does Bookit's Meeting Room Management solution work?</h5>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer" style="max-height: 200px;">
+                        <div class="faq-answer-content">
+                            Bookit's solution allows you to efficiently manage meeting rooms by providing a centralized platform for booking, analytics, and management with real-time updates. Our intuitive interface makes it easy for employees to find and book the perfect meeting space.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h5 class="faq-question-text">What kind of reports can Bookit generate?</h5>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Generate detailed reports on room usage, booking patterns, peak hours, and utilization metrics to optimize resource allocation. Our analytics dashboard provides insights into booking trends, popular rooms, and helps you make data-driven decisions.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h5 class="faq-question-text">How long does implementation take?</h5>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Implementation time varies based on organization size and customization needs, typically taking 2-4 weeks for complete setup. Our dedicated support team will guide you through every step of the process.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h5 class="faq-question-text">Is Bookit available on mobile devices?</h5>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! Bookit is fully responsive and available as a mobile app for both iOS and Android platforms. Book rooms on the go, check availability, and manage your meetings from anywhere.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <p class="mb-0">© 2024 Bookit. All rights reserved. 
+                        <a href="#">Terms & Conditions</a> | 
+                        <a href="#">Privacy Policy</a> | 
+                        <a href="#">Manage Cookies</a>
                     </p>
                 </div>
-
-                <!-- Social Media Icons -->
-                <div class="col-md-5 col-lg-4">
-                    <div class="text-center text-md-right">
-                        <ul class="list-unstyled list-inline">
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-facebook-f"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-twitter"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-linkedin-in"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-instagram"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="col-md-4 text-md-end text-center mt-3 mt-md-0">
+                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
     </footer>
 
-
-    <script>
-        feather.replace();
-    </script>
-
-    <!-- js for bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-
-    <!-- custom js file import -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/homepage.js"></script>
-
-    <!-- fontawsome  -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    
-    </body>
-    </html>
+</body>
+</html>
