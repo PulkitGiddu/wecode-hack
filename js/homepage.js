@@ -143,3 +143,130 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 });
+
+// Newsletter Form Handler
+function handleNewsletter(event) {
+    event.preventDefault();
+    const emailInput = event.target.querySelector('.newsletter-input');
+    const email = emailInput.value;
+    
+    // Simple email validation
+    if (email && validateEmail(email)) {
+        // Show success message
+        showNotification('Thank you for subscribing!', 'success');
+        emailInput.value = '';
+    } else {
+        showNotification('Please enter a valid email address', 'error');
+    }
+    
+    return false;
+}
+
+// Email validation helper
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// Notification helper
+function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        background: ${type === 'success' ? '#10b981' : '#ef4444'};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        font-weight: 500;
+    `;
+    notification.textContent = message;
+    
+    // Add animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            notification.remove();
+            style.remove();
+        }, 300);
+    }, 3000);
+}
+
+// Social media link handlers (optional - can be customized)
+document.addEventListener('DOMContentLoaded', () => {
+    const socialBtns = document.querySelectorAll('.social-btn');
+    socialBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const platform = btn.querySelector('i').classList[1].split('-')[1];
+            console.log(`Navigating to ${platform}`);
+            // Add your social media URLs here
+        });
+    });
+});
+
+// Footer links animation on scroll
+window.addEventListener('scroll', () => {
+    const footer = document.querySelector('footer');
+    const footerPosition = footer.getBoundingClientRect().top;
+    const screenPosition = window.innerHeight;
+    
+    if (footerPosition < screenPosition) {
+        footer.classList.add('footer-visible');
+    }
+});
+
+// Add smooth reveal animation to footer
+document.addEventListener('DOMContentLoaded', () => {
+    const footerSections = document.querySelectorAll('.footer-section');
+    footerSections.forEach((section, index) => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(20px)';
+        section.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+    });
+    
+    const footerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    footerSections.forEach(section => {
+        footerObserver.observe(section);
+    });
+});

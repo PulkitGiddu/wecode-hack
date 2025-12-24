@@ -442,11 +442,12 @@ section h2::after {
     margin-bottom: 15px;
 }
 
-/* Features */
+/* Features Section */
 .features {
-    background: var(--accent-color);
+    background: var(--accent-color); /* Keep section background as is */
 }
 
+/* Feature Cards */
 .feature-card {
     padding: 30px;
     border-radius: 15px;
@@ -455,37 +456,25 @@ section h2::after {
     border: 1px solid #e0e0e0;
     height: 100%;
     text-align: left;
+    background: #d9ebff; /* Light professional blue background */
 }
 
-.feature-card:nth-child(1) { 
-    background: linear-gradient(135deg, #fff5f5, #ffdbdb); 
-}
-
-.feature-card:nth-child(2) { 
-    background: linear-gradient(135deg, #f0f9ff, #d0ecff); 
-}
-
-.feature-card:nth-child(3) { 
-    background: linear-gradient(135deg, #fff9e6, #feefbe); 
-}
-
-.feature-card:nth-child(4) { 
-    background: linear-gradient(135deg, #f3ffe6, #d9ffb1); 
-}
-
+/* Hover Effect */
 .feature-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
+/* Icons */
 .feature-card i {
     font-size: 40px;
     margin-bottom: 15px;
     color: var(--primary-color);
 }
 
+/* Text */
 .feature-card p {
-    color: #666;
+    color: #4a838c;
     line-height: 1.6;
     margin: 0;
 }
