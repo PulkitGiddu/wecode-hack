@@ -62,10 +62,11 @@
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-4">
                     <h1 class="text-center mb-4">Login</h1>
-                    <!-- <form method="POST"> -->
+                    <form id="loginForm">
                         <div class="mb-3">
                             <label for="Name" class="form-label">Name</label>
-                            <input type="name" name="name" class="form-control" id="name" required>
+                            <input type="text" name="name" class="form-control" id="name" required>
+                        </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input type="email" name="email" class="form-control" id="email" required>
@@ -95,8 +96,8 @@
                                 </label>
                             </div>
                         </div>
-                        <button type="submit" onclick="validateinput();" class="btn btn-primary w-100">Login</button>
-                    <!-- </form> -->
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -155,6 +156,53 @@
 
     <script>
         feather.replace();
+        
+        // Backend communication
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const usertype = document.querySelector('input[name="usertype"]:checked')?.value;
+            
+            const loginData = { name, email, password, usertype };
+            console.log('Frontend sending:', loginData);
+            
+            try {
+                const res = await fetch('http://localhost:8081/api/debug/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginData)
+                });
+                const text = await res.text();
+                console.log('Backend response:', text);
+                
+                // If login is successful, redirect to appropriate dashboard
+                if (res.ok) {
+                    // Redirect based on user type
+                    switch(usertype) {
+                        case 'admin':
+                            window.location.href = 'admindashboard.html';
+                            break;
+                        case 'manager':
+                            window.location.href = 'manager-dashboard.html';
+                            break;
+                        case 'member':
+                            window.location.href = 'member-dashboard.html';
+                            break;
+                        default:
+                            console.error('Unknown user type:', usertype);
+                            alert('Please select a valid user role.');
+                    }
+                } else {
+                    alert('Login failed. Please check your credentials.');
+                }
+            } catch (err) {
+                console.error('Request failed:', err);
+                alert('Login failed. Please try again.');
+            }
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/login.js"></script>
