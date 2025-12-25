@@ -18,18 +18,153 @@
     <!-- featherly icons cdn -->
     <script src="https://unpkg.com/feather-icons"></script>
 
+    <style>
+        /* Enhanced Dashboard Styles */
+        .dashboard {
+            min-height: calc(100vh - 180px);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding-top: 120px !important;
+            padding-bottom: 100px !important;
+        }
+
+        .dashboard h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0b3558;
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dashboard h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #0b3558, #3369FF);
+            border-radius: 2px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #0b3558, #3369FF);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(11, 53, 88, 0.15);
+        }
+
+        .card-body {
+            padding: 35px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-icon-wrapper {
+            background: linear-gradient(135deg, #0b3558, #3369FF);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card-icon-wrapper img {
+            filter: brightness(0) saturate(100%) invert(20%) sepia(50%) saturate(1500%) hue-rotate(180deg);
+            transition: filter 0.3s ease;
+        }
+
+        .card:hover .card-icon-wrapper img {
+            filter: brightness(0) saturate(100%) invert(100%);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0b3558;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .card-text {
+            color: #6c757d;
+            font-size: 0.95rem;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0b3558, #3369FF);
+            border: none;
+            padding: 12px 40px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(11, 53, 88, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3369FF, #0b3558);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(11, 53, 88, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .dashboard {
+                padding-top: 80px !important;
+            }
+            
+            .dashboard h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
 </head>
 <body>
 
     <!-- Sidebar -->
     <div id="mySidebar" class="sidebar bg-light">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <!-- <a href="homepage.html">Products</a>
-        <a href="homepage.html">Solutions</a>
-        <a href="homepage.html">Pricing</a>
-        <a href="homepage.html">Resources</a>
-        <a href="homepage.html">Company</a>
-        <a href="homepage.html">Contact Us</a> -->
         <a href="homepage.html">Main Page</a>
         <a href="homepage.html#highlights">Highlights</a>
         <a href="homepage.html#working">See Working</a>
@@ -39,7 +174,7 @@
      <!-- Main content -->
      <div id="main">
         <!-- Header Section -->
-        <header class="bg-light py-2 w-100 position-fixed">
+        <header class="bg-light py-2 w-100 position-fixed" style="top: 0; z-index: 1000;">
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <span class="navbar-toggler-icon" onclick="openNav()"></span>
@@ -52,11 +187,6 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
-                            <!-- <li class="nav-item"><a class="nav-link" href="manager-dashboard.html">Manager Dashboard</a></li> -->
-                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
                             <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
                             <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
                             <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
@@ -69,67 +199,79 @@
     </div>
 
         <!-- Manager Dashboard Content -->
-        <section class="dashboard py-5 m-5">
+        <section class="dashboard py-5">
             <div class="container">
-                <h2 class="text-center mb-4">Manager Dashboard</h2>
-                <div class="row">
-                    <div class="col-md-3 my-1">
-                        <div class="card text-center mb-4 d-flex flex-column h-100">
+                <h2 class="text-center">Manager Dashboard</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-6 my-3">
+                        <div class="card text-center d-flex flex-column h-100">
                             <div class="card-body">
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/house-chimney-medical.svg" alt="Organize Meeting" class="mb-3" height="40px">
+                                <div class="card-icon-wrapper">
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/house-chimney-medical.svg" alt="Organize Meeting" height="40px">
+                                </div>
                                 <h5 class="card-title">Organize Meeting</h5>
                                 <p class="card-text">Schedule and organize meetings with ease.</p>
                                 <a href="organize-meeting.html" class="btn btn-primary mt-auto">Go</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 my-1">
-                        <div class="card text-center mb-4 d-flex flex-column h-100">
+                    <div class="col-lg-4 col-md-6 my-3">
+                        <div class="card text-center d-flex flex-column h-100">
                             <div class="card-body">
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/square-poll-vertical.svg" alt="View Analytics" class="mb-3" height="40px">
+                                <div class="card-icon-wrapper">
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/square-poll-vertical.svg" alt="View Analytics" height="40px">
+                                </div>
                                 <h5 class="card-title">View Analytics</h5>
                                 <p class="card-text">Analyze room usage and booking trends.</p>
                                 <a href="analytics.html" class="btn btn-primary mt-auto">Go</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 my-1">
-                        <div class="card text-center mb-4 d-flex flex-column h-100">
+                    <div class="col-lg-4 col-md-6 my-3">
+                        <div class="card text-center d-flex flex-column h-100">
                             <div class="card-body">
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/user-group.svg" alt="Manage Team" class="mb-3" height="40px">
+                                <div class="card-icon-wrapper">
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/user-group.svg" alt="Manage Team" height="40px">
+                                </div>
                                 <h5 class="card-title">Manage Team</h5>
                                 <p class="card-text">Manage your team's access and roles.</p>
                                 <a href="manageTeam.html" class="btn btn-primary mt-auto">Go</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 my-1">
-                        <div class="card text-center mb-4 d-flex flex-column h-100">
+                    <div class="col-lg-4 col-md-6 my-3">
+                        <div class="card text-center d-flex flex-column h-100">
                             <div class="card-body">
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/envelope-open-text.svg" alt="Notifications" class="mb-3" height="40px">
+                                <div class="card-icon-wrapper">
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/envelope-open-text.svg" alt="Notifications" height="40px">
+                                </div>
                                 <h5 class="card-title">Notifications</h5>
                                 <p class="card-text">View and manage notifications.</p>
                                 <a href="notifications.html" class="btn btn-primary mt-auto">Go</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 my-1">
-                        <div class="card text-center mb-4 d-flex flex-column h-100">
+                    <div class="col-lg-4 col-md-6 my-3">
+                        <div class="card text-center d-flex flex-column h-100">
                             <div class="card-body">
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/envelope-open-text.svg" alt="Notifications" class="mb-3" height="40px">
+                                <div class="card-icon-wrapper">
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/file-import.svg" alt="Import Users" height="40px">
+                                </div>
                                 <h5 class="card-title">Import Users</h5>
                                 <p class="card-text">Import users via uploading a csv file.</p>
                                 <a href="importusers.html" class="btn btn-primary mt-auto">Go</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 my-1">
-                        <div class="card text-center mb-4 d-flex flex-column h-100">
+                    <div class="col-lg-4 col-md-6 my-3">
+                        <div class="card text-center d-flex flex-column h-100">
                             <div class="card-body">
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/envelope-open-text.svg" alt="Notifications" class="mb-3" height="40px">
+                                <div class="card-icon-wrapper">
+                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/solid/coins.svg" alt="Credits" height="40px">
+                                </div>
                                 <h5 class="card-title">Credits</h5>
                                 <p class="card-text">Manage your credits and billing.</p>
-                                <a href="importusers.html" class="btn btn-primary mt-auto">Go</a>
+                                <a href="credits.html" class="btn btn-primary mt-auto">Go</a>
                             </div>
                         </div>
                     </div>
@@ -138,14 +280,14 @@
         </section>
 
         <!-- Footer Section -->
-        <footer class="bg-dark text-light pt-2 position-fixed fixed-bottom">
+        <footer class="bg-dark text-light pt-2">
             <div class="container text-center text-md-left">
 
                 <!-- Legal Links and Social Media Icons -->
                 <div class="row align-items-center">
                     <!-- Legal Links -->
                     <div class="col-md-7 col-lg-8">
-                        <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
+                        <p class="text-center text-md-left">© 2025 Bookit. All rights reserved.
                             <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
                             <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
                             <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
@@ -158,25 +300,21 @@
                             <ul class="list-unstyled list-inline">
                                 <li class="list-inline-item">
                                     <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-facebook-f"></i> -->
                                         <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-twitter"></i> -->
                                         <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-linkedin-in"></i> -->
                                         <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-instagram"></i> -->
                                         <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
                                     </a>
                                 </li>
