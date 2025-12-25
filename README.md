@@ -14,7 +14,7 @@ The system automates the procedure of booking a meeting room in a company. Emplo
 <li>Members should not be able to book the room.</li>
 <li>Booked rooms status should be recorded and displayed.</li>
 <li>Meeting rooms schedule should be displayed</li>
-<li>The system should also maintain the additional information of meeting rooms like the meeting room has a per hour cost (in credits) based on the amenities.
+<ul>The system should also maintain the additional information of meeting rooms like the meeting room has a per hour cost (in credits) based on the amenities.
 <li>Credits per amenities: The per hour cost is the sum of credits based on the amenities.</li>
 <li>Seating capacity <=5   =      0 credits</li>
 <li>Seating capacity > 5<= 10    =  10 credits</li>
@@ -26,7 +26,7 @@ The system automates the procedure of booking a meeting room in a company. Emplo
 <li>Water dispenser ==== 5 credits </li>
 <li>TV ==== 10 credits</li>
 <li>Coffee machine  ===== 10 credits</li>  
-</li>
+</ul>
 
 <li>Users of type managers have 2000 credits points, when booking the room, they will have to pay per hour cost from these credits,</li>
 <li>The manager credits are renewed back to 2000 points every Monday morning.</li>
