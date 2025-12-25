@@ -13,8 +13,239 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .mandatory-amenities {
-            color: red;
+        /* Changed dark gradient to light, professional gradient background */
+        body {
+            padding-top: 70px;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e3eef7 50%, #f0f4f8 100%);
+            min-height: 100vh;
+        }
+
+        /* Improved header with proper max-width container and better alignment */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header .container-fluid {
+            max-width: 1350px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+
+        header .navbar {
+            padding: 10px 0;
+        }
+
+        /* Remove all borders and lines beside logo */
+        header .navbar-brand {
+            border: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        header .navbar-brand img {
+            border: none !important;
+        }
+
+        /* Better navbar structure with proper spacing */
+        header .nav-link {
+            padding: 8px 14px;
+            font-size: 0.93rem;
+            color: #333;
+            transition: color 0.2s ease;
+        }
+
+        header .nav-link:hover {
+            color: #0b3558;
+        }
+
+        header .navbar-nav {
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Logout button properly aligned, not at corner */
+        header .navbar-nav .btn-primary {
+            padding: 9px 26px !important;
+            margin: 0 0 0 16px !important;
+            width: auto !important;
+            font-size: 0.93rem;
+            border-radius: 8px;
+        }
+
+        /* Reduced top padding for compact look */
+        .organize-meeting {
+            padding: 20px 0 50px;
+            min-height: calc(100vh - 70px - 120px);
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        /* Enhanced heading with better styling */
+        .organize-meeting h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b3558;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        /* Added subtitle styling */
+        .organize-meeting .subtitle {
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-bottom: 22px;
+            font-weight: 400;
+        }
+
+        .organize-meeting h2::after {
+            content: "";
+            display: block;
+            width: 70px;
+            height: 3.5px;
+            background: linear-gradient(90deg, #3369FF, #5b8fff);
+            margin: 8px auto 12px;
+            border-radius: 6px;
+        }
+
+        /* Increased border-radius for more rounded form card */
+        #organizeMeetingForm {
+            background: white;
+            padding: 32px 38px;
+            border-radius: 20px;
+            box-shadow: 0 8px 35px rgba(11, 53, 88, 0.15);
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid rgba(51, 105, 255, 0.12);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #0b3558;
+            margin-bottom: 7px;
+            font-size: 0.89rem;
+        }
+
+        /* Styled inputs with better focus states */
+        .form-control, .form-select {
+            border: 1px solid #d0dbe6;
+            border-radius: 8px;
+            padding: 10px 13px;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+            font-size: 0.91rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #3369FF;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(51, 105, 255, 0.1);
+        }
+
+        /* Redesigned amenities section with better layout */
+        .amenities-group {
+            background: linear-gradient(135deg, #f8fafb 0%, #e8f1f8 100%);
+            padding: 16px 20px;
+            border-radius: 10px;
+            border: 1px solid #d0dbe6;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .amenities-group > div {
+            display: flex;
+            align-items: center;
+        }
+
+        .amenities-group label {
+            cursor: pointer;
+            color: #495057;
+            transition: color 0.2s ease;
+            font-size: 0.88rem;
+            margin: 0;
+        }
+
+        .amenities-group input[type="checkbox"] {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #3369FF;
+        }
+
+        .amenities-group input[type="checkbox"]:disabled + label {
+            color: #0b3558;
+            font-weight: 600;
+        }
+
+        /* Updated button to use primary blue from brand color */
+        .btn-primary {
+            background: linear-gradient(135deg, #3369FF 0%, #5b8fff 100%);
+            border: none;
+            padding: 11px 45px;
+            border-radius: 9px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: auto;
+            max-width: 260px;
+            margin: 18px auto 0;
+            box-shadow: 0 4px 15px rgba(51, 105, 255, 0.3);
+            font-size: 0.94rem;
+            display: block;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2557e0 0%, #3369FF 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(51, 105, 255, 0.4);
+        }
+
+        /* Improved alert styling */
+        .alert-warning {
+            border-radius: 9px;
+            border-left: 4px solid #ffc107;
+            background: #fff9e6;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            margin-top: auto;
+            position: relative;
+        }
+
+        /* Better responsive layout */
+        @media (max-width: 768px) {
+            #organizeMeetingForm {
+                padding: 22px 18px;
+            }
+            
+            .organize-meeting h2 {
+                font-size: 1.75rem;
+            }
+
+            .amenities-group {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-primary {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Adjusted zoom for large screens - slightly more zoomed in */
+        @media (min-width: 1600px) {
+            body {
+                zoom: 0.95;
+            }
         }
     </style>
 </head>
@@ -22,12 +253,6 @@
     <!-- Sidebar -->
     <div id="mySidebar" class="sidebar bg-light">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <!-- <a href="homepage.html">Products</a>
-        <a href="homepage.html">Solutions</a>
-        <a href="homepage.html">Pricing</a>
-        <a href="homepage.html">Resources</a>
-        <a href="homepage.html">Company</a>
-        <a href="homepage.html">Contact Us</a> -->
         <a href="homepage.html">Main Page</a>
         <a href="manager-dashboard.html">Manager Dashboard</a>
         <a href="homepage.html#highlights">Highlights</a>
@@ -38,10 +263,10 @@
     <!-- Main content -->
     <div id="main">
         <!-- Header Section -->
-        <header class="bg-light py-2 w-100 position-fixed">
+        <header>
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
+                    <span class="navbar-toggler-icon" onclick="openNav()" style="cursor: pointer;"></span>
                     <a class="navbar-brand me-auto" href="./homepage.html">
                         <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
                     </a>
@@ -50,15 +275,9 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
+                           
                             <li class="nav-item"><a class="nav-link" href="manager-dashboard.html">Manager Dashboard</a></li>
-                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
+                            
                             <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
                         </ul>
                     </div>
@@ -66,37 +285,45 @@
             </div>
         </header>   
     </div>  
-<!-- Main content -->
-<div id="main">
     <!-- Organize Meeting Content -->
-    <section class="organize-meeting py-5 my-3">
+    <section class="organize-meeting">
         <div class="container">
-            <h2 class="text-center mb-4">Organize Meeting</h2>
+            <h2 class="text-center">Organize Meeting</h2>
+            <!-- Added subtitle under heading -->
+            <p class="text-center subtitle">Schedule and configure your meeting with ease</p>
             <form id="organizeMeetingForm">
                 <div class="mb-3">
                     <label for="meetingTitle" class="form-label">Meeting Title</label>
-                    <input type="text" class="form-control" id="meetingTitle" required>
+                    <input type="text" class="form-control" id="meetingTitle" placeholder="Enter meeting title" required>
                 </div>
-                <div class="mb-3">
-                    <label for="meetingDate" class="form-label">Date</label>
-                    <input type="date" class="form-control" id="meetingDate" required>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="meetingDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="meetingDate" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="meetingTime" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="meetingTime" required>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="meetingTime" class="form-label">Time</label>
-                    <input type="time" class="form-control" id="meetingTime" required>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="meetingDuration" class="form-label">Duration (hours)</label>
+                        <input type="number" class="form-control" id="meetingDuration" min="1" placeholder="e.g., 2" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="roomSelection" class="form-label">Select Room</label>
+                        <select class="form-select" id="roomSelection" required>
+                            <option value="">Choose a room</option>
+                            <option value="Room 1">Room 1</option>
+                            <option value="Room 2">Room 2</option>
+                            <option value="Room 3">Room 3</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="meetingDuration" class="form-label">Duration (hours)</label>
-                    <input type="number" class="form-control" id="meetingDuration" min="1" required>
-                </div>
-                <div class="mb-3">
-                    <label for="roomSelection" class="form-label">Select Room</label>
-                    <select class="form-select" id="roomSelection" required>
-                        <option value="Room 1">Room 1</option>
-                        <option value="Room 2">Room 2</option>
-                        <option value="Room 3">Room 3</option>
-                    </select>
-                </div>
+
                 <div class="mb-3">
                     <label for="meetingType" class="form-label">Meeting Type</label>
                     <select class="form-select" id="meetingType" required>
@@ -107,84 +334,34 @@
                         <option value="Conference Call">Conference Call</option>
                     </select>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Amenities</label><br>
-                    <input type="checkbox" id="wifi" value="WiFi">
-                    <label for="wifi">WiFi</label><br>
-                    <input type="checkbox" id="conferenceCallFacility" value="Conference Call Facility">
-                    <label for="conferenceCallFacility">Conference Call Facility</label><br>
-                    <input type="checkbox" id="waterDispenser" value="Water Dispenser">
-                    <label for="waterDispenser">Water Dispenser</label><br>
-                    <input type="checkbox" id="tv" value="TV">
-                    <label for="tv">TV</label><br>
-                    <input type="checkbox" id="coffeeMachine" value="Coffee Machine">
-                    <label for="coffeeMachine">Coffee Machine</label><br>
-                    <input type="checkbox" id="whiteboard" value="Whiteboard">
-                    <label for="whiteboard">Whiteboard</label><br>
-                    <input type="checkbox" id="projector" value="Projector">
-                    <label for="projector">Projector</label>
+                    <label class="form-label">Amenities</label>
+                    <div class="amenities-group">
+                        <div><input type="checkbox" id="wifi" value="WiFi"><label for="wifi">WiFi</label></div>
+                        <div><input type="checkbox" id="conferenceCallFacility" value="Conference Call Facility"><label for="conferenceCallFacility">Conference Call Facility</label></div>
+                        <div><input type="checkbox" id="waterDispenser" value="Water Dispenser"><label for="waterDispenser">Water Dispenser</label></div>
+                        <div><input type="checkbox" id="tv" value="TV"><label for="tv">TV</label></div>
+                        <div><input type="checkbox" id="coffeeMachine" value="Coffee Machine"><label for="coffeeMachine">Coffee Machine</label></div>
+                        <div><input type="checkbox" id="whiteboard" value="Whiteboard"><label for="whiteboard">Whiteboard</label></div>
+                        <div><input type="checkbox" id="projector" value="Projector"><label for="projector">Projector</label></div>
+                    </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="seatingCapacity" class="form-label">Seating Capacity</label>
-                    <input type="number" class="form-control" id="seatingCapacity" min="1" required>
+                    <input type="number" class="form-control" id="seatingCapacity" min="1" placeholder="Number of seats required" required>
                 </div>
+
                 <div id="creditWarning" class="alert alert-warning d-none">
-                    <p>Insufficient credits. Please adjust your booking or contact support.</p>
+                    <p class="mb-0">Insufficient credits. Please adjust your booking or contact support.</p>
                 </div>
-                <button type="submit" class="btn btn-primary" onclick="window.location.href = 'manager-dashboard.html';" >Book</button>
+
+                <button type="submit" class="btn btn-primary" onclick="window.location.href = 'manager-dashboard.html';">Book Meeting</button>
             </form>
         </div>
     </section>
-</div>
-    <!-- Footer Section -->
-    <footer class="bg-dark text-light pt-2">
-        <div class="container text-center text-md-left">
 
-            <!-- Legal Links and Social Media Icons -->
-            <div class="row align-items-center">
-                <!-- Legal Links -->
-                <div class="col-md-7 col-lg-8">
-                    <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
-                        <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
-                        <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
-                        <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
-                    </p>
-                </div>
-
-                <!-- Social Media Icons -->
-                <div class="col-md-5 col-lg-4">
-                    <div class="text-center text-md-right">
-                        <ul class="list-unstyled list-inline">
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-facebook-f"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-twitter"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-linkedin-in"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-instagram"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
@@ -200,17 +377,13 @@
                 'Conference Call': ['conferenceCallFacility']
             };
 
-            // Clear all amenities checkboxes
             document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.checked = false;
                 checkbox.disabled = false;
             });
 
             if (meetingType) {
-                // Get mandatory amenities based on meeting type
                 const mandatoryAmenities = amenities[meetingType] || [];
-                
-                // Automatically select mandatory amenities and disable them
                 mandatoryAmenities.forEach(amenity => {
                     document.getElementById(amenity).checked = true;
                     document.getElementById(amenity).disabled = true;
@@ -219,81 +392,53 @@
         });
 
         document.getElementById('organizeMeetingForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        // Initial credits
-        let userCredits = 2000;
-        
-        // Credit values for amenities
-        const creditValues = {
-            'WiFi': 10,
-            'Conference Call Facility': 15,
-            'Water Dispenser': 5,
-            'TV': 10,
-            'Coffee Machine': 10,
-            'Whiteboard': 5,
-            'Projector': 5
-        };
-        
-        // Meeting duration and credits calculation
-        const meetingDuration = parseInt(document.getElementById('meetingDuration').value);
-        const creditsForDuration = meetingDuration * 2; // Example calculation
+            event.preventDefault();
+            
+            let userCredits = 2000;
+            const creditValues = {
+                'WiFi': 10,
+                'Conference Call Facility': 15,
+                'Water Dispenser': 5,
+                'TV': 10,
+                'Coffee Machine': 10,
+                'Whiteboard': 5,
+                'Projector': 5
+            };
+            
+            const meetingDuration = parseInt(document.getElementById('meetingDuration').value);
+            const creditsForDuration = meetingDuration * 2;
+            let creditsRequired = creditsForDuration;
+            
+            const selectedAmenities = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedAmenities.push(checkbox.value);
+            });
+            
+            selectedAmenities.forEach(amenity => {
+                if (creditValues[amenity]) {
+                    creditsRequired += creditValues[amenity];
+                }
+            });
 
-        // Calculate total credits required for the meeting
-        let creditsRequired = creditsForDuration;
-        const meetingType = document.getElementById('meetingType').value;
-        const amenities = {
-            'Classroom Training': ['Whiteboard', 'Projector'],
-            'Online Training': ['WiFi', 'Projector'],
-            'Business Call': ['Projector'],
-            'Conference Call': ['Conference Call Facility']
-        };
-
-        // Calculate credits for selected amenities
-        const selectedAmenities = [];
-        document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-            selectedAmenities.push(checkbox.value);
-        });
-        
-        selectedAmenities.forEach(amenity => {
-            if (creditValues[amenity]) {
-                creditsRequired += creditValues[amenity];
+            const seatingCapacity = parseInt(document.getElementById('seatingCapacity').value);
+            if(seatingCapacity > 10){
+                creditsRequired += 20;
+            } else if (seatingCapacity > 5 && seatingCapacity <= 10){
+                creditsRequired += 10;
             }
+
+            const creditsUsed = creditsRequired;
+
+            if (userCredits < creditsUsed) {
+                document.getElementById('creditWarning').classList.remove('d-none');
+                return;
+            }
+            
+            userCredits -= creditsUsed;
+            document.getElementById('creditWarning').classList.add('d-none');
+            alert(`Meeting booked successfully!\nCredits Used: ${creditsUsed}\nAvailable Credits: ${userCredits}`);
         });
-
-        const seatingCapacity = parseInt(document.getElementById('seatingCapacity').value);
-        if(seatingCapacity>10){
-            creditsRequired+=20;
-        }
-        else if (seatingCapacity>5 && seatingCapacity<=10){
-            creditsRequired+=10;
-        }
-
-        // Calculate credits used
-        const creditsUsed = creditsRequired;
-
-        // Check if user has sufficient credits
-        if (userCredits < creditsUsed) {
-            document.getElementById('creditWarning').classList.remove('d-none');
-            return;
-        }
-        
-        // Update available credits
-        userCredits -= creditsUsed;
-
-        // Hide warning and show success message
-        document.getElementById('creditWarning').classList.add('d-none');
-        
-        // Show booking success message with credits used and available credits
-        alert(`Meeting booked successfully!\nCredits Used: ${creditsUsed}\nAvailable Credits: ${userCredits}`);
-    });
     </script>
-    <script>
-        feather.replace();
-    </script>
-
-    <!-- js for bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- custom js file import -->
     <script src="./js/homepage.js"></script>
