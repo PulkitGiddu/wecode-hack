@@ -289,39 +289,36 @@
     <section class="organize-meeting">
         <div class="container">
             <h2 class="text-center">Organize Meeting</h2>
-            <!-- Added subtitle under heading -->
-            <p class="text-center subtitle">Schedule and configure your meeting with ease</p>
             <form id="organizeMeetingForm">
                 <div class="mb-3">
                     <label for="meetingTitle" class="form-label">Meeting Title</label>
                     <input type="text" class="form-control" id="meetingTitle" placeholder="Enter meeting title" required>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="meetingDate" class="form-label">Date</label>
-                        <input type="date" class="form-control" id="meetingDate" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="meetingTime" class="form-label">Time</label>
-                        <input type="time" class="form-control" id="meetingTime" required>
-                    </div>
+                <div class="mb-3">
+                    <label for="meetingDate" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="meetingDate" required>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="meetingDuration" class="form-label">Duration (hours)</label>
-                        <input type="number" class="form-control" id="meetingDuration" min="1" placeholder="e.g., 2" required>
+                        <label for="startTime" class="form-label">Start Time</label>
+                        <input type="time" class="form-control" id="startTime" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="roomSelection" class="form-label">Select Room</label>
-                        <select class="form-select" id="roomSelection" required>
-                            <option value="">Choose a room</option>
-                            <option value="Room 1">Room 1</option>
-                            <option value="Room 2">Room 2</option>
-                            <option value="Room 3">Room 3</option>
-                        </select>
+                        <label for="endTime" class="form-label">End Time</label>
+                        <input type="time" class="form-control" id="endTime" required>
                     </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="roomSelection" class="form-label">Select Room</label>
+                    <select class="form-select" id="roomSelection" required>
+                        <option value="">Choose a room</option>
+                        <option value="Room 1">Room 1</option>
+                        <option value="Room 2">Room 2</option>
+                        <option value="Room 3">Room 3</option>
+                    </select>
                 </div>
 
                 <div class="mb-3">
@@ -394,6 +391,30 @@
         document.getElementById('organizeMeetingForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
+            // Calculate duration from start and end time
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            
+            if (!startTime || !endTime) {
+                alert('Please enter both start and end times.');
+                return;
+            }
+            
+            // Convert time strings to hours
+            const [startHour, startMinute] = startTime.split(':').map(Number);
+            const [endHour, endMinute] = endTime.split(':').map(Number);
+            
+            const startInMinutes = startHour * 60 + startMinute;
+            const endInMinutes = endHour * 60 + endMinute;
+            
+            if (endInMinutes <= startInMinutes) {
+                alert('End time must be after start time.');
+                return;
+            }
+            
+            const durationInMinutes = endInMinutes - startInMinutes;
+            const meetingDuration = Math.ceil(durationInMinutes / 60); // Convert to hours, rounding up
+            
             let userCredits = 2000;
             const creditValues = {
                 'WiFi': 10,
@@ -405,7 +426,6 @@
                 'Projector': 5
             };
             
-            const meetingDuration = parseInt(document.getElementById('meetingDuration').value);
             const creditsForDuration = meetingDuration * 2;
             let creditsRequired = creditsForDuration;
             
@@ -436,7 +456,7 @@
             
             userCredits -= creditsUsed;
             document.getElementById('creditWarning').classList.add('d-none');
-            alert(`Meeting booked successfully!\nCredits Used: ${creditsUsed}\nAvailable Credits: ${userCredits}`);
+            alert(`Meeting booked successfully!\nDuration: ${meetingDuration} hour(s)\nCredits Used: ${creditsUsed}\nAvailable Credits: ${userCredits}`);
         });
     </script>
 
