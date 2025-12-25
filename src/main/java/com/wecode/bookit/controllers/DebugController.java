@@ -14,10 +14,11 @@ import java.util.Map;
 public class DebugController {
     private static final Logger logger = LoggerFactory.getLogger(DebugController.class);
 
-    @PostMapping("/login")
+    @PostMapping("/signUp")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> body) {
         logger.info("Received login body: {}", body);
         System.out.println("Received login body : " + body);
         return ResponseEntity.ok(body);
     }
 }
+

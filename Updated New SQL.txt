@@ -1,0 +1,151 @@
+CREATE TABLE users (
+    user_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    phone VARCHAR(20),
+
+    role VARCHAR(20) NOT NULL
+        CHECK (role IN ('ADMIN', 'MANAGER', 'MEMBER')),
+
+    credits INTEGER DEFAULT 0 CHECK (credits >= 0),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+CREATE TABLE meeting_rooms (
+    room_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    room_name VARCHAR(100) UNIQUE NOT NULL,
+    seating_capacity INTEGER NOT NULL CHECK (seating_capacity > 0),
+
+    projector BOOLEAN DEFAULT FALSE,
+    wifi BOOLEAN DEFAULT FALSE,
+    conference_call BOOLEAN DEFAULT FALSE,
+    whiteboard BOOLEAN DEFAULT FALSE,
+    water_dispenser BOOLEAN DEFAULT FALSE,
+    tv BOOLEAN DEFAULT FALSE,
+    coffee_machine BOOLEAN DEFAULT FALSE,
+
+    is_active BOOLEAN DEFAULT TRUE,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+
+CREATE TABLE bookings (
+    booking_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    room_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+
+    meeting_title VARCHAR(200) NOT NULL,
+    meeting_type VARCHAR(20) NOT NULL
+        CHECK (meeting_type IN ('CLASSROOM', 'ONLINE', 'CONFERENCE', 'BUSINESS')),
+
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+
+    total_credits INTEGER NOT NULL CHECK (total_credits >= 0),
+
+    status VARCHAR(20) DEFAULT 'ACTIVE'
+        CHECK (status IN ('ACTIVE', 'CANCELLED')),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cancelled_at TIMESTAMP,
+
+    CONSTRAINT fk_booking_room
+        FOREIGN KEY (room_id)
+        REFERENCES meeting_rooms(room_id),
+
+    CONSTRAINT fk_booking_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id),
+
+    CONSTRAINT chk_booking_time
+        CHECK (end_time > start_time)
+);
+
+
+
+CREATE TABLE credit_transactions (
+    transaction_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    user_id INTEGER NOT NULL,
+    booking_id INTEGER,
+
+    amount INTEGER NOT NULL,
+
+    transaction_type VARCHAR(20) NOT NULL
+        CHECK (transaction_type IN ('BOOKING', 'REFUND', 'RESET')),
+
+    description VARCHAR(255),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_transaction_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id),
+
+    CONSTRAINT fk_transaction_booking
+        FOREIGN KEY (booking_id)
+        REFERENCES bookings(booking_id)
+);
+
+
+
+
+CREATE TABLE room_schedule (
+    schedule_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    booking_id INTEGER UNIQUE NOT NULL,
+    room_id INTEGER NOT NULL,
+    booked_by INTEGER NOT NULL,
+
+    room_name VARCHAR(100) NOT NULL,
+    meeting_title VARCHAR(200),
+    meeting_type VARCHAR(20),
+
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+
+    status VARCHAR(20)
+        CHECK (status IN ('ACTIVE', 'CANCELLED')),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_schedule_booking
+        FOREIGN KEY (booking_id)
+        REFERENCES bookings(booking_id),
+
+    CONSTRAINT fk_schedule_room
+        FOREIGN KEY (room_id)
+        REFERENCES meeting_rooms(room_id),
+
+    CONSTRAINT fk_schedule_user
+        FOREIGN KEY (booked_by)
+        REFERENCES users(user_id)
+);
+
+
+CREATE TABLE manager_credit_summary (
+    user_id INTEGER PRIMARY KEY,
+
+    manager_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+
+    total_credits INTEGER NOT NULL,
+    last_reset_at TIMESTAMP,
+
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_manager_summary_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+);
