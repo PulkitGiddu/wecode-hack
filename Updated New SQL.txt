@@ -15,7 +15,6 @@ CREATE TABLE users (
 );
 
 
-
 CREATE TABLE meeting_rooms (
     room_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
@@ -35,8 +34,6 @@ CREATE TABLE meeting_rooms (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
 
 
 CREATE TABLE bookings (
@@ -73,7 +70,6 @@ CREATE TABLE bookings (
 );
 
 
-
 CREATE TABLE credit_transactions (
     transaction_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
@@ -97,8 +93,6 @@ CREATE TABLE credit_transactions (
         FOREIGN KEY (booking_id)
         REFERENCES bookings(booking_id)
 );
-
-
 
 
 CREATE TABLE room_schedule (
@@ -149,3 +143,42 @@ CREATE TABLE manager_credit_summary (
         FOREIGN KEY (user_id)
         REFERENCES users(user_id)
 );
+
+
+CREATE TABLE amenities (
+    amenity_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    amenity_name VARCHAR(50) UNIQUE NOT NULL,
+    credit_cost INTEGER NOT NULL CHECK (credit_cost >= 0)
+);
+
+Dummy Data: INSERT INTO amenities (amenity_name, credit_cost) VALUES
+('PROJECTOR', 5),
+('WIFI', 10),
+('CONFERENCE_CALL', 15),
+('WHITEBOARD', 5),
+('WATER_DISPENSER', 5),
+('TV', 10),
+('COFFEE_MACHINE', 10);
+
+CREATE TABLE seating_capacity_credits (
+    min_capacity INTEGER NOT NULL,
+    max_capacity INTEGER NOT NULL,
+    credit_cost INTEGER NOT NULL,
+
+    CONSTRAINT pk_seating_capacity PRIMARY KEY (min_capacity, max_capacity)
+);
+
+Dummy data: INSERT INTO seating_capacity_credits VALUES
+(0, 5, 0),
+(6, 10, 10),
+(11, 1000, 20);
+
+
+How to use in service layer.
+1. Fetch room seating capacity
+2. Fetch seating capacity credit
+3. Fetch all amenities for the room
+4. Sum all amenity credits
+5. hourlyCost = seatingCost + amenityCost
+6. totalCost = hourlyCost × duration
+
