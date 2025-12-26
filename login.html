@@ -66,6 +66,18 @@
                     
                     <form id="loginForm">
                         <div class="form-group">
+                            <label for="name" class="form-label">Name</label>
+                            <input 
+                                type="text" 
+                                name="name" 
+                                class="form-input" 
+                                id="name" 
+                                placeholder="Jane Doe"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
                             <label for="email" class="form-label">Email</label>
                             <input 
                                 type="email" 
@@ -101,15 +113,15 @@
                             <label class="form-label">Role</label>
                             <div class="role-selector">
                                 <label class="role-option">
-                                    <input type="radio" name="usertype" value="admin" id="admin" required>
+                                    <input type="radio" name="role" value="admin" id="admin" required>
                                     <span class="role-card">Admin</span>
                                 </label>
                                 <label class="role-option">
-                                    <input type="radio" name="usertype" value="manager" id="manager">
+                                    <input type="radio" name="role" value="manager" id="manager">
                                     <span class="role-card">Manager</span>
                                 </label>
                                 <label class="role-option">
-                                    <input type="radio" name="usertype" value="member" id="member">
+                                    <input type="radio" name="role" value="member" id="member">
                                     <span class="role-card">Member</span>
                                 </label>
                             </div>
@@ -145,24 +157,23 @@
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const usertype = document.querySelector('input[name="usertype"]:checked')?.value;
+            const role = document.querySelector('input[name="role"]:checked')?.value;
             
             // Validate user type selection
-            if (!usertype) {
+            if (!role) {
                 alert('Please select a role.');
                 return;
             }
             
-            // For demo purposes, we're using email as name
-            const name = email.split('@')[0];
-            
-            const loginData = { name, email, password, usertype };
+            const roleUpper = role.toUpperCase();
+            const loginData = { name, email, password, role: roleUpper };
             console.log('Frontend sending:', loginData);
             
             try {
-                const res = await fetch('http://localhost:8081/api/debug/login', {
+                const res = await fetch('http://localhost:8081/api/auth/signUp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(loginData)
@@ -173,14 +184,14 @@
                 // If login is successful, redirect to appropriate dashboard
                 if (res.ok) {
                     // Redirect based on user type
-                    switch(usertype) {
-                        case 'admin':
+                    switch(roleUpper) {
+                        case 'ADMIN':
                             window.location.href = 'admindashboard.html';
                             break;
-                        case 'manager':
+                        case 'MANAGER':
                             window.location.href = 'manager-dashboard.html';
                             break;
-                        case 'member':
+                        case 'MEMBER':
                             window.location.href = 'member-dashboard.html';
                             break;
                         default:
