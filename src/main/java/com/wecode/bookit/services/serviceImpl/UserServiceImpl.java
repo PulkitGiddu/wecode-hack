@@ -1,54 +1,51 @@
 package com.wecode.bookit.services.serviceImpl;
 
-import com.wecode.bookit.dao.UserDAO;
-import com.wecode.bookit.dao.UserDAOImpl;
-import com.wecode.bookit.model.Users;
-import com.wecode.bookit.exceptions.AccessDeniedException;
+import com.wecode.bookit.dto.UserDto;
+import com.wecode.bookit.entity.Role;
+import com.wecode.bookit.entity.User;
+import com.wecode.bookit.repository.UserRepository;
 import com.wecode.bookit.services.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.UUID;
 
+@Service
 public class UserServiceImpl implements UserService {
 
-    private final UserDAO userdao;
-    private final Users authenticatedUser;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserServiceImpl(Users authenticatedUser) {
-        this.authenticatedUser = authenticatedUser;
-        this.userdao = new UserDAOImpl();
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    protected void checkAdminAccess() {
-        if (authenticatedUser == null || !authenticatedUser.getRole().equalsIgnoreCase("admin")) {
-            throw new AccessDeniedException("You do not have access to this feature!");
+    @Override
+    public User signUp(UserDto userDto) {
+
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new RuntimeException("Email already registered");
         }
-    }
 
-    //add a user to the database
-    public void addUserdata(String id, String username, String password, String name, String email, String phone, String role, int credits) {
-        checkAdminAccess(); //if admin, then allowed to access the method, else it will throw an exception
-        Users newUser = new Users(id, username, password, name, email, phone, role, credits);
-        userdao.addUsers(authenticatedUser, newUser);
-        System.out.println("User added: " + name);
-    }
+        User user = new User();
+        user.setUserId(UUID.randomUUID());
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
 
-    //delete user data
-    public void deleteUserdata(String username) {
-        checkAdminAccess();
-        userdao.deleteUsers(authenticatedUser, username);
-    }
+        user.setPasswordHash(passwordEncoder.encode(userDto.getPassword()));
 
-    //view all users
-    public void getAllUsers() {
-        checkAdminAccess();
-        List<Users> users = userdao.findUsers();
-        users.forEach(System.out::println);
-    }
+        Role role = null;
+        if (userDto.getRole() != null && !userDto.getRole().isEmpty()) {
+            role = Role.valueOf(userDto.getRole().toUpperCase());
+        }
+        user.setRole(role);
 
-    //view users based on the username
-    public void getUsersByUsername(String username) {
-        checkAdminAccess();
-        List<Users> users = userdao.getUsersbyusername(username);
-        users.forEach(System.out::println);
+        if (role == Role.MANAGER) {
+            user.setCredits(2000);
+        } else {
+            user.setCredits(0);
+        }
+
+        return userRepository.save(user);
     }
 }

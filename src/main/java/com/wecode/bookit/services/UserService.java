@@ -1,8 +1,9 @@
 package com.wecode.bookit.services;
 
+import com.wecode.bookit.dto.UserDto;
+import com.wecode.bookit.entity.User;
+
 public interface UserService {
-    public void addUserdata(String id,String username,String password,String name,String email,String phone,String role,int credits);
-    public void deleteUserdata(String username);
-    public void getAllUsers();
-    public void getUsersByUsername(String username);
+    User signUp(UserDto userDto);
 }
+
