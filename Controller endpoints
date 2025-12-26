@@ -1,0 +1,168 @@
+controller 1:
+
+
+// admin has to create multiple rooms irrespective of meeting type.
+delhi
+mumbai
+
+/signUp -> DB -> CREATE TABLE users (
+                     user_id INT PRIMARY KEY,
+                     name VARCHAR(100) NOT NULL,
+                     email VARCHAR(255) UNIQUE NOT NULL,
+                     password_hash VARCHAR(255) NOT NULL,
+                     role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'MANAGER', 'MEMBER')),
+                     credits INT DEFAULT 0 CHECK (credits >= 0),
+                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                 );
+
+                while login
+                if(manager){
+                    set.credits == 2000
+                    }
+
+
+AdminController
+/admin/createRoom -> DB -> CREATE TABLE meeting_rooms (
+                         room_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                         room_name VARCHAR(100) UNIQUE NOT NULL,
+                         seating_capacity INTEGER NOT NULL CHECK (seating_capacity > 0),
+
+                         room_type VARCHAR(20) NOT NULL
+                                 CHECK (meeting_type IN ('CLASSROOM', 'ONLINE', 'CONFERENCE', 'BUSINESS')),
+
+                         // bool isBooked = false; based on roomid;
+
+                         projector BOOLEAN DEFAULT FALSE,
+                         wifi BOOLEAN DEFAULT FALSE,
+                         conference_call BOOLEAN DEFAULT FALSE,
+                         whiteboard BOOLEAN DEFAULT FALSE,
+                         water_dispenser BOOLEAN DEFAULT FALSE,
+                         tv BOOLEAN DEFAULT FALSE,
+                         coffee_machine BOOLEAN DEFAULT FALSE,
+
+                         is_active BOOLEAN DEFAULT TRUE,
+                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                     );
+
+
+
+/admin/manageAmenities -> DB -> Amenities(name, credits)
+                         projector BOOLEAN DEFAULT FALSE,
+                         wifi BOOLEAN DEFAULT FALSE,
+                         conference_call BOOLEAN DEFAULT FALSE,
+                         whiteboard BOOLEAN DEFAULT FALSE,
+                         water_dispenser BOOLEAN DEFAULT FALSE,
+                         tv BOOLEAN DEFAULT FALSE,
+                         coffee_machine BOOLEAN DEFAULT FALSE,
+
+                 /addAmenities
+                 /removeAmenities
+
+
+/admin/editRoom -> DB -> Update TABLE meeting_rooms (
+                                                  room_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                                                  room_name VARCHAR(100) UNIQUE NOT NULL,
+                                                  seating_capacity INTEGER NOT NULL CHECK (seating_capacity > 0),
+
+                                                  room_type VARCHAR(20) NOT NULL
+                                                          CHECK (meeting_type IN ('CLASSROOM', 'ONLINE', 'CONFERENCE', 'BUSINESS')),
+
+                                                  projector BOOLEAN DEFAULT FALSE,
+                                                  wifi BOOLEAN DEFAULT FALSE,
+                                                  conference_call BOOLEAN DEFAULT FALSE,
+                                                  whiteboard BOOLEAN DEFAULT FALSE,
+                                                  water_dispenser BOOLEAN DEFAULT FALSE,
+                                                  tv BOOLEAN DEFAULT FALSE,
+                                                  coffee_machine BOOLEAN DEFAULT FALSE,
+
+                                                  is_active BOOLEAN DEFAULT TRUE,
+                                                  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                                  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                                              );
+
+
+*** admin/member -> checkAdminAccess();
+
+controller2:
+
+ManagerController
+1. first while calling below endpoint   -> available
+
+/manager/organizeMeeting   -> DB ->     CREATE TABLE meeting_rooms (
+                                        room_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+                                        room_name VARCHAR(100) UNIQUE NOT NULL,
+                                        meeting_title VARCHAR(100) NOT NULL,
+                                        seating_capacity INTEGER NOT NULL CHECK (seating_capacity > 0),
+
+                                        projector BOOLEAN DEFAULT FALSE,
+                                        wifi BOOLEAN DEFAULT FALSE,
+                                        conference_call BOOLEAN DEFAULT FALSE,
+                                        whiteboard BOOLEAN DEFAULT FALSE,
+                                        water_dispenser BOOLEAN DEFAULT FALSE,
+                                        tv BOOLEAN DEFAULT FALSE,
+                                        coffee_machine BOOLEAN DEFAULT FALSE,
+
+                                        is_active BOOLEAN DEFAULT TRUE,
+
+                                        date,
+                                        start_time,
+                                        end_time,
+
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                                    );
+
+
+book now -> create booking under roomid and manager id  then
+
+
+/get-credits  -> total credits - room cost.
+CREATE TABLE credit_transactions (
+    transaction_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    user_id INTEGER NOT NULL,
+    booking_id INTEGER,
+
+    amount INTEGER NOT NULL,
+
+    transaction_type VARCHAR(20) NOT NULL
+        CHECK (transaction_type IN ('BOOKING', 'REFUND', 'RESET')),
+
+    description VARCHAR(255),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_transaction_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(user_id),
+
+    CONSTRAINT fk_transaction_booking
+        FOREIGN KEY (booking_id)
+        REFERENCES bookings(booking_id)
+);
+
+
+/manager/viewAnalytics -> get all rooms with bookings
+
+
+MemberController
+/manager/manageteam -> getall user with role member -> based on name get DB results and
+                        have privilage to change the role to manager
+                        -> same credits should be moved to that member.
+
+
+/manager/credits -> total credits -> under managerId
+                    ussage
+
+
+
+
+/member/getMeetings -> date , manager name
+                        get all meetings booked under mangerId.
+
+
+/logout -> 200ok
+frontend
