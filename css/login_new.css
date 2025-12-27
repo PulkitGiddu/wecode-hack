@@ -7,7 +7,8 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #e8eef5 0%, #d4dce8 100%);
+      background: url('../assets/img/bg.png') center center / cover no-repeat;
+    
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -25,10 +26,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 20% 50%, rgba(79, 109, 245, 0.04) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 50%);
-    animation: gradientShift 15s ease infinite;
+    background: url('./assets/img/bg.png') center center / cover no-repeat;
+   
     z-index: 0;
     pointer-events: none;
 }
@@ -41,9 +40,9 @@ body::before {
 .login-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    max-width: 1050px;
+    max-width: 1100px;
     width: 100%;
-    max-height: 88vh;
+    max-height: 110vh;
     background: #ffffff;
     border-radius: 24px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
@@ -165,7 +164,7 @@ body::before {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #049dfd 0%, #8b5cf6 100%);
+   background: linear-gradient(135deg, #072c7c 0%, #5fcdfe 100%);
     color: white;
     font-size: 12px;
     font-weight: 700;
