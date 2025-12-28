@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 public class LoginResponseDto {
     private int statusCode;
     private String message;
+    private String error;
+    private String email;
+    private String role;
 }

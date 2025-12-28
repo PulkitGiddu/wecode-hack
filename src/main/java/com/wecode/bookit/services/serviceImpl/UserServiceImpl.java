@@ -22,7 +22,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User signUp(UserDto userDto) {
-
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
@@ -31,20 +30,11 @@ public class UserServiceImpl implements UserService {
         user.setUserId(UUID.randomUUID());
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-
         user.setPasswordHash(passwordEncoder.encode(userDto.getPassword()));
 
-        Role role = null;
-        if (userDto.getRole() != null && !userDto.getRole().isEmpty()) {
-            role = Role.valueOf(userDto.getRole().toUpperCase());
-        }
+        Role role = Role.valueOf(userDto.getRole().toUpperCase());
         user.setRole(role);
-
-        if (role == Role.MANAGER) {
-            user.setCredits(2000);
-        } else {
-            user.setCredits(0);
-        }
+        user.setCredits(role == Role.MANAGER ? 2000 : 0);
 
         return userRepository.save(user);
     }
@@ -61,3 +51,4 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 }
+

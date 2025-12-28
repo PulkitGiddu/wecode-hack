@@ -27,40 +27,64 @@ public class SignUpController {
     public ResponseEntity<SignUpResponseDto> signUp(@RequestBody UserDto userDto) {
         UserValidator.ValidationResult validationResult = userValidator.validateSignUpRequest(userDto);
         if (!validationResult.isValid()) {
-            SignUpResponseDto response = SignUpResponseDto.builder()
+            return ResponseEntity.badRequest().body(
+                SignUpResponseDto.builder()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
                     .message(validationResult.getMessage())
-                    .build();
-            return ResponseEntity.badRequest().body(response);
+                    .build()
+            );
         }
 
-        User user = userService.signUp(userDto);
-
-        SignUpResponseDto response = SignUpResponseDto.builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message("User registered successfully")
-                .name(user.getName())
-                .role(user.getRole())
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            User user = userService.signUp(userDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                SignUpResponseDto.builder()
+                    .statusCode(HttpStatus.CREATED.value())
+                    .message("User registered successfully")
+                    .name(user.getName())
+                    .role(user.getRole().toString())
+                    .build()
+            );
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                SignUpResponseDto.builder()
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
+                    .message(e.getMessage())
+                    .build()
+            );
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody UserDto userDto) {
         UserValidator.ValidationResult validationResult = userValidator.validateLoginRequest(userDto);
         if (!validationResult.isValid()) {
-            LoginResponseDto response = LoginResponseDto.builder()
+            return ResponseEntity.badRequest().body(
+                LoginResponseDto.builder()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .message(validationResult.getMessage())
-                    .build();
-            return ResponseEntity.badRequest().body(response);
+                    .error(validationResult.getMessage())
+                    .build()
+            );
         }
 
-        User user = userService.login(userDto);
-        LoginResponseDto response = LoginResponseDto.builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message("Login Successfull")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        try {
+            User user = userService.login(userDto);
+            return ResponseEntity.ok(
+                LoginResponseDto.builder()
+                    .statusCode(HttpStatus.OK.value())
+                    .message("Login successful")
+                    .email(user.getEmail())
+                    .role(user.getRole().toString())
+                    .build()
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                LoginResponseDto.builder()
+                    .statusCode(HttpStatus.UNAUTHORIZED.value())
+                    .error(e.getMessage())
+                    .build()
+            );
+        }
     }
 }
+
