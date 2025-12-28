@@ -3,181 +3,1048 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- favicon cdn -->
+    <title>Manage Team - Bookit</title>
+    
     <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
-
-    <title>Manage Team</title>
-    <link rel="stylesheet" href="./css/homepage.css">
-
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #E5E7EB;
+            color: #1F2937;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('./assets/img/bg.png') center center / cover no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(219, 234, 254, 0.4) 0%, rgba(243, 244, 246, 0.5) 50%, rgba(239, 246, 255, 0.4) 100%);
+            z-index: -1;
+        }
+
+        .top-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 6px 0;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(243, 244, 246, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #6B7280;
+        }
+
+        .header-icon-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #3B82F6;
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .nav-tabs-container {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            top: 46px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+        }
+
+        .nav-tabs-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-tab {
+            padding: 10px 18px;
+            color: #6B7280;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .nav-tab.active {
+            border-bottom-color: #3B82F6;
+        }
+
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 100px 24px 30px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 20px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+            letter-spacing: -0.3px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 18px;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+            border: 0.5px solid rgba(255, 255, 255, 0.4);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-text {
+            font-size: 11px;
+            color: #6B7280;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .invite-action-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(239, 246, 255, 0.8));
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .invite-action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
+            background: white;
+        }
+
+        .invite-illustration {
+            width: 60px;
+            height: 60px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            color: #3B82F6;
+        }
+
+        .btn-invite-primary {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-invite-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(249, 250, 251, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            background: rgba(239, 246, 255, 0.7);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.12);
+        }
+
+        .stat-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3B82F6;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .members-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card:hover {
+            background: white;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+        }
+
+        .member-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .member-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 6px;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.3s;
+        }
+
+        .member-card:hover .member-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #F3F4F6;
+            color: #3B82F6;
+        }
+
+        .member-info {
+            margin-bottom: 12px;
+        }
+
+        .member-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .member-email {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .member-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .role-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-admin { background: rgba(239, 246, 255, 0.8); color: #3B82F6; }
+        .badge-manager { background: rgba(254, 243, 199, 0.8); color: #D97706; }
+        .badge-member { background: rgba(243, 244, 246, 0.8); color: #6B7280; }
+
+        .member-name-btn {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .member-name-btn:hover {
+            color: #3B82F6;
+        }
+
+        /* Enhanced Modal Styles */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .custom-modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
+            width: 440px;
+            max-width: 90%;
+            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .custom-modal.show .custom-modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .custom-modal-header {
+            padding: 24px 28px 0;
+            position: relative;
+        }
+
+        .custom-modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 8px 0;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(243, 244, 246, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #6B7280;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+            transform: rotate(90deg);
+        }
+
+        .custom-modal-body {
+            padding: 24px 28px 28px;
+        }
+
+        /* Enhanced Member Detail Modal */
+        .member-detail-header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .member-detail-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 20px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: 800;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-detail-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .member-detail-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .member-detail-email {
+            font-size: 14px;
+            color: #6B7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .detail-section {
+            background: rgba(249, 250, 251, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .detail-item:first-child {
+            padding-top: 0;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6B7280;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-label i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .status-active {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10B981;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .btn-modal-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-modal-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header { border: none; padding: 24px 24px 12px; }
+        .modal-body { padding: 12px 24px 24px; }
+        .form-control, .form-select {
+            background: rgba(243, 244, 246, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div id="mySidebar" class="sidebar bg-light">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <!-- <a href="homepage.html">Products</a>
-        <a href="homepage.html">Solutions</a>
-        <a href="homepage.html">Pricing</a>
-        <a href="homepage.html">Resources</a>
-        <a href="homepage.html">Company</a>
-        <a href="homepage.html">Contact Us</a> -->
-        <a href="homepage.html">Main Page</a>
-        <a href="manager-dashboard.html">Manager Dashboard</a>
-        <a href="homepage.html#highlights">Highlights</a>
-        <a href="homepage.html#working">See Working</a>
-        <a href="homepage.html#features">Features</a>
-    </div> 
-    <!-- Main content -->
-    <div id="main">
-        <!-- Header Section -->
-        <header class="bg-light py-2 w-100 position-fixed">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
-                    <a class="navbar-brand me-auto" href="./homepage.html">
-                        <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
-                            <li class="nav-item"><a class="nav-link" href="manager-dashboard.html">Manager Dashboard</a></li>
-                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
-                            <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
-                        </ul>
-                    </div>
-                </nav>
-    </div>
-        </header>   
-    </div>
-    <div class="container py-5 my-5">
-        <h2>Manage Team</h2>
-        <form id="manageTeamForm">
-            <div class="mb-3">
-                <label for="teamMember" class="form-label">Team Member Name</label>
-                <input type="text" class="form-control" id="teamMember" placeholder="Enter team member name">
+    <header class="top-header">
+        <div class="header-container">
+            <a href="./homepage.html" class="logo">
+                <img src="./assets/img/bookitlogo.png" alt="Bookit">
+            </a>
+            
+            <div class="header-actions">
+                <button class="header-icon-btn"><i data-feather="search" width="16" height="16"></i></button>
+                <button class="header-icon-btn"><i data-feather="bell" width="16" height="16"></i></button>
+                <button class="header-icon-btn"><i data-feather="settings" width="16" height="16"></i></button>
+                <div class="user-avatar">JD</div>
             </div>
-            <div class="mb-3">
-                <label for="teamRole" class="form-label">Role</label>
-                <select class="form-select" id="teamRole">
-                    <option value="Admin">Admin</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Member">Member</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Assign Role</button>
-        </form>
-        <a href="manager-dashboard.html" class="btn btn-secondary mt-3">Back to Dashboard</a>
-    </div>
-    <!-- Footer Section -->
-    <footer class="bg-dark text-light pt-2 position-fixed fixed-bottom">
-        <div class="container text-center text-md-left">
+        </div>
+    </header>
 
-            <!-- Legal Links and Social Media Icons -->
-            <div class="row align-items-center">
-                <!-- Legal Links -->
-                <div class="col-md-7 col-lg-8">
-                    <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
-                        <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
-                        <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
-                        <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
-                    </p>
+    <nav class="nav-tabs-container">
+        <div class="nav-tabs-wrapper">
+            <a href="organize-meeting.html" class="nav-tab"><i data-feather="calendar" width="14" height="14"></i>Organize Meetings</a>
+            <a href="analytics.html" class="nav-tab"><i data-feather="bar-chart-2" width="14" height="14"></i>Analyze Meetings</a>
+            <a href="manageTeam.html" class="nav-tab active"><i data-feather="users" width="14" height="14"></i>Team</a>
+            <a href="manageamenities.html" class="nav-tab"><i data-feather="box" width="14" height="14"></i>Amenities</a>
+            <a href="notifications.html" class="nav-tab"><i data-feather="bell" width="14" height="14"></i>Notifications</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Team Management</h1>
+            <p class="dashboard-subtitle">Organize your workspace, assign roles, and manage permissions.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="sidebar-column">
+                <div class="dashboard-card">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title">
+                            <i data-feather="user-plus" width="16" height="16" style="color: #3B82F6;"></i>
+                            Invite Member
+                        </div>
+                        <p class="sidebar-text">Invite new team members to collaborate on your projects and manage meetings.</p>
+                        
+                        <div class="invite-action-card" data-bs-toggle="modal" data-bs-target="#inviteMemberModal">
+                            <div class="invite-illustration">
+                                <i data-feather="plus" width="30" height="30"></i>
+                            </div>
+                            <div class="sidebar-title" style="justify-content: center; margin-bottom: 4px;">Quick Invite</div>
+                            <p class="sidebar-text" style="margin-bottom: 12px;">Add someone via email</p>
+                            <button class="btn-invite-primary">Open Invitation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-column">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i data-feather="users" width="16" height="16"></i></div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;"><i data-feather="shield" width="16" height="16"></i></div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Admin Roles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;"><i data-feather="user-check" width="16" height="16"></i></div>
+                        <div class="stat-value">9</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
                 </div>
 
-                <!-- Social Media Icons -->
-                <div class="col-md-5 col-lg-4">
-                    <div class="text-center text-md-right">
-                        <ul class="list-unstyled list-inline">
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-facebook-f"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-twitter"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-linkedin-in"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                    <!-- <i class="fab fa-instagram"></i> -->
-                                    <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
-                                </a>
-                            </li>
-                        </ul>
+                <div class="dashboard-card">
+                    <div class="card-header" style="padding: 0; margin-bottom: 20px; border: none; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 class="dashboard-title" style="font-size: 18px;">Active Members</h3>
+                        <div style="display: flex; gap: 8px;">
+                            <div class="header-icon-btn"><i data-feather="filter" width="14" height="14"></i></div>
+                            <div class="header-icon-btn"><i data-feather="grid" width="14" height="14"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="members-card-grid">
+                        <div class="member-card">
+                            <div class="member-header">
+                                <div class="member-avatar" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6)">AS</div>
+                                <div class="member-actions">
+                                    <div class="action-btn"><i data-feather="edit-2"></i></div>
+                                    <div class="action-btn"><i data-feather="trash-2"></i></div>
+                                    <div class="action-btn" onclick="showMemberDetails('Arjun Sharma', 'arjun.sharma@company.com', 'Admin', 'AS', 'linear-gradient(135deg,#3B82F6,#8B5CF6)', 29, 'Jan 12, 2023')">
+                                        <i data-feather="eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <div class="member-name member-name-btn" onclick="showMemberDetails('Arjun Sharma', 'arjun.sharma@company.com', 'Admin', 'AS', 'linear-gradient(135deg,#3B82F6,#8B5CF6)', 29, 'Jan 12, 2023')">
+                                    Arjun Sharma
+                                </div>
+                                <div class="member-email">arjun.sharma@company.com</div>
+                            </div>
+                            <div class="member-footer">
+                                <span class="role-badge badge-admin">Admin</span>
+                            </div>
+                        </div>
+
+                        <div class="member-card">
+                            <div class="member-header">
+                                <div class="member-avatar" style="background:linear-gradient(135deg,#EC4899,#8B5CF6)">PM</div>
+                                <div class="member-actions">
+                                    <div class="action-btn"><i data-feather="edit-2"></i></div>
+                                    <div class="action-btn"><i data-feather="trash-2"></i></div>
+                                    <div class="action-btn" onclick="showMemberDetails('Priya Mehta', 'priya.mehta@company.com', 'Manager', 'PM', 'linear-gradient(135deg,#EC4899,#8B5CF6)', 32, 'Mar 05, 2023')">
+                                        <i data-feather="eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <div class="member-name member-name-btn" onclick="showMemberDetails('Priya Mehta', 'priya.mehta@company.com', 'Manager', 'PM', 'linear-gradient(135deg,#EC4899,#8B5CF6)', 32, 'Mar 05, 2023')">
+                                    Priya Mehta
+                                </div>
+                                <div class="member-email">priya.mehta@company.com</div>
+                            </div>
+                            <div class="member-footer">
+                                <span class="role-badge badge-manager">Manager</span>
+                            </div>
+                        </div>
+
+                        <div class="member-card">
+                            <div class="member-header">
+                                <div class="member-avatar" style="background:linear-gradient(135deg,#10B981,#3B82F6)">RK</div>
+                                <div class="member-actions">
+                                    <div class="action-btn"><i data-feather="edit-2"></i></div>
+                                    <div class="action-btn"><i data-feather="trash-2"></i></div>
+                                    <div class="action-btn" onclick="showMemberDetails('Rohit Kumar', 'rohit.kumar@company.com', 'Member', 'RK', 'linear-gradient(135deg,#10B981,#3B82F6)', 26, 'Jun 18, 2023')">
+                                        <i data-feather="eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <div class="member-name member-name-btn" onclick="showMemberDetails('Rohit Kumar', 'rohit.kumar@company.com', 'Member', 'RK', 'linear-gradient(135deg,#10B981,#3B82F6)', 26, 'Jun 18, 2023')">
+                                    Rohit Kumar
+                                </div>
+                                <div class="member-email">rohit.kumar@company.com</div>
+                            </div>
+                            <div class="member-footer">
+                                <span class="role-badge badge-member">Member</span>
+                            </div>
+                        </div>
+
+                        <div class="member-card">
+                            <div class="member-header">
+                                <div class="member-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">NG</div>
+                                <div class="member-actions">
+                                    <div class="action-btn"><i data-feather="edit-2"></i></div>
+                                    <div class="action-btn"><i data-feather="trash-2"></i></div>
+                                    <div class="action-btn" onclick="showMemberDetails('Neha Gupta', 'neha.gupta@company.com', 'Member', 'NG', 'linear-gradient(135deg,#F59E0B,#EF4444)', 27, 'Aug 02, 2023')">
+                                        <i data-feather="eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <div class="member-name member-name-btn" onclick="showMemberDetails('Neha Gupta', 'neha.gupta@company.com', 'Member', 'NG', 'linear-gradient(135deg,#F59E0B,#EF4444)', 27, 'Aug 02, 2023')">
+                                    Neha Gupta
+                                </div>
+                                <div class="member-email">neha.gupta@company.com</div>
+                            </div>
+                            <div class="member-footer">
+                                <span class="role-badge badge-member">Member</span>
+                            </div>
+                        </div>
+
+                        <div class="member-card">
+                            <div class="member-header">
+                                <div class="member-avatar" style="background:linear-gradient(135deg,#6366F1,#A855F7)">AP</div>
+                                <div class="member-actions">
+                                    <div class="action-btn"><i data-feather="edit-2"></i></div>
+                                    <div class="action-btn"><i data-feather="trash-2"></i></div>
+                                    <div class="action-btn" onclick="showMemberDetails('Amit Patel', 'amit.patel@company.com', 'Member', 'AP', 'linear-gradient(135deg,#6366F1,#A855F7)', 31, 'Sep 14, 2023')">
+                                        <i data-feather="eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <div class="member-name member-name-btn" onclick="showMemberDetails('Amit Patel', 'amit.patel@company.com', 'Member', 'AP', 'linear-gradient(135deg,#6366F1,#A855F7)', 31, 'Sep 14, 2023')">
+                                    Amit Patel
+                                </div>
+                                <div class="member-email">amit.patel@company.com</div>
+                            </div>
+                            <div class="member-footer">
+                                <span class="role-badge badge-member">Member</span>
+                            </div>
+                        </div>
+
+                        <div class="member-card">
+                            <div class="member-header">
+                                <div class="member-avatar" style="background:linear-gradient(135deg,#14B8A6,#0EA5E9)">KS</div>
+                                <div class="member-actions">
+                                    <div class="action-btn"><i data-feather="edit-2"></i></div>
+                                    <div class="action-btn"><i data-feather="trash-2"></i></div>
+                                    <div class="action-btn" onclick="showMemberDetails('Kavya Singh', 'kavya.singh@company.com', 'Admin', 'KS', 'linear-gradient(135deg,#14B8A6,#0EA5E9)', 34, 'Dec 01, 2022')">
+                                        <i data-feather="eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <div class="member-name member-name-btn" onclick="showMemberDetails('Kavya Singh', 'kavya.singh@company.com', 'Admin', 'KS', 'linear-gradient(135deg,#14B8A6,#0EA5E9)', 34, 'Dec 01, 2022')">
+                                    Kavya Singh
+                                </div>
+                                <div class="member-email">kavya.singh@company.com</div>
+                            </div>
+                            <div class="member-footer">
+                                <span class="role-badge badge-admin">Admin</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
 
+    <!-- Invite Member Modal -->
+    <div class="modal fade" id="inviteMemberModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="font-weight: 700; color: #111827;">Invite Team Member</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4 text-center">
+                        <div class="invite-illustration" style="width: 80px; height: 80px; margin-bottom: 16px;">
+                            <i data-feather="mail" width="40" height="40"></i>
+                        </div>
+                        <p style="font-size: 13px; color: #6B7280;">Send a link to invite them to the team.</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 12px; font-weight: 600; color: #374151;">Email Address</label>
+                        <input type="email" class="form-control" placeholder="name@company.com" id="inviteEmailModal">
+                    </div>
+                    <button class="btn-modal-primary" onclick="handleInvite()">Send Invitation</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- Member Detail Modal -->
+    <div id="memberDetailModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <h5 class="custom-modal-title">Member Profile</h5>
+                <div class="close-modal" onclick="closeModal()">&times;</div>
+            </div>
+            <div class="custom-modal-body">
+                <div class="member-detail-header">
+                    <div id="detailAvatar" class="member-detail-avatar">
+                        <img id="detailAvatarImg" src="" alt="Member Image" />
+                        <span id="detailAvatarText"></span>
+                    </div>
+                    <div class="member-detail-name" id="detailName"></div>
+                    <div class="member-detail-email" id="detailEmail">
+                        <i data-feather="mail" width="14" height="14"></i>
+                        <span id="detailEmailText"></span>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i data-feather="shield" width="16" height="16"></i>
+                            Role
+                        </span>
+                        <span id="detailRole" class="detail-value"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i data-feather="user" width="16" height="16"></i>
+                            Age
+                        </span>
+                        <span id="detailAge" class="detail-value"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i data-feather="calendar" width="16" height="16"></i>
+                            Joined Date
+                        </span>
+                        <span id="detailJoined" class="detail-value"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i data-feather="activity" width="16" height="16"></i>
+                            Status
+                        </span>
+                        <span class="status-active">
+                            <span class="status-dot"></span>
+                            Active
+                        </span>
+                    </div>
+                </div>
+                
+                <button class="btn-modal-primary" onclick="closeModal()">Close Profile</button>
+            </div>
+        </div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         feather.replace();
-    </script>
-
-    <!-- js for bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- custom js file import -->
-    <script src="./js/homepage.js"></script>
-
-    <!-- fontawsome  -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script>
-        document.getElementById('manageTeamForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
-    
-            // Get form values
-            const teamMember = document.getElementById('teamMember').value.trim();
-            const teamRole = document.getElementById('teamRole').value;
-    
-            // Validation
-            if (teamMember === '') {
-                alert('Please enter the team member\'s name.');
-                return; // Stop the submission
+        
+        function handleInvite() {
+            const email = document.getElementById('inviteEmailModal').value;
+            if (email) {
+                alert('Invitation sent to: ' + email);
+                bootstrap.Modal.getInstance(document.getElementById('inviteMemberModal')).hide();
+            } else {
+                alert('Please enter an email address.');
             }
-    
-            if (teamRole === '') {
-                alert('Please select a role.');
-                return; // Stop the submission
+        }
+
+        function showMemberDetails(name, email, role, initials, avatarGradient, age, joiningDate) {
+            document.getElementById('detailName').innerText = name;
+            document.getElementById('detailEmailText').innerText = email;
+            document.getElementById('detailRole').innerText = role;
+            document.getElementById('detailAge').innerText = age + ' years';
+            document.getElementById('detailJoined').innerText = joiningDate;
+            
+            const avatar = document.getElementById('detailAvatar');
+            const avatarText = document.getElementById('detailAvatarText');
+            avatarText.innerText = initials;
+            avatar.style.background = avatarGradient;
+            
+            const modal = document.getElementById('memberDetailModal');
+            modal.classList.add('show');
+            
+            setTimeout(() => {
+                feather.replace();
+            }, 100);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('memberDetailModal');
+            modal.classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('memberDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
             }
-    
-            // If all validations pass, proceed with form submission
-            alert('Role assigned successfully!');
-            window.location.href = 'manager-dashboard.html';
-            // You can also submit the form here if needed, e.g.,
-            // this.submit();
+        });
+
+        // Replace feather icons after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
         });
     </script>
-    <script>
-        function logout() {
-            window.location.href = 'homepage.html';
-        }
-    </script>
-    
-    
 </body>
 </html>
