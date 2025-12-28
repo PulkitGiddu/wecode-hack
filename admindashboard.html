@@ -3,294 +3,1289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/dashboard.css">
-    <link rel="stylesheet" href="./css/homepage.css">
+    <title>Admin Dashboard - BookIt</title>
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F3F4F6;
+            color: #1F2937;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('./assets/img/bg.png') center center / cover no-repeat;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        /* Header */
+        .top-header {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 12px 0;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            height: 32px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            background: rgba(243, 244, 246, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-logout {
+            padding: 8px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            color: #DC2626;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 90px 24px 30px;
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        /* Tabs Navigation */
+        .tabs-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border-radius: 16px;
+            padding: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .room-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .room-card-content {
+            padding: 20px;
+        }
+
+        .capacity-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #3B82F6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-actions-top {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+
+        .card-title-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: #6B7280;
+            text-transform: capitalize;
+        }
+
+        .price-tag {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .amenities-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .amenity-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #3B82F6;
+            font-weight: 500;
+        }
+
+        .add-amenity-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            background: transparent;
+            border: 1px dashed rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            color: #3B82F6;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .add-amenity-btn:hover {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: #3B82F6;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #6B7280;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #3B82F6;
+            transform: translateY(-2px);
+        }
+
+        .icon-btn.delete:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #DC2626;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(40px);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(243, 244, 246, 0.5);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(209, 213, 219, 0.6);
+            border-radius: 10px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #1F2937;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: white;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 12px 24px;
+            background: rgba(107, 114, 128, 0.1);
+            border: 1px solid rgba(107, 114, 128, 0.3);
+            border-radius: 10px;
+            color: #4B5563;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(107, 114, 128, 0.2);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(40px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3B82F6;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty-description {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 24px;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            border: none;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .fab:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.5);
+        }
+
+        .add-room-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .add-room-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .tabs-container {
+                overflow-x: auto;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-
-    <!-- loader -->
-    <div id="myloader" class="preloader">
-        <img id="myloader" class="preloader-image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHN0eWxlPSItLWFuaW1hdGlvbi1zdGF0ZTogcnVubmluZzsiPgo8c3R5bGU+CiAgICAgICAgOnJvb3QgewogICAgICAgICAgLS1hbmltYXRpb24tc3RhdGU6IHBhdXNlZDsKICAgICAgICB9CgogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgd2hlcmUgdGhlICJyZWd1bGFyIiBzY2hlbWUgaXMgZGFyayAqLwogICAgICAgIC8qIHVzZXIgcGlja2VkIGEgdGhlbWUgYSBsaWdodCBzY2hlbWUgYW5kIGFsc28gZW5hYmxlZCBhIGRhcmsgc2NoZW1lICovCgogICAgICAgIC8qIGRlYWwgd2l0aCBsaWdodCBzY2hlbWUgZmlyc3QgKi8KICAgICAgICBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBsaWdodCkgewogICAgICAgICAgOnJvb3QgewogICAgICAgICAgICAtLXByaW1hcnk6ICMwMDAwMDA7CiAgICAgICAgICAgIC0tc2Vjb25kYXJ5OiAjZmZmZmZmOwogICAgICAgICAgICAtLXRlcnRpYXJ5OiAjMzM2OUZGOwogICAgICAgICAgICAtLWhpZ2hsaWdodDogIzMzNjlGRjsKICAgICAgICAgICAgLS1zdWNjZXNzOiAjM2Q4NTRkOwogICAgICAgICAgfQogICAgICAgIH0KCiAgICAgICAgLyogdGhlbiBkZWFsIHdpdGggZGFyayBzY2hlbWUgKi8KICAgICAgICBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSB7CiAgICAgICAgICA6cm9vdCB7CiAgICAgICAgICAgIC0tcHJpbWFyeTogIzAwMDAwMDsKICAgICAgICAgICAgLS1zZWNvbmRhcnk6ICNmZmZmZmY7CiAgICAgICAgICAgIC0tdGVydGlhcnk6ICMzMzY5RkY7CiAgICAgICAgICAgIC0taGlnaGxpZ2h0OiAjMzM2OUZGOwogICAgICAgICAgICAtLXN1Y2Nlc3M6ICMzZDg1NGQ7CiAgICAgICAgICB9CiAgICAgICAgfQoKICAgICAgICAvKiB0aGVzZSBzdHlsZXMgbmVlZCB0byBsaXZlIGhlcmUgYmVjYXVzZSB0aGUgU1ZHIGhhcyBhIGRpZmZlcmVudCBzY29wZSAqLwogICAgICAgIC5kb3RzIHsKICAgICAgICAgIGFuaW1hdGlvbi1uYW1lOiBsb2FkZXI7CiAgICAgICAgICBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBlYXNlLWluLW91dDsKICAgICAgICAgIGFuaW1hdGlvbi1kdXJhdGlvbjogM3M7CiAgICAgICAgICBhbmltYXRpb24taXRlcmF0aW9uLWNvdW50OiBpbmZpbml0ZTsKICAgICAgICAgIGFuaW1hdGlvbi1wbGF5LXN0YXRlOiB2YXIoLS1hbmltYXRpb24tc3RhdGUpOwogICAgICAgICAgc3Ryb2tlOiAjZmZmOwogICAgICAgICAgc3Ryb2tlLXdpZHRoOiAwLjVweDsKICAgICAgICAgIHRyYW5zZm9ybS1vcmlnaW46IGNlbnRlcjsKICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICByOiBtYXgoMXZ3LCAxMXB4KTsKICAgICAgICAgIGN5OiA1MCU7CiAgICAgICAgICBmaWx0ZXI6IHNhdHVyYXRlKDIpIG9wYWNpdHkoMC44NSk7CiAgICAgICAgICBmaWxsOiB2YXIoLS10ZXJ0aWFyeSk7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoMikgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjE1czsKICAgICAgICB9CgogICAgICAgIC5kb3RzOm50aC1jaGlsZCgzKSB7CiAgICAgICAgICBhbmltYXRpb24tZGVsYXk6IDAuM3M7CiAgICAgICAgfQoKICAgICAgICAuZG90czpudGgtY2hpbGQoNCkgewogICAgICAgICAgYW5pbWF0aW9uLWRlbGF5OiAwLjQ1czsKICAgICAgICB9CgogICAgICAgIC5kb3RzOm50aC1jaGlsZCg1KSB7CiAgICAgICAgICBhbmltYXRpb24tZGVsYXk6IDAuNnM7CiAgICAgICAgfQoKICAgICAgICBAa2V5ZnJhbWVzIGxvYWRlciB7CiAgICAgICAgICAwJSB7CiAgICAgICAgICAgIG9wYWNpdHk6IDA7CiAgICAgICAgICAgIHRyYW5zZm9ybTogc2NhbGUoMSk7CiAgICAgICAgICB9CiAgICAgICAgICA0NSUgewogICAgICAgICAgICBvcGFjaXR5OiAxOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDAuNyk7CiAgICAgICAgICB9CiAgICAgICAgICA2NSUgewogICAgICAgICAgICBvcGFjaXR5OiAxOwogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDAuNyk7CiAgICAgICAgICB9CiAgICAgICAgICAxMDAlIHsKICAgICAgICAgICAgb3BhY2l0eTogMDsKICAgICAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgxKTsKICAgICAgICAgIH0KICAgICAgICB9CiAgICAgIDwvc3R5bGU+CjxnIGNsYXNzPSJjb250YWluZXIiPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iMzB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNDB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNTB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNjB2dyIvPgo8Y2lyY2xlIGNsYXNzPSJkb3RzIiBjeD0iNzB2dyIvPgo8L2c+Cjwvc3ZnPg==" alt="Stape Community">
-    </div>
-
-        <!-- Sidebar -->
-        <div id="mySidebar" class="sidebar bg-light">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <!-- <a href="homepage.html">Products</a>
-            <a href="homepage.html">Solutions</a>
-            <a href="homepage.html">Pricing</a>
-            <a href="homepage.html">Resources</a>
-            <a href="homepage.html">Company</a>
-            <a href="homepage.html">Contact Us</a> -->
-            <a href="homepage.html">Main Page</a>
-            <a href="homepage.html#highlights">Highlights</a>
-            <a href="homepage.html#working">See Working</a>
-            <a href="homepage.html#features">Features</a>
-        </div>  
-
-    <!-- Main content wrapper -->
-    <div class="d-flex flex-column min-vh-100">
-        <!-- Header Section -->
-        <header class="bg-light py-2 w-100">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
-                    <a class="navbar-brand me-auto" href="./homepage.html">
-                        <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
-                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
-                            <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
-                        </ul>
-                    </div>
-                </nav>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="./assets/img/bookitlogo.png" alt="Bookit">
+                
             </div>
-        </header>   
-
-        <!-- Admin Dashboard Layout -->
-        <div class="d-flex flex-grow-1">
-            <!-- Sidebar -->
-            <div id="sidebar" class="bg-dark text-light p-3">
-                <h4>Admin Dashboard</h4>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <button class="nav-link text-light" onclick="window.location.href = 'admindashboard.html';" data-toggle="tooltip" data-placement="right" title="Admin Dashboard">Dashboard</button>
-                    </li>
-                </ul>
-            </div>
-            <!-- Main Content Area -->
-            <div id="content" class="p-4 flex-grow-1">
-                <div class="container">
-                    <!-- Buttons to toggle visibility -->
-                    <div class="mb-4">
-                        <button class="btn btn-success mb-1" onclick="showCreateRoom()">Create Room</button>
-                        <button class="btn btn-primary mb-1" onclick="showEditRoom()">Edit Room</button>
-                        <button class="btn btn-danger m-1" onclick="resetManagerCredits()">Reset Manager Credits</button>
-                    </div>
-                    <hr />
-
-                    <div id="allRoomsInfo">
-                        <h4>View All Rooms</h4>
-                        <div class="m-1 row">
-                            <div class="col-sx-12 col-sm-6 col-md-4 col-lg-4 col-xlg-4">
-                                <div class="card text-center mb-4">
-                                    <div class="card-body">
-                                        <!-- <img src="./assets/img/30904729.jpg" alt="Organize Meeting" height="400px"> -->
-                                            <h2 class="card-title text-decoration-underline">Training Room 3</h2>
-                                            <div class="card-text"> <b>Room Type:</b> Training Room</div>
-                                            <div class="card-text"> <b>Seating Capacity:</b> 30</div>
-                                            <div class="card-text"> <b>Amenities:</b>
-                                                <ul>
-                                                    <li>Whiteboard & Projector</li>
-                                                    <li>Wifi & Projector</li>
-                                                    <li>Conference Call Facility</li>
-                                                    <li>Projector</li>
-                                                </ul>    
-                                            </div>
-                                            <a href="organize-meeting.html" class="btn btn-primary mt-auto">Edit Room</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sx-12 col-sm-6 col-md-4 col-lg-4 col-xlg-4">
-                                <div class="card text-center mb-4">
-                                    <div class="card-body">
-                                        <!-- <img src="./assets/img/meeting_presentation.png" alt="Organize Meeting" height="400px"> -->
-                                            <h2 class="card-title m-2 text-decoration-underline">Conference Call Room</h2>
-                                            <div class="card-text m-2"> <b>Room Type:</b> Conference Call</div>
-                                            <div class="card-text m-2"> <b>Seating Capacity:</b> 20</div>
-                                            <div class="card-text m-2 "> <b>Amenities:</b>
-                                                <ul>
-                                                    <li>Whiteboard & Projector</li>
-                                                    <li>Wifi & Projector</li>
-                                                    <li>Conference Call Facility</li>
-                                                    <li>Projector</li>
-                                                </ul>    
-                                            </div>
-                                            <a href="organize-meeting.html" class="btn btn-primary mt-auto">Edit Room</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sx-12 col-sm-6 col-md-4 col-lg-4 col-xlg-4">
-                                <div class="card text-center mb-4">
-                                    <div class="card-body">
-                                        <!-- <img src="./assets/img/meeting_presentation.png" alt="Organize Meeting" height="400px"> -->
-                                            <h2 class="card-title m-2 text-decoration-underline">Meeting Room</h2>
-                                            <div class="card-text m-2"> <b>Room Type:</b> Business</div>
-                                            <div class="card-text m-2"> <b>Seating Capacity:</b> 45</div>
-                                            <div class="card-text m-2 "> <b>Amenities:</b>
-                                                <ul>
-                                                    <li>Whiteboard & Projector</li>
-                                                    <li>Wifi & Projector</li>
-                                                    <li>Conference Call Facility</li>
-                                                    <li>Projector</li>
-                                                </ul>    
-                                            </div>
-                                            <a href="organize-meeting.html" class="btn btn-primary mt-auto">Edit Room</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Create Room Screen -->
-                    <div id="createRoomDiv" class="content-screen mb-5" style="display: none;">
-                        <h3>Create Room</h3>
-                        <form>
-                            <div class="mb-3">
-                                <label for="selectRoom" class="form-label">Select Room Type</label>
-                                <select class="form-select" id="selectRoom">
-                                    <option selected>Select a room</option>
-                                    <option value="Classroom Training">Classroom Training</option>
-                                    <option value="Online Training">Online Training</option>
-                                    <option value="Conference Call">Conference Call</option>
-                                    <option value="Business">Business</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="roomName" class="form-label">Room Name</label>
-                                <input type="text" class="form-control" id="roomName" placeholder="Enter room name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="roomCapacity" class="form-label">Seating Capacity</label>
-                                <input type="number" class="form-control" id="roomCapacity" placeholder="Enter room capacity">
-                            </div>
-                            <div class="mb-3">
-                                <label for="roomAmenities" class="form-label">Amenities</label>
-                                <!-- Example amenities input fields -->
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Whiteboard & Projector" disabled>
-                                    <input type="number" value="1" min="1" class="form-control" placeholder="Enter Whiteboard & Projector Quantity">
-                                </div>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Wifi & Projector" disabled>
-                                    <input type="number" value="1" min="1" class="form-control" placeholder="Enter Wifi & Projector Quantity">
-                                </div>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Conference Call Facility" disabled>
-                                    <input type="number" value="1" min="1" class="form-control" placeholder="Enter Conference Call Facility Quantity">
-                                </div>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Projector" disabled>
-                                    <input type="number" value="1" min="1" class="form-control" placeholder="Enter Projector Quantity">
-                                </div>
-                            </div>
-                            <a href="#" class="btn btn-primary">
-                                + Add additional Amenities
-                            </a>
-                            <div class="mb-3">
-                                <a href="./manageamenities.html">Manage Amenities</a>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Create Room</button>
-                        </form>
-                    </div>
-
-                    <!-- Edit Room -->
-                    <div id="editRoomDiv" class="content-screen mb-5" style="display: none;">
-                        <h3>Edit Room</h3>
-                        <form>
-                            <div class="mb-3">
-                                <label for="selectRoom2" class="form-label">Select Room to Edit</label>
-                                <select class="form-select" id="selectRoom2">
-                                    <option selected>Select a room</option>
-                                    <option value="Classroom Training">Classroom Training</option>
-                                    <option value="Online Training">Online Training</option>
-                                    <option value="Conference Call">Conference Call</option>
-                                    <option value="Business">Business</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editRoomName" class="form-label">Room Name</label>
-                                <input type="text" class="form-control" id="editRoomName" placeholder="Enter new room name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editRoomCapacity" class="form-label">Seating Capacity</label>
-                                <input type="number" class="form-control" id="editRoomCapacity" placeholder="Enter new room capacity">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editRoomAmenities" class="form-label">Amenities</label>
-                                <textarea class="form-control" id="editRoomAmenities" rows="3" placeholder="Enter new amenities"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                        </form>
-                    </div>
+            <div class="header-actions">
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <span style="font-size: 13px; font-weight: 500; color: #374151;">Admin</span>
                 </div>
+                <button class="btn-logout" onclick="logout()">
+                    <i data-feather="log-out" style="width: 16px; height: 16px;"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 class="page-title">Admin Dashboard</h1>
+                <p class="page-subtitle">Manage rooms and amenities for your organization</p>
+            </div>
+            <button class="add-room-btn" onclick="openCreateModal()">
+                <i data-feather="plus" style="width: 16px; height: 16px;"></i>
+                <span id="addBtnText">Add Room</span>
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('rooms')">
+                <i data-feather="home" style="width: 16px; height: 16px;"></i>
+                Rooms Management
+            </button>
+            <button class="tab-btn" onclick="switchTab('amenities')">
+                <i data-feather="package" style="width: 16px; height: 16px;"></i>
+                Amenities Management
+            </button>
+        </div>
+
+        <!-- Rooms Section -->
+        <div id="roomsSection" class="content-section active">
+            <div id="roomsList" class="cards-grid">
+                <!-- Rooms will be loaded here -->
             </div>
         </div>
 
-        <!-- Footer Section -->
-        <footer class="bg-dark text-light pt-2 position-fixed fixed-bottom">
-            <div class="container text-center text-md-left">
+        <!-- Amenities Section -->
+        <div id="amenitiesSection" class="content-section">
+            <div id="amenitiesList" class="cards-grid">
+                <!-- Amenities will be loaded here -->
+            </div>
+        </div>
+    </div>
 
-                <!-- Legal Links and Social Media Icons -->
-                <div class="row align-items-center">
-                    <!-- Legal Links -->
-                    <div class="col-md-7 col-lg-8">
-                        <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
-                            <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
-                            <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
-                            <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
-                        </p>
-                    </div>
+    <!-- FAB for current tab -->
+    <button class="fab" id="fabBtn" onclick="openCreateModal()">
+        <i data-feather="plus" style="width: 18px; height: 18px;"></i>
+        <span id="fabText">Add Room</span>
+    </button>
 
-                    <!-- Social Media Icons -->
-                    <div class="col-md-5 col-lg-4">
-                        <div class="text-center text-md-right">
-                            <ul class="list-unstyled list-inline">
-                                <li class="list-inline-item">
-                                    <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-facebook-f"></i> -->
-                                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-twitter"></i> -->
-                                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-linkedin-in"></i> -->
-                                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-instagram"></i> -->
-                                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+    <!-- Room Modal -->
+    <div id="roomModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="roomModalTitle">Create Room</h2>
+                <button class="modal-close" onclick="closeRoomModal()">
+                    <i data-feather="x" style="width: 18px; height: 18px;"></i>
+                </button>
+            </div>
+            <form id="roomForm">
+                <input type="hidden" id="roomId">
+                <div class="form-group">
+                    <label class="form-label">Room Name</label>
+                    <input type="text" class="form-input" id="roomName" placeholder="e.g., Conference Room A" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Room Type</label>
+                    <select class="form-select" id="roomType" required>
+                        <option value="">Select Room Type</option>
+                        <option value="Conference Room">Conference Room</option>
+                        <option value="Meeting Room">Meeting Room</option>
+                        <option value="Training Room">Training Room</option>
+                        <option value="Board Room">Board Room</option>
+                        <option value="Discussion Room">Discussion Room</option>
+                        <option value="Huddle Room">Huddle Room</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Seating Capacity</label>
+                    <input type="number" class="form-input" id="seatingCapacity" placeholder="e.g., 10" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Select Amenities</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 200px; overflow-y: auto; padding: 12px; background: rgba(243, 244, 246, 0.5); border-radius: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="Projector" style="width: 16px; height: 16px;">
+                            <span>Projector</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="Whiteboard" style="width: 16px; height: 16px;">
+                            <span>Whiteboard</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="WiFi" style="width: 16px; height: 16px;">
+                            <span>WiFi</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="Video Conference" style="width: 16px; height: 16px;">
+                            <span>Video Conference</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="Smart TV" style="width: 16px; height: 16px;">
+                            <span>Smart TV</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="Coffee Machine" style="width: 16px; height: 16px;">
+                            <span>Coffee Machine</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="Air Conditioning" style="width: 16px; height: 16px;">
+                            <span>Air Conditioning</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="Sound System" style="width: 16px; height: 16px;">
+                            <span>Sound System</span>
+                        </label>
                     </div>
                 </div>
-            </div>
-        </footer>
+                <div class="form-group">
+                    <label class="form-label">Per Hour Cost ($)</label>
+                    <input type="number" step="0.01" class="form-input" id="perHourCost" placeholder="e.g., 50.00" min="0" required>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="submit" class="btn-primary">
+                        <span id="roomBtnText">Create Room</span>
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="closeRoomModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    </div>  
+    <!-- Amenity Modal -->
+    <div id="amenityModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="amenityModalTitle">Create Amenity</h2>
+                <button class="modal-close" onclick="closeAmenityModal()">
+                    <i data-feather="x" style="width: 18px; height: 18px;"></i>
+                </button>
+            </div>
+            <form id="amenityForm">
+                <input type="hidden" id="amenityId">
+                <div class="form-group">
+                    <label class="form-label">Amenity Name</label>
+                    <input type="text" class="form-input" id="amenityName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="amenityDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Credits Score</label>
+                    <input type="number" step="0.01" class="form-input" id="creditsScore" required>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="submit" class="btn-primary">
+                        <span id="amenityBtnText">Create Amenity</span>
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="closeAmenityModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
-        function logout() {
-            window.location.href = 'homepage.html';
-        }
-    </script>
+        feather.replace();
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <script src="./js/dashboard.js"></script>
-    <script src="./js/homepage.js"></script>
+        const API_BASE = 'http://localhost:8081/api/admin';
+        let currentTab = 'rooms';
+
+        // Tab Switching
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            
+            if (tab === 'rooms') {
+                document.querySelector('[onclick="switchTab(\'rooms\')"]').classList.add('active');
+                document.getElementById('roomsSection').classList.add('active');
+                document.getElementById('addBtnText').textContent = 'Add Room';
+                document.getElementById('fabText').textContent = 'Add Room';
+                loadRooms();
+            } else {
+                document.querySelector('[onclick="switchTab(\'amenities\')"]').classList.add('active');
+                document.getElementById('amenitiesSection').classList.add('active');
+                document.getElementById('addBtnText').textContent = 'Add Amenity';
+                document.getElementById('fabText').textContent = 'Add Amenity';
+                loadAmenities();
+            }
+            feather.replace();
+        }
+
+        // Load Rooms
+        async function loadRooms() {
+            // Dummy data for now
+            const dummyRooms = [
+                {
+                    roomId: 1,
+                    name: 'Conference Room A',
+                    roomType: 'Conference Room',
+                    seatingCapacity: 20,
+                    amenities: ['Projector', 'Whiteboard'],
+                    perHourCost: 75.00,
+                    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'
+                },
+                {
+                    roomId: 2,
+                    name: 'Training Room 1',
+                    roomType: 'Training Room',
+                    seatingCapacity: 12,
+                    amenities: ['Projector', 'Whiteboard', 'WiFi'],
+                    perHourCost: 100.00,
+                    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&h=400&fit=crop'
+                },
+                {
+                    roomId: 3,
+                    name: 'Board Room',
+                    roomType: 'Board Room',
+                    seatingCapacity: 150,
+                    amenities: ['Video Conference', 'WiFi', 'Smart TV', 'Sound System'],
+                    perHourCost: 150.00,
+                    image: 'https://images.unsplash.com/photo-1431540015161-0bf868a2d407?w=600&h=400&fit=crop'
+                },
+                {
+                    roomId: 4,
+                    name: 'Huddle Room 2',
+                    roomType: 'Meeting Room',
+                    seatingCapacity: 6,
+                    amenities: ['Projector', 'WiFi', 'Whiteboard', 'WiFi'],
+                    perHourCost: 40.00,
+                    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=400&fit=crop'
+                }
+            ];
+
+            try {
+                // Try to fetch from API
+                const response = await fetch(`${API_BASE}/rooms`);
+                let rooms = [];
+                
+                if (response.ok) {
+                    rooms = await response.json();
+                }
+                
+                // If no rooms from API, use dummy data
+                if (!rooms || rooms.length === 0) {
+                    rooms = dummyRooms;
+                }
+                
+                const roomsList = document.getElementById('roomsList');
+                roomsList.innerHTML = rooms.map(room => `
+                    <div class="glass-card">
+                        <img src="${room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" alt="${room.name}" class="room-image">
+                        <div class="capacity-badge">
+                            <i data-feather="users" style="width: 14px; height: 14px;"></i>
+                            <span>${room.seatingCapacity || 0} Seats</span>
+                        </div>
+                        <div class="card-actions-top">
+                            <button class="icon-btn" onclick="editRoom(${room.roomId || room.id})" title="Edit">
+                                <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                            <button class="icon-btn delete" onclick="deleteRoom(${room.roomId || room.id})" title="Delete">
+                                <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                        </div>
+                        <div class="room-card-content">
+                            <div class="card-header-section">
+                                <div style="flex: 1;">
+                                    <h3 class="card-title-text">${room.name || 'Unnamed Room'}</h3>
+                                    <p class="card-subtitle">${room.roomType || 'Meeting Room'}</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div class="price-tag">$${room.perHourCost || 0}</div>
+                                    <div class="price-label">/ hour</div>
+                                </div>
+                            </div>
+                            <div class="amenities-container">
+                                ${Array.isArray(room.amenities) ? room.amenities.map(amenity => {
+                                    const iconMap = {
+                                        'Projector': 'monitor',
+                                        'Whiteboard': 'edit-3',
+                                        'WiFi': 'wifi',
+                                        'Video Conference': 'video',
+                                        'Smart TV': 'tv',
+                                        'Coffee Machine': 'coffee',
+                                        'Air Conditioning': 'wind',
+                                        'Sound System': 'speaker'
+                                    };
+                                    const icon = iconMap[amenity] || 'check-circle';
+                                    return `<div class="amenity-badge">
+                                        <i data-feather="${icon}" style="width: 14px; height: 14px;"></i>
+                                        <span>${amenity}</span>
+                                    </div>`;
+                                }).join('') : ''}
+                            </div>
+                            <button class="add-amenity-btn" onclick="alert('Add amenity functionality coming soon!')">
+                                <i data-feather="plus" style="width: 16px; height: 16px;"></i>
+                                Add Amenity
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                feather.replace();
+            } catch (error) {
+                console.error('Error loading rooms:', error);
+                // Use dummy data on error
+                const roomsList = document.getElementById('roomsList');
+                roomsList.innerHTML = dummyRooms.map(room => `
+                    <div class="glass-card">
+                        <img src="${room.image}" alt="${room.name}" class="room-image">
+                        <div class="capacity-badge">
+                            <i data-feather="users" style="width: 14px; height: 14px;"></i>
+                            <span>${room.seatingCapacity} Seats</span>
+                        </div>
+                        <div class="card-actions-top">
+                            <button class="icon-btn" onclick="editRoom(${room.roomId})" title="Edit">
+                                <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                            <button class="icon-btn delete" onclick="alert('This is a demo room')" title="Delete">
+                                <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                        </div>
+                        <div class="room-card-content">
+                            <div class="card-header-section">
+                                <div style="flex: 1;">
+                                    <h3 class="card-title-text">${room.name}</h3>
+                                    <p class="card-subtitle">${room.roomType}</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div class="price-tag">$${room.perHourCost}</div>
+                                    <div class="price-label">/ hour</div>
+                                </div>
+                            </div>
+                            <div class="amenities-container">
+                                ${room.amenities.map(amenity => {
+                                    const iconMap = {
+                                        'Projector': 'monitor',
+                                        'Whiteboard': 'edit-3',
+                                        'WiFi': 'wifi',
+                                        'Video Conference': 'video',
+                                        'Smart TV': 'tv',
+                                        'Coffee Machine': 'coffee',
+                                        'Air Conditioning': 'wind',
+                                        'Sound System': 'speaker'
+                                    };
+                                    const icon = iconMap[amenity] || 'check-circle';
+                                    return `<div class="amenity-badge">
+                                        <i data-feather="${icon}" style="width: 14px; height: 14px;"></i>
+                                        <span>${amenity}</span>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                            <button class="add-amenity-btn" onclick="alert('Add amenity functionality coming soon!')">
+                                <i data-feather="plus" style="width: 16px; height: 16px;"></i>
+                                Add Amenity
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                feather.replace();
+            }
+        }
+
+        // Load Amenities
+        async function loadAmenities() {
+            // Dummy amenities data
+            const dummyAmenities = [
+                { amenityId: 1, name: 'Projector', description: 'HD projector with HDMI connectivity', creditsScore: 15 },
+                { amenityId: 2, name: 'Whiteboard', description: 'Large whiteboard with markers', creditsScore: 5 },
+                { amenityId: 3, name: 'WiFi', description: 'High-speed wireless internet', creditsScore: 10 },
+                { amenityId: 4, name: 'Video Conference', description: 'Professional video conferencing system', creditsScore: 25 },
+                { amenityId: 5, name: 'Smart TV', description: '65-inch 4K Smart TV', creditsScore: 20 },
+                { amenityId: 6, name: 'Coffee Machine', description: 'Premium espresso machine', creditsScore: 8 },
+                { amenityId: 7, name: 'Air Conditioning', description: 'Climate control system', creditsScore: 12 },
+                { amenityId: 8, name: 'Sound System', description: 'Professional audio system', creditsScore: 18 }
+            ];
+
+            try {
+                const response = await fetch(`${API_BASE}/amenities`);
+                let amenities = [];
+                
+                if (response.ok) {
+                    amenities = await response.json();
+                }
+                
+                // If no amenities from API, use dummy data
+                if (!amenities || amenities.length === 0) {
+                    amenities = dummyAmenities;
+                }
+                
+                const amenitiesList = document.getElementById('amenitiesList');
+                amenitiesList.innerHTML = amenities.map(amenity => `
+                    <div class="glass-card">
+                        <div class="card-header-section">
+                            <div>
+                                <h3 class="card-title-text">${amenity.name || 'Unnamed Amenity'}</h3>
+                                <p class="card-subtitle">${amenity.description || 'No description'}</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="icon-btn" onclick="editAmenity(${amenity.amenityId || amenity.id})">
+                                    <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                                </button>
+                                <button class="icon-btn delete" onclick="deleteAmenity(${amenity.amenityId || amenity.id})">
+                                    <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Credits Score</span>
+                            <span class="info-value">${amenity.creditsScore || 0} credits</span>
+                        </div>
+                    </div>
+                `).join('');
+                feather.replace();
+            } catch (error) {
+                console.error('Error loading amenities:', error);
+                // Use dummy data on error
+                const amenitiesList = document.getElementById('amenitiesList');
+                amenitiesList.innerHTML = dummyAmenities.map(amenity => `
+                    <div class="glass-card">
+                        <div class="card-header-section">
+                            <div>
+                                <h3 class="card-title-text">${amenity.name}</h3>
+                                <p class="card-subtitle">${amenity.description}</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="icon-btn" onclick="editAmenity(${amenity.amenityId})">
+                                    <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                                </button>
+                                <button class="icon-btn delete" onclick="alert('This is a demo amenity')">
+                                    <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Credits Score</span>
+                            <span class="info-value">${amenity.creditsScore} credits</span>
+                        </div>
+                    </div>
+                `).join('');
+                feather.replace();
+            }
+        }
+
+        // Modal Functions
+        function openCreateModal() {
+            if (currentTab === 'rooms') {
+                document.getElementById('roomModalTitle').textContent = 'Create Room';
+                document.getElementById('roomBtnText').textContent = 'Create Room';
+                document.getElementById('roomForm').reset();
+                document.getElementById('roomId').value = '';
+                document.getElementById('roomModal').classList.add('active');
+            } else {
+                document.getElementById('amenityModalTitle').textContent = 'Create Amenity';
+                document.getElementById('amenityBtnText').textContent = 'Create Amenity';
+                document.getElementById('amenityForm').reset();
+                document.getElementById('amenityId').value = '';
+                document.getElementById('amenityModal').classList.add('active');
+            }
+            feather.replace();
+        }
+
+        function closeRoomModal() {
+            document.getElementById('roomModal').classList.remove('active');
+        }
+
+        function closeAmenityModal() {
+            document.getElementById('amenityModal').classList.remove('active');
+        }
+
+        // Room CRUD
+        document.getElementById('roomForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const roomId = document.getElementById('roomId').value;
+            
+            // Get selected amenities from checkboxes
+            const selectedAmenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked'))
+                .map(checkbox => checkbox.value);
+            
+            const roomData = {
+                name: document.getElementById('roomName').value,
+                roomType: document.getElementById('roomType').value,
+                seatingCapacity: parseInt(document.getElementById('seatingCapacity').value),
+                amenities: selectedAmenities,
+                perHourCost: parseFloat(document.getElementById('perHourCost').value)
+            };
+
+            try {
+                const url = roomId ? `${API_BASE}/rooms` : `${API_BASE}/rooms`;
+                const method = roomId ? 'PUT' : 'POST';
+                
+                if (roomId) roomData.roomId = parseInt(roomId);
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(roomData)
+                });
+
+                if (response.ok) {
+                    closeRoomModal();
+                    loadRooms();
+                    alert(roomId ? 'Room updated successfully!' : 'Room created successfully!');
+                } else {
+                    alert('Error saving room. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving room. Please try again.');
+            }
+        });
+
+        async function editRoom(id) {
+            try {
+                const response = await fetch(`${API_BASE}/rooms/${id}`);
+                const room = await response.json();
+                
+                document.getElementById('roomId').value = room.roomId || room.id;
+                document.getElementById('roomName').value = room.name || '';
+                document.getElementById('roomType').value = room.roomType || '';
+                document.getElementById('seatingCapacity').value = room.seatingCapacity || '';
+                document.getElementById('perHourCost').value = room.perHourCost || '';
+                
+                // Check the appropriate amenity checkboxes
+                document.querySelectorAll('input[name="amenity"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                if (Array.isArray(room.amenities)) {
+                    room.amenities.forEach(amenity => {
+                        const checkbox = document.querySelector(`input[name="amenity"][value="${amenity}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                
+                document.getElementById('roomModalTitle').textContent = 'Edit Room';
+                document.getElementById('roomBtnText').textContent = 'Update Room';
+                document.getElementById('roomModal').classList.add('active');
+                feather.replace();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error loading room details.');
+            }
+        }
+
+        async function deleteRoom(id) {
+            if (!confirm('Are you sure you want to delete this room?')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/rooms/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    loadRooms();
+                    alert('Room deleted successfully!');
+                } else {
+                    alert('Error deleting room.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting room.');
+            }
+        }
+
+        // Amenity CRUD
+        document.getElementById('amenityForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const amenityId = document.getElementById('amenityId').value;
+            const amenityData = {
+                name: document.getElementById('amenityName').value,
+                description: document.getElementById('amenityDescription').value,
+                creditsScore: parseFloat(document.getElementById('creditsScore').value)
+            };
+
+            try {
+                const url = amenityId ? `${API_BASE}/amenities` : `${API_BASE}/amenities`;
+                const method = amenityId ? 'PUT' : 'POST';
+                
+                if (amenityId) amenityData.amenityId = parseInt(amenityId);
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(amenityData)
+                });
+
+                if (response.ok) {
+                    closeAmenityModal();
+                    loadAmenities();
+                    alert(amenityId ? 'Amenity updated successfully!' : 'Amenity created successfully!');
+                } else {
+                    alert('Error saving amenity. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving amenity. Please try again.');
+            }
+        });
+
+        async function editAmenity(id) {
+            try {
+                const response = await fetch(`${API_BASE}/amenities/${id}`);
+                const amenity = await response.json();
+                
+                document.getElementById('amenityId').value = amenity.amenityId || amenity.id;
+                document.getElementById('amenityName').value = amenity.name || '';
+                document.getElementById('amenityDescription').value = amenity.description || '';
+                document.getElementById('creditsScore').value = amenity.creditsScore || '';
+                
+                document.getElementById('amenityModalTitle').textContent = 'Edit Amenity';
+                document.getElementById('amenityBtnText').textContent = 'Update Amenity';
+                document.getElementById('amenityModal').classList.add('active');
+                feather.replace();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error loading amenity details.');
+            }
+        }
+
+        async function deleteAmenity(id) {
+            if (!confirm('Are you sure you want to delete this amenity?')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/amenities/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    loadAmenities();
+                    alert('Amenity deleted successfully!');
+                } else {
+                    alert('Error deleting amenity.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting amenity.');
+            }
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Initialize
+        loadRooms();
+    </script>
 </body>
 </html>
