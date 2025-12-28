@@ -3,182 +3,568 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- favicon cdn -->
     <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
-
-    <title>Notifications</title>
+    <title>Notifications - Bookit</title>
     
-    <link rel="stylesheet" href="./css/homepage.css">
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #E5E7EB;
+            color: #1F2937;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            zoom: 0.9;
+        }
+
+        /* Background Image */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('./assets/img/bg.png') center center / cover no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(219, 234, 254, 0.4) 0%, rgba(243, 244, 246, 0.5) 50%, rgba(239, 246, 255, 0.4) 100%);
+            z-index: -1;
+        }
+
+        /* Glassmorphism Header */
+        .top-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 6px 0;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(243, 244, 246, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #6B7280;
+        }
+
+        .header-icon-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #3B82F6;
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs-container {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            top: 46px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            padding: 0;
+        }
+
+        .nav-tabs-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-tab {
+            padding: 10px 18px;
+            background: transparent;
+            border: none;
+            color: #6B7280;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-tab:hover {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .nav-tab.active {
+            color: #3B82F6;
+            border-bottom-color: #3B82F6;
+        }
+
+        /* Main Dashboard */
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 100px 24px 30px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 20px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 12px;
+            color: #6B7280;
+            font-weight: 400;
+        }
+
+        /* Glassmorphism Card */
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 
+                        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+                        0 0 0 0.5px rgba(255, 255, 255, 0.4);
+            border: 0.5px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.6s ease;
+            margin-bottom: 18px;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1),
+                        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+                        0 0 0 0.5px rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        .card-header-custom {
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111827;
+            letter-spacing: -0.2px;
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .form-select {
+            border-radius: 10px;
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            padding: 10px 14px;
+            font-size: 13px;
+            background: rgba(249, 250, 251, 0.5);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .form-select:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+        }
+
+        .btn-secondary {
+            background: rgba(243, 244, 246, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            color: #374151;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(229, 231, 235, 0.8);
+            color: #111827;
+            transform: translateY(-2px);
+        }
+
+        .notifications-list-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+
+        .notification-item {
+            background: rgba(249, 250, 251, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .notification-item:hover {
+            background: rgba(239, 246, 255, 0.7);
+            transform: translateX(6px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .notification-item h6 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .badge-reminder {
+            background: rgba(219, 234, 254, 0.8);
+            color: #1976d2;
+            border-color: rgba(25, 118, 210, 0.2);
+        }
+
+        .badge-request {
+            background: rgba(254, 243, 199, 0.8);
+            color: #D97706;
+            border-color: rgba(217, 119, 6, 0.2);
+        }
+
+        .badge-maintenance {
+            background: rgba(252, 228, 236, 0.8);
+            color: #c2185b;
+            border-color: rgba(194, 24, 91, 0.2);
+        }
+
+        .badge-update {
+            background: rgba(209, 250, 229, 0.8);
+            color: #059669;
+            border-color: rgba(5, 150, 105, 0.2);
+        }
+
+        .notification-item p {
+            color: #6B7280;
+            font-size: 12px;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .notification-item small {
+            color: #9CA3AF;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 100px 16px 30px;
+            }
+
+            .dashboard-title {
+                font-size: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div id="mySidebar" class="sidebar bg-light">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <!-- <a href="homepage.html">Products</a>
-        <a href="homepage.html">Solutions</a>
-        <a href="homepage.html">Pricing</a>
-        <a href="homepage.html">Resources</a>
-        <a href="homepage.html">Company</a>
-        <a href="homepage.html">Contact Us</a> -->
-        <a href="homepage.html">Main Page</a>
-        <a href="manager-dashboard.html">Manager Dashboard</a>
-        <a href="homepage.html#highlights">Highlights</a>
-        <a href="homepage.html#working">See Working</a>
-        <a href="homepage.html#features">Features</a>
-    </div> 
-    
-    <!-- Main content -->
-    <div id="main">
-        <!-- Header Section -->
-        <header class="bg-light py-2 w-100 position-fixed">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
-                    <a class="navbar-brand me-auto" href="./homepage.html">
-                        <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
-                            <li class="nav-item"><a class="nav-link" href="manager-dashboard.html">Manager Dashboard</a></li>
-                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
-                            <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
-                        </ul>
-                    </div>
-        </nav>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="header-container">
+            <a href="./homepage.html" class="logo">
+                <img src="./assets/img/bookitlogo.png" alt="BookIt">
+            </a>
+            <div class="header-actions">
+                <button class="header-icon-btn" title="Search">
+                    <i data-feather="search" width="16" height="16"></i>
+                </button>
+                <button class="header-icon-btn" title="Notifications">
+                    <i data-feather="bell" width="16" height="16"></i>
+                </button>
+                <button class="header-icon-btn" title="Settings">
+                    <i data-feather="settings" width="16" height="16"></i>
+                </button>
+                <div class="user-avatar" title="Profile">JD</div>
             </div>
-        </header>   
-    </div>
-    
-    <div class="container py-5 my-5">
-        <h2>Notifications</h2>
-        <form id="notificationsForm">
-            <div class="mb-3">
-                <label for="notificationType" class="form-label">Notification Type</label>
-                <select class="form-select" id="notificationType">
-                    <option value="Meeting Reminder">Meeting Reminder</option>
-                    <option value="Room Availability">Room Availability</option>
-                    <option value="Team Update">Team Update</option>
-                </select>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs-container">
+        <div class="nav-tabs-wrapper">
+            <a href="organize-meeting.html" class="nav-tab">
+                <i data-feather="calendar" width="14" height="14"></i>
+                Organize Meetings
+            </a>
+            <a href="analytics.html" class="nav-tab">
+                <i data-feather="bar-chart-2" width="14" height="14"></i>
+                Analyze Meetings
+            </a>
+            <a href="manageTeam.html" class="nav-tab">
+                <i data-feather="users" width="14" height="14"></i>
+                Team
+            </a>
+            <a href="notifications.html" class="nav-tab active">
+                <i data-feather="bell" width="14" height="14"></i>
+                Notifications
+            </a>
+        </div>
+    </nav>
+
+    <!-- Dashboard -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Notifications</h1>
+            <p class="dashboard-subtitle">Manage and view all your meeting notifications and updates</p>
+        </div>
+
+        <!-- Send Notification Card -->
+        <div class="dashboard-card">
+            <div class="card-header-custom">
+                <h3 class="card-title">Send New Notification</h3>
             </div>
-            <button type="submit" class="btn btn-primary">Send Notification</button>
-        </form>
-        <a href="manager-dashboard.html" class="btn btn-secondary mt-3">Back to Dashboard</a>
-        <div class="container py-5">
-            <h2>Manager Notifications</h2>
-            <div class="list-group">
-                <div class="list-group-item">
-                    <h5 class="mb-1">Meeting Room 101 Booking</h5>
-                    <p class="mb-1">John Doe has booked Meeting Room 101 for August 20, 2024.</p>
-                    <small>August 18, 2024</small>
+            <form id="notificationsForm">
+                <div class="mb-3">
+                    <label for="notificationType" class="form-label">Notification Type</label>
+                    <select class="form-select" id="notificationType">
+                        <option value="Meeting Reminder">Meeting Reminder</option>
+                        <option value="Room Availability">Room Availability</option>
+                        <option value="Team Update">Team Update</option>
+                    </select>
                 </div>
-                <div class="list-group-item">
-                    <h5 class="mb-1">New Meeting Request</h5>
-                    <p class="mb-1">There is a new meeting request pending approval.</p>
-                    <small>August 18, 2024</small>
+                <button type="submit" class="btn btn-primary me-2">
+                    <i data-feather="send" width="16" height="16" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                    Send Notification
+                </button>
+                <a href="manager-dashboard.html" class="btn btn-secondary">
+                    <i data-feather="arrow-left" width="16" height="16" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                    Back to Dashboard
+                </a>
+            </form>
+        </div>
+
+        <!-- Notifications List Card -->
+        <div class="dashboard-card">
+            <h3 class="notifications-list-title">Recent Notifications</h3>
+            
+            <div class="notification-item">
+                <div class="notification-header">
+                    <h6>
+                        <i data-feather="calendar" width="16" height="16" style="color: #3B82F6;"></i>
+                        Meeting Room 101 Booking
+                    </h6>
+                    <span class="notification-badge badge-reminder">Booking</span>
                 </div>
-                <div class="list-group-item">
-                    <h5 class="mb-1">Room Maintenance</h5>
-                    <p class="mb-1">Room 205 is scheduled for maintenance on August 21, 2024.</p>
-                    <small>August 18, 2024</small>
-                </div>
-                <div class="list-group-item">
-                    <h5 class="mb-1">Meeting Rescheduled</h5>
-                    <p class="mb-1">Jane Smith's meeting has been rescheduled to August 22, 2024.</p>
-                    <small>August 18, 2024</small>
-                </div>
+                <p>John Doe has booked Meeting Room 101 for August 20, 2024.</p>
+                <small><i data-feather="clock" width="12" height="12" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></i>August 18, 2024</small>
             </div>
             
-        </div>
-    </div>
- <!-- Footer Section -->
- <footer class="bg-dark text-light pt-2">
-    <div class="container text-center text-md-left">
-
-        <!-- Legal Links and Social Media Icons -->
-        <div class="row align-items-center">
-            <!-- Legal Links -->
-            <div class="col-md-7 col-lg-8">
-                <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
-                    <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
-                    <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
-                    <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
-                </p>
-            </div>
-
-            <!-- Social Media Icons -->
-            <div class="col-md-5 col-lg-4">
-                <div class="text-center text-md-right">
-                    <ul class="list-unstyled list-inline">
-                        <li class="list-inline-item">
-                            <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                <!-- <i class="fab fa-facebook-f"></i> -->
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                <!-- <i class="fab fa-twitter"></i> -->
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                <!-- <i class="fab fa-linkedin-in"></i> -->
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                <!-- <i class="fab fa-instagram"></i> -->
-                                <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
-                            </a>
-                        </li>
-                    </ul>
+            <div class="notification-item">
+                <div class="notification-header">
+                    <h6>
+                        <i data-feather="alert-circle" width="16" height="16" style="color: #D97706;"></i>
+                        New Meeting Request
+                    </h6>
+                    <span class="notification-badge badge-request">Pending</span>
                 </div>
+                <p>There is a new meeting request pending approval.</p>
+                <small><i data-feather="clock" width="12" height="12" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></i>August 18, 2024</small>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-header">
+                    <h6>
+                        <i data-feather="tool" width="16" height="16" style="color: #c2185b;"></i>
+                        Room Maintenance
+                    </h6>
+                    <span class="notification-badge badge-maintenance">Maintenance</span>
+                </div>
+                <p>Room 205 is scheduled for maintenance on August 21, 2024.</p>
+                <small><i data-feather="clock" width="12" height="12" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></i>August 18, 2024</small>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-header">
+                    <h6>
+                        <i data-feather="refresh-cw" width="16" height="16" style="color: #059669;"></i>
+                        Meeting Rescheduled
+                    </h6>
+                    <span class="notification-badge badge-update">Update</span>
+                </div>
+                <p>Jane Smith's meeting has been rescheduled to August 22, 2024.</p>
+                <small><i data-feather="clock" width="12" height="12" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></i>August 18, 2024</small>
             </div>
         </div>
     </div>
-</footer>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Form submission
         document.getElementById('notificationsForm').addEventListener('submit', function(event) {
             event.preventDefault();
             alert('Notification sent successfully!');
             window.location.href = 'manager-dashboard.html';
         });
     </script>
-    <script>
-        feather.replace();
-    </script>
-
-<script>
-    function logout() {
-        window.location.href = 'homepage.html';
-    }
-</script>
-
-    <!-- js for bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- custom js file import -->
-    <script src="./js/homepage.js"></script>
-
-    <!-- fontawsome  -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
