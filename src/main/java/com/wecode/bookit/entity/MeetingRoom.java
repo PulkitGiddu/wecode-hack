@@ -9,6 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,26 +28,28 @@ public class MeetingRoom {
     @Column(name = "room_name", nullable = false, unique = true, length = 100)
     private String roomName;
 
+    @Column(name = "room_type", nullable = false, length = 100)
+    private String roomType;
+
     @Column(name = "seating_capacity", nullable = false)
     private Integer seatingCapacity;
 
-    @Column(name = "has_projector")
-    private Boolean hasProjector = false;
+    @Column(name = "per_hour_cost", nullable = false)
+    private Integer perHourCost = 0;
 
-    @Column(name = "has_wifi")
-    private Boolean hasWifi = false;
-
-    @Column(name = "has_conference_call")
-    private Boolean hasConferenceCall = false;
-
-    @Column(name = "has_whiteboard")
-    private Boolean hasWhiteboard = false;
-
-    @Column(name = "has_tv")
-    private Boolean hasTv = false;
+    @ManyToMany
+    @JoinTable(
+            name = "room_amenities",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenity_id")
+    )
+    private Set<Amenity> amenities = new HashSet<>();
 
     @Column(name = "is_active")
     private Boolean isActive = true;
+
+    @Column(name = "room_cost")
+    private Integer roomCost;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
