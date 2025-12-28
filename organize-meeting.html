@@ -178,43 +178,6 @@
             box-shadow: 0 0 0 3px rgba(51, 105, 255, 0.1);
         }
 
-        /* Redesigned amenities section with better layout */
-        .amenities-group {
-            background: linear-gradient(135deg, #f8fafb 0%, #e8f1f8 100%);
-            padding: 16px 20px;
-            border-radius: 10px;
-            border: 1px solid #d0dbe6;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .amenities-group > div {
-            display: flex;
-            align-items: center;
-        }
-
-        .amenities-group label {
-            cursor: pointer;
-            color: #495057;
-            transition: color 0.2s ease;
-            font-size: 0.88rem;
-            margin: 0;
-        }
-
-        .amenities-group input[type="checkbox"] {
-            margin-right: 8px;
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            accent-color: #3369FF;
-        }
-
-        .amenities-group input[type="checkbox"]:disabled + label {
-            color: #0b3558;
-            font-weight: 600;
-        }
-
         /* Updated button to use primary blue from brand color */
         .btn-primary {
             background: linear-gradient(135deg, #3369FF 0%, #5b8fff 100%);
@@ -237,14 +200,6 @@
             box-shadow: 0 6px 20px rgba(51, 105, 255, 0.4);
         }
 
-        /* Improved alert styling */
-        .alert-warning {
-            border-radius: 9px;
-            border-left: 4px solid #ffc107;
-            background: #fff9e6;
-            font-size: 0.9rem;
-        }
-
         footer {
             margin-top: auto;
             position: relative;
@@ -258,10 +213,6 @@
             
             .organize-meeting h2 {
                 font-size: 1.75rem;
-            }
-
-            .amenities-group {
-                grid-template-columns: 1fr;
             }
 
             .btn-primary {
@@ -351,28 +302,6 @@
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Amenities</label>
-                    <div class="amenities-group">
-                        <div><input type="checkbox" id="wifi" value="WiFi"><label for="wifi">WiFi</label></div>
-                        <div><input type="checkbox" id="conferenceCallFacility" value="Conference Call Facility"><label for="conferenceCallFacility">Conference Call Facility</label></div>
-                        <div><input type="checkbox" id="waterDispenser" value="Water Dispenser"><label for="waterDispenser">Water Dispenser</label></div>
-                        <div><input type="checkbox" id="tv" value="TV"><label for="tv">TV</label></div>
-                        <div><input type="checkbox" id="coffeeMachine" value="Coffee Machine"><label for="coffeeMachine">Coffee Machine</label></div>
-                        <div><input type="checkbox" id="whiteboard" value="Whiteboard"><label for="whiteboard">Whiteboard</label></div>
-                        <div><input type="checkbox" id="projector" value="Projector"><label for="projector">Projector</label></div>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="seatingCapacity" class="form-label">Seating Capacity</label>
-                    <input type="number" class="form-control" id="seatingCapacity" min="1" placeholder="Number of seats required" required>
-                </div>
-
-                <div id="creditWarning" class="alert alert-warning d-none">
-                    <p class="mb-0">Insufficient credits. Please adjust your booking or contact support.</p>
-                </div>
-
                 <button type="submit" class="btn btn-primary" onclick="window.location.href = 'manager-dashboard.html';">Book Meeting</button>
             </form>
         </div>
@@ -398,29 +327,6 @@
         function logout() {
             window.location.href = 'homepage.html';
         }
-
-        document.getElementById('meetingType').addEventListener('change', function() {
-            const meetingType = this.value;
-            const amenities = {
-                'Classroom Training': ['whiteboard', 'projector'],
-                'Online Training': ['wifi', 'projector'],
-                'Business Call': ['projector'],
-                'Conference Call': ['conferenceCallFacility']
-            };
-
-            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = false;
-                checkbox.disabled = false;
-            });
-
-            if (meetingType) {
-                const mandatoryAmenities = amenities[meetingType] || [];
-                mandatoryAmenities.forEach(amenity => {
-                    document.getElementById(amenity).checked = true;
-                    document.getElementById(amenity).disabled = true;
-                });
-            }
-        });
 
         document.getElementById('organizeMeetingForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -449,48 +355,7 @@
             const durationInMinutes = endInMinutes - startInMinutes;
             const meetingDuration = Math.ceil(durationInMinutes / 60); // Convert to hours, rounding up
             
-            let userCredits = 2000;
-            const creditValues = {
-                'WiFi': 10,
-                'Conference Call Facility': 15,
-                'Water Dispenser': 5,
-                'TV': 10,
-                'Coffee Machine': 10,
-                'Whiteboard': 5,
-                'Projector': 5
-            };
-            
-            const creditsForDuration = meetingDuration * 2;
-            let creditsRequired = creditsForDuration;
-            
-            const selectedAmenities = [];
-            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-                selectedAmenities.push(checkbox.value);
-            });
-            
-            selectedAmenities.forEach(amenity => {
-                if (creditValues[amenity]) {
-                    creditsRequired += creditValues[amenity];
-                }
-            });
-
-            const seatingCapacity = parseInt(document.getElementById('seatingCapacity').value);
-            if(seatingCapacity > 10){
-                creditsRequired += 20;
-            } else if (seatingCapacity > 5 && seatingCapacity <= 10){
-                creditsRequired += 10;
-            }
-
-            const creditsUsed = creditsRequired;
-
-            if (userCredits < creditsUsed) {
-                document.getElementById('creditWarning').classList.remove('d-none');
-                return;
-            }
-            
-            userCredits -= creditsUsed;
-            document.getElementById('creditWarning').classList.add('d-none');
-            alert(`Meeting booked successfully!\nDuration: ${meetingDuration} hour(s)\nCredits Used: ${creditsUsed}\nAvailable Credits: ${userCredits}`);
+            alert(`Meeting booked successfully!\nDuration: ${meetingDuration} hour(s)`);
         });
     </script>
 
