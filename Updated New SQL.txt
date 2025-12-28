@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    user_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id UUID PRIMARY KEY,
 
     name VARCHAR(100) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE users (
 
 
 CREATE TABLE meeting_rooms (
-    room_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    room_id UUID PRIMARY KEY,
 
     room_name VARCHAR(100) UNIQUE NOT NULL,
     seating_capacity INTEGER NOT NULL CHECK (seating_capacity > 0),
@@ -37,10 +37,10 @@ CREATE TABLE meeting_rooms (
 
 
 CREATE TABLE bookings (
-    booking_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    booking_id UUID PRIMARY KEY,
 
-    room_id INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,
+    room_id UUID NOT NULL,
+    user_id UUID NOT NULL,
 
     meeting_title VARCHAR(200) NOT NULL,
     meeting_type VARCHAR(20) NOT NULL
@@ -71,10 +71,10 @@ CREATE TABLE bookings (
 
 
 CREATE TABLE credit_transactions (
-    transaction_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    transaction_id UUID PRIMARY KEY,
 
-    user_id INTEGER NOT NULL,
-    booking_id INTEGER,
+    user_id UUID NOT NULL,
+    booking_id UUID,
 
     amount INTEGER NOT NULL,
 
@@ -96,11 +96,11 @@ CREATE TABLE credit_transactions (
 
 
 CREATE TABLE room_schedule (
-    schedule_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    schedule_id UUID PRIMARY KEY,
 
-    booking_id INTEGER UNIQUE NOT NULL,
-    room_id INTEGER NOT NULL,
-    booked_by INTEGER NOT NULL,
+    booking_id UUID UNIQUE NOT NULL,
+    room_id UUID NOT NULL,
+    booked_by UUID NOT NULL,
 
     room_name VARCHAR(100) NOT NULL,
     meeting_title VARCHAR(200),
@@ -129,7 +129,7 @@ CREATE TABLE room_schedule (
 
 
 CREATE TABLE manager_credit_summary (
-    user_id INTEGER PRIMARY KEY,
+    user_id UUID PRIMARY KEY,
 
     manager_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -146,7 +146,7 @@ CREATE TABLE manager_credit_summary (
 
 
 CREATE TABLE amenities (
-    amenity_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    amenity_id UUID PRIMARY KEY,
     amenity_name VARCHAR(50) UNIQUE NOT NULL,
     credit_cost INTEGER NOT NULL CHECK (credit_cost >= 0)
 );
