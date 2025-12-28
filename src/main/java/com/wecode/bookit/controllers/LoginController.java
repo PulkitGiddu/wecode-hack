@@ -1,6 +1,7 @@
 package com.wecode.bookit.controllers;
 
 import com.wecode.bookit.dto.LoginRequest;
+import com.wecode.bookit.dto.UserDto;
 import com.wecode.bookit.entity.User;
 import com.wecode.bookit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,30 +26,15 @@ public class LoginController {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> login(@RequestBody UserDto userDto) {
 
-        // Extract data
-        String inputEmail = loginRequest.getemail();
-        String inputPassword = loginRequest.getPassword();
+        Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
 
-        // Find the user in the Database
-        Optional<User> userOptional = userRepository.findByEmail(inputEmail);
-
-        // Check if user exists AND if password matches
-        if (userOptional.isPresent()) {
-            User dbUser = userOptional.get();
-            if (passwordEncoder.matches(inputPassword, dbUser.getPasswordHash())) {
-                return ResponseEntity.ok("Login successful");
-            }
+        if (userOptional.isPresent() && passwordEncoder.matches(userDto.getPassword(), userOptional.get().getPasswordHash())) {
+            return ResponseEntity.ok("Login successful");
         }
 
-        //If User not found OR Password wrong -> Fail
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
     }
 
-    @PostMapping("/debugLogin")
-    public ResponseEntity<String> debugLogin(@RequestBody LoginRequest loginRequest) {
-        System.out.println("Debug Login Attempt: " + loginRequest.getemail());
-        return ResponseEntity.ok("Debug received");
-    }
 }
