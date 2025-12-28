@@ -1,9 +1,16 @@
-// java
 package com.wecode.bookit.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
 public class LoginRequest {
     //private String username;
+
+    // FIX 2: Add this so Spring can save the incoming email!
     private String email;
+
+    @Getter
     private String password;
 
     public LoginRequest() {}
@@ -13,19 +20,9 @@ public class LoginRequest {
         this.password = password;
     }
 
+    // FIX 1: Correct casing
     public String getemail() {
         return email;
     }
 
-    public void setemail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
