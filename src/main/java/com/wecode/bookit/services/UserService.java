@@ -5,5 +5,6 @@ import com.wecode.bookit.entity.User;
 
 public interface UserService {
     User signUp(UserDto userDto);
+    User login(UserDto userDto);
 }
 

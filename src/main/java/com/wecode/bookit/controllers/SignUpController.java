@@ -1,5 +1,6 @@
 package com.wecode.bookit.controllers;
 
+import com.wecode.bookit.dto.LoginResponseDto;
 import com.wecode.bookit.dto.SignUpResponseDto;
 import com.wecode.bookit.dto.UserDto;
 import com.wecode.bookit.entity.User;
@@ -42,5 +43,24 @@ public class SignUpController {
                 .role(user.getRole())
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody UserDto userDto) {
+        UserValidator.ValidationResult validationResult = userValidator.validateLoginRequest(userDto);
+        if (!validationResult.isValid()) {
+            LoginResponseDto response = LoginResponseDto.builder()
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
+                    .message(validationResult.getMessage())
+                    .build();
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        User user = userService.login(userDto);
+        LoginResponseDto response = LoginResponseDto.builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("Login Successfull")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
