@@ -47,12 +47,10 @@ public class AmenityServiceImpl implements AmenityService {
             amenity.setAmenityName(updateAmenityDto.getAmenityName());
         }
 
-        // Update credit cost if provided
         if (updateAmenityDto.getCreditCost() != null) {
             amenity.setCreditCost(updateAmenityDto.getCreditCost());
         }
 
-        // Update active status if provided
         if (updateAmenityDto.getIsActive() != null) {
             amenity.setIsActive(updateAmenityDto.getIsActive());
         }
