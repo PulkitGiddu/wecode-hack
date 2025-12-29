@@ -113,7 +113,8 @@ The system automatically enforces these rules during booking.
   - Read-only calendar/grid view of current and upcoming bookings
 
 ---
-[ HOMEPAGE ] 
+##WORKFLOW STRUCTURE
+```[ HOMEPAGE ] 
       |
       |---> (Describes App Features & Details)
       |
@@ -136,7 +137,7 @@ The system automatically enforces these rules during booking.
                                           |-- 2. Validate Credits
                                           |-- 3. 5-Minute Room Lock
                                           |-- 4. Confirm & Deduct
-
+```
 ## 👨‍💻 Implementation Strategy & Team Distribution
 
 ### Sub-Team A: UI/UX  
