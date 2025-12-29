@@ -697,35 +697,35 @@
                     <label class="form-label">Select Amenities</label>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 200px; overflow-y: auto; padding: 12px; background: rgba(243, 244, 246, 0.5); border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="Projector" style="width: 16px; height: 16px;">
+                            <input type="checkbox" name="amenity" value="PROJECTOR" style="width: 16px; height: 16px;">
                             <span>Projector</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="Whiteboard" style="width: 16px; height: 16px;">
+                            <input type="checkbox" name="amenity" value="WHITEBOARD" style="width: 16px; height: 16px;">
                             <span>Whiteboard</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="WiFi" style="width: 16px; height: 16px;">
+                            <input type="checkbox" name="amenity" value="WIFI" style="width: 16px; height: 16px;">
                             <span>WiFi</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="Video Conference" style="width: 16px; height: 16px;">
+                            <input type="checkbox" name="amenity" value="VIDEO_CONFERENCE" style="width: 16px; height: 16px;">
                             <span>Video Conference</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="Smart TV" style="width: 16px; height: 16px;">
+                            <input type="checkbox" name="amenity" value="SMART_TV" style="width: 16px; height: 16px;">
                             <span>Smart TV</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="Coffee Machine" style="width: 16px; height: 16px;">
+                            <input type="checkbox" name="amenity" value="COFFEE_MACHINE" style="width: 16px; height: 16px;">
                             <span>Coffee Machine</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="Air Conditioning" style="width: 16px; height: 16px;">
+                            <input type="checkbox" name="amenity" value="AIR_CONDITIONING" style="width: 16px; height: 16px;">
                             <span>Air Conditioning</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="Sound System" style="width: 16px; height: 16px;">
+                            <input type="checkbox" name="amenity" value="SOUND_SYSTEM" style="width: 16px; height: 16px;">
                             <span>Sound System</span>
                         </label>
                     </div>
@@ -777,10 +777,12 @@
         </div>
     </div>
 
+    <!-- Load API Module -->
+    <script src="./js/api.js"></script>
+    
     <script>
         feather.replace();
 
-        const API_BASE = 'http://localhost:8081/api/admin';
         let currentTab = 'rooms';
 
         // Tab Switching
@@ -807,253 +809,187 @@
 
         // Load Rooms
         async function loadRooms() {
-            // Dummy data for now
-            const dummyRooms = [
-                {
-                    roomId: 1,
-                    name: 'Conference Room A',
-                    roomType: 'Conference Room',
-                    seatingCapacity: 20,
-                    amenities: ['Projector', 'Whiteboard'],
-                    perHourCost: 75.00,
-                    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'
-                },
-                {
-                    roomId: 2,
-                    name: 'Training Room 1',
-                    roomType: 'Training Room',
-                    seatingCapacity: 12,
-                    amenities: ['Projector', 'Whiteboard', 'WiFi'],
-                    perHourCost: 100.00,
-                    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&h=400&fit=crop'
-                },
-                {
-                    roomId: 3,
-                    name: 'Board Room',
-                    roomType: 'Board Room',
-                    seatingCapacity: 150,
-                    amenities: ['Video Conference', 'WiFi', 'Smart TV', 'Sound System'],
-                    perHourCost: 150.00,
-                    image: 'https://images.unsplash.com/photo-1431540015161-0bf868a2d407?w=600&h=400&fit=crop'
-                },
-                {
-                    roomId: 4,
-                    name: 'Huddle Room 2',
-                    roomType: 'Meeting Room',
-                    seatingCapacity: 6,
-                    amenities: ['Projector', 'WiFi', 'Whiteboard', 'WiFi'],
-                    perHourCost: 40.00,
-                    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=400&fit=crop'
-                }
-            ];
-
             try {
-                // Try to fetch from API
-                const response = await fetch(`${API_BASE}/rooms`);
-                let rooms = [];
-                
-                if (response.ok) {
-                    rooms = await response.json();
-                }
-                
-                // If no rooms from API, use dummy data
-                if (!rooms || rooms.length === 0) {
-                    rooms = dummyRooms;
-                }
-                
-                const roomsList = document.getElementById('roomsList');
-                roomsList.innerHTML = rooms.map(room => `
-                    <div class="glass-card">
-                        <img src="${room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" alt="${room.name}" class="room-image">
-                        <div class="capacity-badge">
-                            <i data-feather="users" style="width: 14px; height: 14px;"></i>
-                            <span>${room.seatingCapacity || 0} Seats</span>
-                        </div>
-                        <div class="card-actions-top">
-                            <button class="icon-btn" onclick="editRoom(${room.roomId || room.id})" title="Edit">
-                                <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
-                            </button>
-                            <button class="icon-btn delete" onclick="deleteRoom(${room.roomId || room.id})" title="Delete">
-                                <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
-                            </button>
-                        </div>
-                        <div class="room-card-content">
-                            <div class="card-header-section">
-                                <div style="flex: 1;">
-                                    <h3 class="card-title-text">${room.name || 'Unnamed Room'}</h3>
-                                    <p class="card-subtitle">${room.roomType || 'Meeting Room'}</p>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div class="price-tag">$${room.perHourCost || 0}</div>
-                                    <div class="price-label">/ hour</div>
-                                </div>
-                            </div>
-                            <div class="amenities-container">
-                                ${Array.isArray(room.amenities) ? room.amenities.map(amenity => {
-                                    const iconMap = {
-                                        'Projector': 'monitor',
-                                        'Whiteboard': 'edit-3',
-                                        'WiFi': 'wifi',
-                                        'Video Conference': 'video',
-                                        'Smart TV': 'tv',
-                                        'Coffee Machine': 'coffee',
-                                        'Air Conditioning': 'wind',
-                                        'Sound System': 'speaker'
-                                    };
-                                    const icon = iconMap[amenity] || 'check-circle';
-                                    return `<div class="amenity-badge">
-                                        <i data-feather="${icon}" style="width: 14px; height: 14px;"></i>
-                                        <span>${amenity}</span>
-                                    </div>`;
-                                }).join('') : ''}
-                            </div>
-                            <button class="add-amenity-btn" onclick="alert('Add amenity functionality coming soon!')">
-                                <i data-feather="plus" style="width: 16px; height: 16px;"></i>
-                                Add Amenity
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-                feather.replace();
+                // Fetch rooms from API
+                const rooms = await getAllRooms();
+                displayRooms(rooms && rooms.length > 0 ? rooms : getDummyRooms());
             } catch (error) {
                 console.error('Error loading rooms:', error);
                 // Use dummy data on error
-                const roomsList = document.getElementById('roomsList');
-                roomsList.innerHTML = dummyRooms.map(room => `
-                    <div class="glass-card">
-                        <img src="${room.image}" alt="${room.name}" class="room-image">
-                        <div class="capacity-badge">
-                            <i data-feather="users" style="width: 14px; height: 14px;"></i>
-                            <span>${room.seatingCapacity} Seats</span>
-                        </div>
-                        <div class="card-actions-top">
-                            <button class="icon-btn" onclick="editRoom(${room.roomId})" title="Edit">
-                                <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
-                            </button>
-                            <button class="icon-btn delete" onclick="alert('This is a demo room')" title="Delete">
-                                <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
-                            </button>
-                        </div>
-                        <div class="room-card-content">
-                            <div class="card-header-section">
-                                <div style="flex: 1;">
-                                    <h3 class="card-title-text">${room.name}</h3>
-                                    <p class="card-subtitle">${room.roomType}</p>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div class="price-tag">$${room.perHourCost}</div>
-                                    <div class="price-label">/ hour</div>
-                                </div>
-                            </div>
-                            <div class="amenities-container">
-                                ${room.amenities.map(amenity => {
-                                    const iconMap = {
-                                        'Projector': 'monitor',
-                                        'Whiteboard': 'edit-3',
-                                        'WiFi': 'wifi',
-                                        'Video Conference': 'video',
-                                        'Smart TV': 'tv',
-                                        'Coffee Machine': 'coffee',
-                                        'Air Conditioning': 'wind',
-                                        'Sound System': 'speaker'
-                                    };
-                                    const icon = iconMap[amenity] || 'check-circle';
-                                    return `<div class="amenity-badge">
-                                        <i data-feather="${icon}" style="width: 14px; height: 14px;"></i>
-                                        <span>${amenity}</span>
-                                    </div>`;
-                                }).join('')}
-                            </div>
-                            <button class="add-amenity-btn" onclick="alert('Add amenity functionality coming soon!')">
-                                <i data-feather="plus" style="width: 16px; height: 16px;"></i>
-                                Add Amenity
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-                feather.replace();
+                displayRooms(getDummyRooms());
             }
+        }
+
+        // Display Rooms
+        function displayRooms(rooms) {
+            const roomsList = document.getElementById('roomsList');
+            roomsList.innerHTML = rooms.map(room => {
+                // Handle both backend format (roomName, roomId) and old format (name, id)
+                const roomName = room.roomName || room.name || 'Unnamed Room';
+                const roomId = room.roomId || room.id;
+                const seatingCapacity = room.seatingCapacity || 0;
+                const perHourCost = room.perHourCost || 0;
+                const roomType = room.roomType || 'Meeting Room';
+                
+                return `
+                <div class="glass-card">
+                    <img src="${room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" alt="${roomName}" class="room-image">
+                    <div class="capacity-badge">
+                        <i data-feather="users" style="width: 14px; height: 14px;"></i>
+                        <span>${seatingCapacity} Seats</span>
+                    </div>
+                    <div class="card-actions-top">
+                        <button class="icon-btn" onclick='handleEditRoom("${roomId}")' title="Edit">
+                            <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button class="icon-btn delete" onclick='handleDeleteRoom("${roomId}")' title="Delete">
+                            <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                    <div class="room-card-content">
+                        <div class="card-header-section">
+                            <div style="flex: 1;">
+                                <h3 class="card-title-text">${roomName}</h3>
+                                <p class="card-subtitle">${roomType}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="price-tag">$${perHourCost}</div>
+                                <div class="price-label">/ hour</div>
+                            </div>
+                        </div>
+                        <div class="amenities-container">
+                            ${Array.isArray(room.amenities) ? room.amenities.map(amenity => {
+                                // Format amenity name if it's in uppercase (e.g., COFFEE_MACHINE -> Coffee Machine)
+                                let formattedAmenity = amenity;
+                                if (typeof formatAmenityName === 'function') {
+                                    formattedAmenity = formatAmenityName(amenity);
+                                } else {
+                                    // Fallback formatting
+                                    formattedAmenity = amenity
+                                        .toLowerCase()
+                                        .split('_')
+                                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                        .join(' ');
+                                }
+                                
+                                const iconMap = {
+                                    'Projector': 'monitor',
+                                    'Whiteboard': 'edit-3',
+                                    'Wifi': 'wifi',
+                                    'WiFi': 'wifi',
+                                    'Video Conference': 'video',
+                                    'Conference Call': 'phone',
+                                    'Smart TV': 'tv',
+                                    'TV': 'tv',
+                                    'Tv': 'tv',
+                                    'Coffee Machine': 'coffee',
+                                    'Air Conditioning': 'wind',
+                                    'Sound System': 'speaker',
+                                    'Water Dispenser': 'droplet'
+                                };
+                                const icon = iconMap[formattedAmenity] || 'check-circle';
+                                return `<div class="amenity-badge">
+                                    <i data-feather="${icon}" style="width: 14px; height: 14px;"></i>
+                                    <span>${formattedAmenity}</span>
+                                </div>`;
+                            }).join('') : ''}
+                        </div>
+                        <button class="add-amenity-btn" onclick="alert('Add amenity functionality coming soon!')">
+                            <i data-feather="plus" style="width: 16px; height: 16px;"></i>
+                            Add Amenity
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            feather.replace();
         }
 
         // Load Amenities
         async function loadAmenities() {
-            // Dummy amenities data
-            const dummyAmenities = [
-                { amenityId: 1, name: 'Projector', description: 'HD projector with HDMI connectivity', creditsScore: 15 },
-                { amenityId: 2, name: 'Whiteboard', description: 'Large whiteboard with markers', creditsScore: 5 },
-                { amenityId: 3, name: 'WiFi', description: 'High-speed wireless internet', creditsScore: 10 },
-                { amenityId: 4, name: 'Video Conference', description: 'Professional video conferencing system', creditsScore: 25 },
-                { amenityId: 5, name: 'Smart TV', description: '65-inch 4K Smart TV', creditsScore: 20 },
-                { amenityId: 6, name: 'Coffee Machine', description: 'Premium espresso machine', creditsScore: 8 },
-                { amenityId: 7, name: 'Air Conditioning', description: 'Climate control system', creditsScore: 12 },
-                { amenityId: 8, name: 'Sound System', description: 'Professional audio system', creditsScore: 18 }
-            ];
-
             try {
-                const response = await fetch(`${API_BASE}/amenities`);
-                let amenities = [];
+                console.log('Starting to load amenities...');
+                // Fetch amenities from API
+                const amenities = await getAllAmenities();
+                console.log('Received amenities from API:', amenities);
+                console.log('Type:', typeof amenities, 'Is Array:', Array.isArray(amenities));
                 
-                if (response.ok) {
-                    amenities = await response.json();
+                if (amenities && amenities.length > 0) {
+                    console.log('First amenity:', amenities[0]);
+                    displayAmenities(amenities);
+                } else {
+                    console.log('No amenities from API, using dummy data');
+                    displayAmenities(getDummyAmenities());
                 }
-                
-                // If no amenities from API, use dummy data
-                if (!amenities || amenities.length === 0) {
-                    amenities = dummyAmenities;
-                }
-                
-                const amenitiesList = document.getElementById('amenitiesList');
-                amenitiesList.innerHTML = amenities.map(amenity => `
-                    <div class="glass-card">
-                        <div class="card-header-section">
-                            <div>
-                                <h3 class="card-title-text">${amenity.name || 'Unnamed Amenity'}</h3>
-                                <p class="card-subtitle">${amenity.description || 'No description'}</p>
-                            </div>
-                            <div class="card-actions">
-                                <button class="icon-btn" onclick="editAmenity(${amenity.amenityId || amenity.id})">
-                                    <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
-                                </button>
-                                <button class="icon-btn delete" onclick="deleteAmenity(${amenity.amenityId || amenity.id})">
-                                    <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Credits Score</span>
-                            <span class="info-value">${amenity.creditsScore || 0} credits</span>
-                        </div>
-                    </div>
-                `).join('');
-                feather.replace();
             } catch (error) {
                 console.error('Error loading amenities:', error);
+                console.log('Falling back to dummy data');
                 // Use dummy data on error
-                const amenitiesList = document.getElementById('amenitiesList');
-                amenitiesList.innerHTML = dummyAmenities.map(amenity => `
-                    <div class="glass-card">
-                        <div class="card-header-section">
-                            <div>
-                                <h3 class="card-title-text">${amenity.name}</h3>
-                                <p class="card-subtitle">${amenity.description}</p>
-                            </div>
-                            <div class="card-actions">
-                                <button class="icon-btn" onclick="editAmenity(${amenity.amenityId})">
-                                    <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
-                                </button>
-                                <button class="icon-btn delete" onclick="alert('This is a demo amenity')">
-                                    <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
-                                </button>
-                            </div>
+                displayAmenities(getDummyAmenities());
+            }
+        }
+
+        // Display Amenities
+        function displayAmenities(amenities) {
+            console.log('Displaying amenities:', amenities); // Debug log
+            
+            const amenitiesList = document.getElementById('amenitiesList');
+            
+            if (!amenities || amenities.length === 0) {
+                amenitiesList.innerHTML = '<div class="glass-card"><p class="text-center">No amenities available</p></div>';
+                return;
+            }
+            
+            amenitiesList.innerHTML = amenities.map(amenity => {
+                console.log('Processing amenity:', amenity); // Debug log
+                
+                // Handle both backend format (amenityName, creditCost) and old format (name, creditsScore)
+                const amenityName = amenity.amenityName || amenity.name || 'Unnamed Amenity';
+                console.log('Amenity name:', amenityName); // Debug log
+                
+                // Format the name (e.g., COFFEE_MACHINE -> Coffee Machine)
+                let formattedName = amenityName;
+                if (typeof formatAmenityName === 'function') {
+                    formattedName = formatAmenityName(amenityName);
+                } else {
+                    // Fallback formatting if function not available
+                    formattedName = amenityName
+                        .toLowerCase()
+                        .split('_')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ');
+                }
+                console.log('Formatted name:', formattedName); // Debug log
+                
+                const creditCost = amenity.creditCost || amenity.creditsScore || 0;
+                const amenityId = amenity.amenity_id || amenity.amenityId || amenity.id;
+                const isActive = amenity.is_active !== undefined ? amenity.is_active : true;
+                
+                return `
+                <div class="glass-card ${!isActive ? 'opacity-50' : ''}">
+                    <div class="card-header-section">
+                        <div>
+                            <h3 class="card-title-text">${formattedName}</h3>
+                            <p class="card-subtitle">${amenity.description || `${formattedName} facility`}</p>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">Credits Score</span>
-                            <span class="info-value">${amenity.creditsScore} credits</span>
+                        <div class="card-actions">
+                            <button class="icon-btn" onclick='handleEditAmenity("${amenityId}")'>
+                                <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                            <button class="icon-btn delete" onclick='handleDeleteAmenity("${amenityId}")'>
+                                <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                            </button>
                         </div>
                     </div>
-                `).join('');
-                feather.replace();
-            }
+                    <div class="info-row">
+                        <span class="info-label">Credits Score</span>
+                        <span class="info-value">${creditCost} credits</span>
+                    </div>
+                    ${!isActive ? '<div class="info-row"><span class="badge" style="background: #DC2626; color: white; padding: 4px 8px; border-radius: 4px;">Inactive</span></div>' : ''}
+                </div>
+                `;
+            }).join('');
+            feather.replace();
         }
 
         // Modal Functions
@@ -1087,13 +1023,11 @@
             e.preventDefault();
             
             const roomId = document.getElementById('roomId').value;
-            
-            // Get selected amenities from checkboxes
             const selectedAmenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked'))
                 .map(checkbox => checkbox.value);
             
             const roomData = {
-                name: document.getElementById('roomName').value,
+                roomName: document.getElementById('roomName').value,
                 roomType: document.getElementById('roomType').value,
                 seatingCapacity: parseInt(document.getElementById('seatingCapacity').value),
                 amenities: selectedAmenities,
@@ -1101,37 +1035,28 @@
             };
 
             try {
-                const url = roomId ? `${API_BASE}/rooms` : `${API_BASE}/rooms`;
-                const method = roomId ? 'PUT' : 'POST';
-                
-                if (roomId) roomData.roomId = parseInt(roomId);
-
-                const response = await fetch(url, {
-                    method: method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(roomData)
-                });
-
-                if (response.ok) {
-                    closeRoomModal();
-                    loadRooms();
-                    alert(roomId ? 'Room updated successfully!' : 'Room created successfully!');
+                if (roomId) {
+                    roomData.roomId = roomId;
+                    await updateRoom(roomData);
+                    alert('Room updated successfully!');
                 } else {
-                    alert('Error saving room. Please try again.');
+                    await createRoom(roomData);
+                    alert('Room created successfully!');
                 }
+                closeRoomModal();
+                loadRooms();
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error saving room. Please try again.');
+                alert('Error saving room: ' + error.message);
             }
         });
 
-        async function editRoom(id) {
+        async function handleEditRoom(id) {
             try {
-                const response = await fetch(`${API_BASE}/rooms/${id}`);
-                const room = await response.json();
+                const room = await getRoomById(id);
                 
                 document.getElementById('roomId').value = room.roomId || room.id;
-                document.getElementById('roomName').value = room.name || '';
+                document.getElementById('roomName').value = room.roomName || room.name || '';
                 document.getElementById('roomType').value = room.roomType || '';
                 document.getElementById('seatingCapacity').value = room.seatingCapacity || '';
                 document.getElementById('perHourCost').value = room.perHourCost || '';
@@ -1153,27 +1078,20 @@
                 feather.replace();
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error loading room details.');
+                alert('Error loading room details: ' + error.message);
             }
         }
 
-        async function deleteRoom(id) {
+        async function handleDeleteRoom(id) {
             if (!confirm('Are you sure you want to delete this room?')) return;
             
             try {
-                const response = await fetch(`${API_BASE}/rooms/${id}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    loadRooms();
-                    alert('Room deleted successfully!');
-                } else {
-                    alert('Error deleting room.');
-                }
+                await deleteRoom(id);
+                loadRooms();
+                alert('Room deleted successfully!');
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error deleting room.');
+                alert('Error deleting room: ' + error.message);
             }
         }
 
@@ -1189,34 +1107,25 @@
             };
 
             try {
-                const url = amenityId ? `${API_BASE}/amenities` : `${API_BASE}/amenities`;
-                const method = amenityId ? 'PUT' : 'POST';
-                
-                if (amenityId) amenityData.amenityId = parseInt(amenityId);
-
-                const response = await fetch(url, {
-                    method: method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(amenityData)
-                });
-
-                if (response.ok) {
-                    closeAmenityModal();
-                    loadAmenities();
-                    alert(amenityId ? 'Amenity updated successfully!' : 'Amenity created successfully!');
+                if (amenityId) {
+                    amenityData.amenityId = amenityId;
+                    await updateAmenity(amenityData);
+                    alert('Amenity updated successfully!');
                 } else {
-                    alert('Error saving amenity. Please try again.');
+                    await createAmenity(amenityData);
+                    alert('Amenity created successfully!');
                 }
+                closeAmenityModal();
+                loadAmenities();
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error saving amenity. Please try again.');
+                alert('Error saving amenity: ' + error.message);
             }
         });
 
-        async function editAmenity(id) {
+        async function handleEditAmenity(id) {
             try {
-                const response = await fetch(`${API_BASE}/amenities/${id}`);
-                const amenity = await response.json();
+                const amenity = await getAmenityById(id);
                 
                 document.getElementById('amenityId').value = amenity.amenityId || amenity.id;
                 document.getElementById('amenityName').value = amenity.name || '';
@@ -1229,27 +1138,20 @@
                 feather.replace();
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error loading amenity details.');
+                alert('Error loading amenity details: ' + error.message);
             }
         }
 
-        async function deleteAmenity(id) {
+        async function handleDeleteAmenity(id) {
             if (!confirm('Are you sure you want to delete this amenity?')) return;
             
             try {
-                const response = await fetch(`${API_BASE}/amenities/${id}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    loadAmenities();
-                    alert('Amenity deleted successfully!');
-                } else {
-                    alert('Error deleting amenity.');
-                }
+                await deleteAmenity(id);
+                loadAmenities();
+                alert('Amenity deleted successfully!');
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error deleting amenity.');
+                alert('Error deleting amenity: ' + error.message);
             }
         }
 

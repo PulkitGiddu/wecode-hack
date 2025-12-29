@@ -866,6 +866,291 @@
                 gap: 20px;
             }
         }
+
+        /* Rooms Grid Styles */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            padding: 20px 0;
+        }
+
+        .room-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .room-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .room-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .room-card-content {
+            padding: 20px;
+        }
+
+        .room-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .room-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F2937;
+            margin: 0;
+        }
+
+        .room-card-type {
+            font-size: 14px;
+            color: #6B7280;
+            margin-top: 4px;
+        }
+
+        .room-price-badge {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .room-info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0;
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .room-amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .room-amenity-tag {
+            background: #DBEAFE;
+            color: #1E40AF;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .book-room-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .book-room-btn:hover {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .loading-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #6B7280;
+            font-size: 16px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content-large {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .modal-header-custom h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+            margin: 0;
+        }
+
+        .modal-close-btn {
+            background: #F3F4F6;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close-btn:hover {
+            background: #E5E7EB;
+        }
+
+        .form-row-custom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group-custom {
+            margin-bottom: 20px;
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input-custom {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-input-custom:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input-custom[readonly] {
+            background: #F9FAFB;
+            color: #6B7280;
+        }
+
+        .amenities-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .total-cost-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: #F0F9FF;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .cost-amount {
+            color: #2563EB;
+            font-size: 24px;
+        }
+
+        .modal-actions-custom {
+            display: flex;
+            gap: 12px;
+            padding: 24px;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .btn-cancel-custom {
+            flex: 1;
+            padding: 12px 24px;
+            background: #F3F4F6;
+            color: #374151;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel-custom:hover {
+            background: #E5E7EB;
+        }
+
+        .btn-submit-custom {
+            flex: 1;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-submit-custom:hover {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        #bookRoomForm {
+            padding: 24px;
+        }
     </style>
 </head>
 <body>
@@ -894,10 +1179,15 @@
     <!-- Navigation Tabs -->
     <nav class="nav-tabs-container">
         <div class="nav-tabs-wrapper">
-            <a href="organize-meeting.html" class="nav-tab">
-                <i data-feather="calendar" width="14" height="14"></i>
-                Organize Meetings
+            <a href="#" onclick="showSection('dashboard'); return false;" class="nav-tab active" id="dashboardTab">
+                <i data-feather="home" width="14" height="14"></i>
+                Dashboard
             </a>
+            <a href="#" onclick="showSection('viewRooms'); return false;" class="nav-tab" id="viewRoomsTab">
+                <i data-feather="grid" width="14" height="14"></i>
+                View Rooms
+            </a>
+           
             <a href="analytics.html" class="nav-tab">
                 <i data-feather="bar-chart-2" width="14" height="14"></i>
                 Analyze Meetings
@@ -915,7 +1205,7 @@
     </nav>
 
     <!-- Dashboard -->
-    <div class="dashboard-container">
+    <div id="dashboardSection" class="dashboard-container">
         <div class="dashboard-header">
             <h1 class="dashboard-title">Manager Dashboard</h1>
             <p class="dashboard-subtitle">Welcome back, John Doe. Here's an overview of your team's bookings and stats today.</p>
@@ -1125,7 +1415,105 @@
         </div>
     </div>
 
+    <!-- View Rooms Section -->
+    <div id="viewRoomsSection" class="dashboard-container" style="display: none;">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Available Meeting Rooms</h1>
+            <p class="dashboard-subtitle">Browse and book available meeting rooms for your team</p>
+        </div>
+
+        <div id="roomsGrid" class="rooms-grid">
+            <!-- Rooms will be loaded here dynamically -->
+            <div class="loading-message">Loading rooms...</div>
+        </div>
+    </div>
+
+    <!-- Book Room Modal -->
+    <div id="bookRoomModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content-large">
+            <div class="modal-header-custom">
+                <h2 id="bookModalTitle">Book Meeting Room</h2>
+                <button class="modal-close-btn" onclick="closeBookModal()">
+                    <i data-feather="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <form id="bookRoomForm">
+                <input type="hidden" id="selectedRoomId">
+                <input type="hidden" id="selectedRoomCost">
+                
+                <div class="form-row-custom">
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Room Name</label>
+                        <input type="text" id="bookRoomName" class="form-input-custom" readonly>
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Room Type</label>
+                        <input type="text" id="bookRoomType" class="form-input-custom" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row-custom">
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Seating Capacity</label>
+                        <input type="text" id="bookSeatingCapacity" class="form-input-custom" readonly>
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Cost Per Hour</label>
+                        <input type="text" id="bookPerHourCost" class="form-input-custom" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Meeting Title</label>
+                    <input type="text" id="meetingTitle" class="form-input-custom" required placeholder="Enter meeting title">
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Meeting Date</label>
+                    <input type="date" id="meetingDate" class="form-input-custom" required>
+                </div>
+
+                <div class="form-row-custom">
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Start Time</label>
+                        <input type="time" id="startTime" class="form-input-custom" required>
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">End Time</label>
+                        <input type="time" id="endTime" class="form-input-custom" required>
+                    </div>
+                </div>
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Duration</label>
+                    <input type="text" id="durationDisplay" class="form-input-custom" readonly placeholder="Select start and end time">
+                </div>
+
+                
+
+                <div class="form-group-custom">
+                    <label class="form-label-custom">Amenities Included</label>
+                    <div id="bookAmenities" class="amenities-display"></div>
+                </div>
+
+                <div class="total-cost-display">
+                    <span>Estimated Total Cost:</span>
+                    <span id="totalCostDisplay" class="cost-amount">$0</span>
+                </div>
+
+                <div class="modal-actions-custom">
+                    <button type="button" class="btn-cancel-custom" onclick="closeBookModal()">Cancel</button>
+                    <button type="submit" class="btn-submit-custom">
+                        <i data-feather="check" style="width: 16px; height: 16px;"></i>
+                        Confirm Booking
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/api.js"></script>
     <script>
         // Initialize Feather Icons
         feather.replace();
@@ -1268,7 +1656,7 @@
         }
 
         // Period selector functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const periodButtons = document.querySelectorAll('.period-btn');
             
             periodButtons.forEach(button => {
@@ -1283,6 +1671,9 @@
                     updateChart(period);
                 });
             });
+
+            // Load manager profile
+            await loadManagerProfile();
         });
 
         function updateChart(period) {
@@ -1291,6 +1682,332 @@
             timeSpendChart.data.datasets[0].data = data.data;
             timeSpendChart.update('active');
         }
+
+        // Load Manager Profile
+        async function loadManagerProfile() {
+            console.log('🔄 Starting to load manager profile...');
+            console.log('📂 API endpoint will be: http://localhost:8081/api/manager/profile');
+            
+            try {
+                console.log('📡 Calling getManagerProfile()...');
+                const profile = await getManagerProfile();
+                
+                console.log('✅ Profile received:', profile);
+                console.log('📊 Available Credits:', profile.availableCredits);
+                console.log('👤 Manager Name:', profile.name);
+                console.log('📧 Email:', profile.email);
+                console.log('🎭 Role:', profile.role);
+                
+                // Update dashboard subtitle with manager name
+                const subtitle = document.querySelector('.dashboard-subtitle');
+                if (subtitle && profile.name) {
+                    subtitle.textContent = `Welcome back, ${profile.name}. Here's an overview of your team's bookings and stats today.`;
+                    console.log('✅ Updated subtitle with name:', profile.name);
+                }
+                
+                // Update user avatar with initials
+                const avatar = document.querySelector('.user-avatar');
+                if (avatar && profile.name) {
+                    const initials = profile.name
+                        .split(' ')
+                        .map(word => word.charAt(0).toUpperCase())
+                        .join('')
+                        .substring(0, 2);
+                    avatar.textContent = initials;
+                    avatar.title = profile.name;
+                    console.log('✅ Updated avatar with initials:', initials);
+                }
+                
+                // Update credits information
+                if (profile.availableCredits !== undefined) {
+                    const totalCredits = 90; // You can also fetch this from the backend
+                    const usedCredits = totalCredits - profile.availableCredits;
+                    const usagePercentage = Math.round((usedCredits / totalCredits) * 100);
+                    
+                    console.log('💰 Credits calculation:');
+                    console.log('  - Available:', profile.availableCredits);
+                    console.log('  - Used:', usedCredits);
+                    console.log('  - Total:', totalCredits);
+                    console.log('  - Usage %:', usagePercentage);
+                    
+                    // Update credits remaining
+                    const creditsRemaining = document.getElementById('creditsRemaining');
+                    if (creditsRemaining) {
+                        creditsRemaining.textContent = profile.availableCredits;
+                        console.log('✅ Updated creditsRemaining element');
+                    } else {
+                        console.warn('⚠️ creditsRemaining element not found!');
+                    }
+                    
+                    // Update progress bar
+                    const progressBar = document.getElementById('creditProgressBar');
+                    if (progressBar) {
+                        progressBar.style.width = `${usagePercentage}%`;
+                        console.log('✅ Updated progress bar width:', usagePercentage + '%');
+                    } else {
+                        console.warn('⚠️ creditProgressBar element not found!');
+                    }
+                    
+                    // Update progress text
+                    const progressText = document.getElementById('progressText');
+                    if (progressText) {
+                        progressText.textContent = `${usagePercentage}%`;
+                        console.log('✅ Updated progress text');
+                    } else {
+                        console.warn('⚠️ progressText element not found!');
+                    }
+                    
+                    // Update breakdown - Available
+                    const breakdownItems = document.querySelectorAll('.breakdown-item');
+                    console.log('📊 Found breakdown items:', breakdownItems.length);
+                    if (breakdownItems.length >= 3) {
+                        breakdownItems[0].querySelector('.breakdown-value').textContent = profile.availableCredits;
+                        breakdownItems[1].querySelector('.breakdown-value').textContent = usedCredits;
+                        breakdownItems[2].querySelector('.breakdown-value').textContent = totalCredits;
+                        console.log('✅ Updated all breakdown values');
+                    } else {
+                        console.warn('⚠️ Not enough breakdown items found!');
+                    }
+                    
+                    // Update total credits display
+                    const creditsTotal = document.querySelector('.credits-total');
+                    if (creditsTotal) {
+                        creditsTotal.textContent = `of ${totalCredits} credits`;
+                        console.log('✅ Updated credits total text');
+                    } else {
+                        console.warn('⚠️ creditsTotal element not found!');
+                    }
+                }
+                
+                console.log('✅ Manager profile loaded successfully!');
+            } catch (error) {
+                console.error('❌ Error loading manager profile:', error);
+                console.error('Stack trace:', error.stack);
+            }
+        }
+
+        // Section Switching
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('dashboardSection').style.display = 'none';
+            document.getElementById('viewRoomsSection').style.display = 'none';
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+
+            // Show selected section and activate tab
+            if (section === 'dashboard') {
+                document.getElementById('dashboardSection').style.display = 'block';
+                document.getElementById('dashboardTab').classList.add('active');
+            } else if (section === 'viewRooms') {
+                document.getElementById('viewRoomsSection').style.display = 'block';
+                document.getElementById('viewRoomsTab').classList.add('active');
+                loadAllRooms();
+            }
+
+            feather.replace();
+        }
+
+        // Load all rooms
+        async function loadAllRooms() {
+            const roomsGrid = document.getElementById('roomsGrid');
+            roomsGrid.innerHTML = '<div class="loading-message">Loading rooms...</div>';
+
+            try {
+                const rooms = await getAllRooms();
+                displayRooms(rooms);
+            } catch (error) {
+                console.error('Error loading rooms:', error);
+                roomsGrid.innerHTML = '<div class="loading-message">Error loading rooms. Please try again later.</div>';
+            }
+        }
+
+        // Display rooms
+        function displayRooms(rooms) {
+            const roomsGrid = document.getElementById('roomsGrid');
+
+            if (!rooms || rooms.length === 0) {
+                roomsGrid.innerHTML = '<div class="loading-message">No rooms available</div>';
+                return;
+            }
+
+            roomsGrid.innerHTML = rooms.map(room => {
+                const roomName = room.roomName || room.name || 'Unnamed Room';
+                const roomType = room.roomType || 'Meeting Room';
+                const seatingCapacity = room.seatingCapacity || 0;
+                const perHourCost = room.perHourCost || 0;
+                const roomCost = room.roomCost || perHourCost;
+                const amenities = room.amenities || [];
+                const roomId = room.roomId || room.id;
+
+                return `
+                    <div class="room-card">
+                        <img src="${room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" 
+                             alt="${roomName}" class="room-card-image">
+                        <div class="room-card-content">
+                            <div class="room-card-header">
+                                <div>
+                                    <h3 class="room-card-title">${roomName}</h3>
+                                    <p class="room-card-type">${roomType}</p>
+                                </div>
+                                <div class="room-price-badge">$${roomCost}/hr</div>
+                            </div>
+                            
+                            <div class="room-info-row">
+                                <i data-feather="users" width="16" height="16"></i>
+                                <span>${seatingCapacity} people</span>
+                            </div>
+
+                            ${amenities.length > 0 ? `
+                                <div class="room-amenities">
+                                    ${amenities.map(amenity => {
+                                        const formattedAmenity = typeof formatAmenityName === 'function' ? 
+                                            formatAmenityName(amenity) : 
+                                            amenity.toLowerCase().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                                        return `<span class="room-amenity-tag">${formattedAmenity}</span>`;
+                                    }).join('')}
+                                </div>
+                            ` : ''}
+
+                            <button class="book-room-btn" onclick='openBookModal(${JSON.stringify(room).replace(/'/g, "&apos;")})'>
+                                <i data-feather="calendar" width="16" height="16"></i>
+                                Book This Room
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            feather.replace();
+        }
+
+        // Open book modal
+        function openBookModal(room) {
+            const roomName = room.roomName || room.name || 'Unnamed Room';
+            const roomType = room.roomType || 'Meeting Room';
+            const seatingCapacity = room.seatingCapacity || 0;
+            const perHourCost = room.perHourCost || 0;
+            const roomCost = room.roomCost || perHourCost;
+            const amenities = room.amenities || [];
+            const roomId = room.roomId || room.id;
+
+            // Fill form with room details
+            document.getElementById('selectedRoomId').value = roomId;
+            document.getElementById('selectedRoomCost').value = roomCost;
+            document.getElementById('bookRoomName').value = roomName;
+            document.getElementById('bookRoomType').value = roomType;
+            document.getElementById('bookSeatingCapacity').value = `${seatingCapacity} people`;
+            document.getElementById('bookPerHourCost').value = `$${roomCost}/hour`;
+
+            // Display amenities
+            const amenitiesDisplay = document.getElementById('bookAmenities');
+            if (amenities.length > 0) {
+                amenitiesDisplay.innerHTML = amenities.map(amenity => {
+                    const formattedAmenity = typeof formatAmenityName === 'function' ? 
+                        formatAmenityName(amenity) : 
+                        amenity.toLowerCase().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                    return `<span class="room-amenity-tag">${formattedAmenity}</span>`;
+                }).join('');
+            } else {
+                amenitiesDisplay.innerHTML = '<span style="color: #6B7280;">No amenities included</span>';
+            }
+
+            // Clear previous form data
+            document.getElementById('meetingTitle').value = '';
+            document.getElementById('meetingDate').value = '';
+            document.getElementById('startTime').value = '';
+            document.getElementById('endTime').value = '';
+            document.getElementById('durationDisplay').value = '';
+            document.getElementById('meetingDescription').value = '';
+            document.getElementById('totalCostDisplay').textContent = '$0';
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('meetingDate').setAttribute('min', today);
+
+            // Show modal
+            document.getElementById('bookRoomModal').style.display = 'flex';
+            feather.replace();
+        }
+
+        // Close book modal
+        function closeBookModal() {
+            document.getElementById('bookRoomModal').style.display = 'none';
+        }
+
+        // Calculate total cost and duration
+        function calculateTotalCost() {
+            const meetingDate = document.getElementById('meetingDate').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            const costPerHour = parseFloat(document.getElementById('selectedRoomCost').value);
+
+            if (meetingDate && startTime && endTime && costPerHour) {
+                // Create datetime objects
+                const startDateTime = new Date(`${meetingDate}T${startTime}`);
+                const endDateTime = new Date(`${meetingDate}T${endTime}`);
+                
+                // Calculate duration in hours
+                const durationMs = endDateTime - startDateTime;
+                const hours = durationMs / (1000 * 60 * 60);
+                
+                if (hours > 0) {
+                    // Display duration
+                    const hoursInt = Math.floor(hours);
+                    const minutes = Math.round((hours - hoursInt) * 60);
+                    const durationText = hoursInt > 0 ? 
+                        `${hoursInt} hour${hoursInt > 1 ? 's' : ''}${minutes > 0 ? ` ${minutes} min` : ''}` : 
+                        `${minutes} minutes`;
+                    document.getElementById('durationDisplay').value = durationText;
+                    
+                    // Calculate total cost
+                    const totalCost = (hours * costPerHour).toFixed(2);
+                    document.getElementById('totalCostDisplay').textContent = `$${totalCost}`;
+                } else {
+                    document.getElementById('durationDisplay').value = '';
+                    document.getElementById('totalCostDisplay').textContent = '$0';
+                    if (endTime && startTime) {
+                        alert('End time must be after start time');
+                    }
+                }
+            }
+        }
+
+        // Add event listeners for date/time changes
+        document.getElementById('meetingDate').addEventListener('change', calculateTotalCost);
+        document.getElementById('startTime').addEventListener('change', calculateTotalCost);
+        document.getElementById('endTime').addEventListener('change', calculateTotalCost);
+
+        // Handle booking form submission
+        document.getElementById('bookRoomForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const meetingDate = document.getElementById('meetingDate').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            const bookingData = {
+                roomId: document.getElementById('selectedRoomId').value,
+                meetingTitle: document.getElementById('meetingTitle').value,
+                startDateTime: `${meetingDate}T${startTime}`,
+                endDateTime: `${meetingDate}T${endTime}`,
+                description: document.getElementById('meetingDescription').value
+            };
+
+            try {
+                // TODO: Call your booking API endpoint here
+                console.log('Booking data:', bookingData);
+                
+                alert('Meeting booked successfully!');
+                closeBookModal();
+                
+                // Optionally redirect to organize-meeting page with pre-filled data
+                // window.location.href = `organize-meeting.html?roomId=${bookingData.roomId}`;
+            } catch (error) {
+                console.error('Error booking room:', error);
+                alert('Error booking room: ' + error.message);
+            }
+        });
     </script>
 </body>
 </html>
