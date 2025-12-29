@@ -113,50 +113,29 @@ The system automatically enforces these rules during booking.
   - Read-only calendar/grid view of current and upcoming bookings
 
 ---
-##🧭 Frontend Workflow Diagram
-flowchart TD
-    %% Homepage and Login
-    A[Homepage (Public Access)] --> B[Login / Signup]
-    B --> C[Role Identification<br/>Admin / Manager / Member]
-
-    %% Dashboards
-    subgraph Dashboards
-        D[Admin Dashboard]
-        E[Manager Dashboard]
-        F[Member Dashboard]
-    end
-
-    C --> D
-    C --> E
-    C --> F
-
-    %% Admin Features
-    subgraph "Admin Features"
-        D --> D1[Create Rooms]
-        D --> D2[Manage Amenities]
-        D --> D3[Set Credit Cost]
-        D --> D4[Import Users]
-    end
-
-    %% Manager Features
-    subgraph "Manager Booking Workflow"
-        E --> E1[Organize Meetings / Book]
-        E1 --> E2[Search & Select Room<br/>(Capacity & Amenities)]
-        E2 --> E3[Credit Validation]
-        E3 --> E4[Room Lock (5 min)]
-        E4 --> E5[Enter Booking Details<br/>(Date, Time, Team)]
-        E5 --> E6[Confirmation & Credits Deducted]
-        E6 --> E7[Analyze Meetings / Reports]
-        E7 --> E8[Team Management]
-        E8 --> E9[Notifications & Alerts]
-    end
-
-    %% Member Features
-    subgraph "Member Features"
-        F --> F1[View Room Schedules]
-        F --> F2[View Meeting Details]
-    end
-
+[ HOMEPAGE ] 
+      |
+      |---> (Describes App Features & Details)
+      |
+[ LOGIN / SIGNUP ] 
+      |
+      |---> (Identifies User Role: Admin, Manager, or Member)
+      |
+      |---------------------------------------------------------
+      |                        |                               |
+[ ADMIN DASHBOARD ]    [ MANAGER DASHBOARD ]         [ MEMBER DASHBOARD ]
+      |                        |                               |
+      |-- Create Rooms         |-- Organize Meeting            |-- View Schedules
+      |-- Manage Amenities     |-- Credit Tracker (2000 pts)   |-- View Room Info
+      |-- Import Users (XML)   |-- Analyze Team & Rooms        |
+      |-- Set Credit Costs     |-- Notifications Tag           |
+                               |                               |
+                               |--------[ BOOKING FLOW ]--------
+                                          |
+                                          |-- 1. Select Meeting Type
+                                          |-- 2. Validate Credits
+                                          |-- 3. 5-Minute Room Lock
+                                          |-- 4. Confirm & Deduct
 
 ## 👨‍💻 Implementation Strategy & Team Distribution
 
