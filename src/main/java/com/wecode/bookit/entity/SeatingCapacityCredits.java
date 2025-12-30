@@ -1,5 +1,6 @@
 package com.wecode.bookit.entity;
 
+import com.wecode.bookit.dto.SeatingCapacityCreditsId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

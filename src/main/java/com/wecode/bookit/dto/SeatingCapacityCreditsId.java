@@ -1,4 +1,4 @@
-package com.wecode.bookit.entity;
+package com.wecode.bookit.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.wecode.bookit.repository;
 
 import com.wecode.bookit.entity.SeatingCapacityCredits;
-import com.wecode.bookit.entity.SeatingCapacityCreditsId;
+import com.wecode.bookit.dto.SeatingCapacityCreditsId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
