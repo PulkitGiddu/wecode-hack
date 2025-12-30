@@ -79,8 +79,14 @@ public class AdminController {
 
     @GetMapping("/getAllRoom")
     public ResponseEntity<List<MeetingRoomDto>> getAllRooms() {
-        List<MeetingRoomDto> rooms = meetingRoomService.getAllRooms();
-        return ResponseEntity.ok(rooms);
+        try {
+            List<MeetingRoomDto> rooms = meetingRoomService.getAllRooms();
+            return ResponseEntity.ok(rooms);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/rooms/{roomId}")
