@@ -62,8 +62,19 @@ public class AdminController {
 
     @GetMapping("/getRoomById/{roomId}")
     public ResponseEntity<MeetingRoomDto> getRoomById(@PathVariable UUID roomId) {
-        MeetingRoomDto room = meetingRoomService.getRoomById(roomId);
-        return ResponseEntity.ok(room);
+        try {
+            MeetingRoomDto room = meetingRoomService.getRoomById(roomId);
+            room.setStatusCode(HttpStatus.OK.value());
+            room.setMessage("Room fetched successfully");
+            return ResponseEntity.ok(room);
+        }
+        catch (Exception e)
+        {
+            MeetingRoomDto errorResponse = new MeetingRoomDto();
+            errorResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            errorResponse.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     @GetMapping("/getAllRoom")
