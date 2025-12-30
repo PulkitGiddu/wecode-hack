@@ -116,29 +116,7 @@ The system automatically enforces these rules during booking.
 ##  **WORKFLOW STRUCTURE**
 
 ```
-[ HOMEPAGE ] 
-      |
-      |---> (Describes App Features & Details)
-      |
-[ LOGIN / SIGNUP ] 
-      |
-      |---> (Identifies User Role: Admin, Manager, or Member)
-      |
-      |---------------------------------------------------------
-      |                        |                               |
-[ ADMIN DASHBOARD ]    [ MANAGER DASHBOARD ]         [ MEMBER DASHBOARD ]
-      |                        |                               |
-      |-- Create Rooms         |-- Organize Meeting            |-- View Schedules
-      |-- Manage Amenities     |-- Credit Tracker (2000 pts)   |-- View Room Info
-      |-- Import Users (XML)   |-- Analyze Team & Rooms        |
-      |-- Set Credit Costs     |-- Notifications Tag           |
-                               |                               |
-                               |--------[ BOOKING FLOW ]--------
-                                          |
-                                          |-- 1. Select Meeting Type
-                                          |-- 2. Validate Credits
-                                          |-- 3. 5-Minute Room Lock
-                                          |-- 4. Confirm & Deduct
+
 ```
 ## 👨‍💻 Implementation Strategy & Team Distribution
 
