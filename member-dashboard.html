@@ -4,102 +4,573 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
-    <title>Member Dashboard</title>
+    <title>Member Dashboard - BookIt</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/homepage.css">
+    <script src="https://unpkg.com/feather-icons"></script>
 
-
-    <!-- Custom CSS -->
     <style>
-        .sidebar {
-            height: 100%;
-            width: 250px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #E5E7EB;
+            color: #1F2937;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Background Effects */
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #f8f9fa;
-            padding-top: 20px;
+            right: 0;
+            bottom: 0;
+            background: url('./assets/img/bg.png') center center / cover no-repeat;
+            opacity: 0.3;
+            z-index: -1;
         }
-        .sidebar a {
-            padding: 10px 15px;
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(219, 234, 254, 0.4) 0%, rgba(243, 244, 246, 0.5) 50%, rgba(239, 246, 255, 0.4) 100%);
+            z-index: -1;
+        }
+
+        /* Glassmorphism Header */
+        .top-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 12px 0;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
+        }
+
+        .logo img {
+            height: 35px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #6B7280;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #3B82F6;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            background: rgba(243, 244, 246, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #6B7280;
+        }
+
+        /* Sidebar for Mobile */
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 2000;
+            transition: left 0.3s ease;
+            padding: 80px 20px 20px;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-mobile.active {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
             display: block;
-            color: #000;
         }
-        .sidebar a:hover {
-            background-color: #e9ecef;
+
+        .sidebar-mobile a {
+            display: block;
+            padding: 14px 20px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
         }
-        .content {
-            margin-left: 260px;
-            padding: 20px;
+
+        .sidebar-mobile a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
         }
-        .calendar-view, .list-view {
+
+        .close-sidebar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 24px 100px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 
+                        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+                        0 0 0 0.5px rgba(255, 255, 255, 0.4);
+            border: 0.5px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.6s ease;
+            margin-bottom: 24px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1),
+                        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+                        0 0 0 0.5px rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        .card-header-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        /* Search Card - Light Clean Style */
+        .search-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            color: #1F2937;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 
+                        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+                        0 0 0 0.5px rgba(255, 255, 255, 0.4);
+            border: 0.5px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .search-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1),
+                        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+                        0 0 0 0.5px rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .search-card .form-control,
+        .search-card .form-select {
+            border-radius: 10px;
+            border: 1px solid rgba(209, 213, 219, 0.5);
+            padding: 12px 16px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1F2937;
+            transition: all 0.3s;
+        }
+
+        .search-card .form-control:focus,
+        .search-card .form-select:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+
+        .search-card .btn-search {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 10px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .search-card .btn-search:hover {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Meeting List */
+        .meeting-count {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .meeting-item {
+            background: rgba(249, 250, 251, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .meeting-item:hover {
+            background: rgba(239, 246, 255, 0.7);
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .meeting-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(239, 246, 255, 0.8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3B82F6;
+            flex-shrink: 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .meeting-details {
+            flex: 1;
+        }
+
+        .meeting-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .meeting-info {
+            font-size: 13px;
+            color: #6B7280;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(45, 55, 72, 0.95);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #cbd5e0;
+            margin: 0;
+        }
+
+        .footer-text a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-text a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+
+        .social-icon img {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .header-nav {
+                display: none;
+            }
+
+            .dashboard-container {
+                padding: 80px 16px 100px;
+            }
+
+            .dashboard-title {
+                font-size: 24px;
+            }
+
+            .glass-card {
+                padding: 20px;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-text {
+                font-size: 12px;
+            }
+
+            .search-card .btn-search {
+                margin-top: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-container {
+                padding: 0 16px;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+
+            .dashboard-title {
+                font-size: 20px;
+            }
+
+            .card-title {
+                font-size: 16px;
+            }
+
+            .meeting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="header-container">
+            <a href="./homepage.html" class="logo">
+                <img src="./assets/img/bookitlogo.png" alt="Bookit">
+            </a>
+            
+            <button class="mobile-toggle" id="mobileToggle">
+                <i data-feather="menu" width="20" height="20"></i>
+            </button>
 
-        <!-- Sidebar -->
-        <div id="mySidebar" class="sidebar bg-light">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <!-- <a href="homepage.html">Products</a>
-            <a href="homepage.html">Solutions</a>
-            <a href="homepage.html">Pricing</a>
-            <a href="homepage.html">Resources</a>
-            <a href="homepage.html">Company</a>
-            <a href="homepage.html">Contact Us</a> -->
-            <a href="homepage.html">Main Page</a>
-            <a href="homepage.html#highlights">Highlights</a>
-            <a href="homepage.html#working">See Working</a>
-            <a href="homepage.html#features">Features</a>
-        </div>  
+            <nav class="header-nav">
+                <a href="homepage.html" class="nav-link">Main Page</a>
+                <a href="homepage.html#highlights" class="nav-link">Highlights</a>
+                <a href="homepage.html#working" class="nav-link">See Working</a>
+                <a href="homepage.html#features" class="nav-link">Features</a>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Main content -->
-    <div id="main">
-        <!-- Header Section -->
-        <header class="bg-light py-2 w-100 position-fixed">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <span class="navbar-toggler-icon" onclick="openNav()"></span>
-                    <a class="navbar-brand me-auto" href="./homepage.html">
-                        <img src="./assets/img/bookitlogo.png" alt="Bookit" height="40px">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Main Page</a></li>
-                            <!-- <li class="nav-item"><a class="nav-link" href="homepage.html">Solutions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Resources</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html">Company</a></li> -->
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#highlights">Highlights</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#working">See Working</a></li>
-                            <li class="nav-item"><a class="nav-link" href="homepage.html#features">Features</a></li>
-                            <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </header>   
+    <!-- Mobile Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-mobile" id="sidebarMobile">
+        <button class="close-sidebar" id="closeSidebar">&times;</button>
+        <a href="homepage.html">🏠 Main Page</a>
+        <a href="homepage.html#highlights">⭐ Highlights</a>
+        <a href="homepage.html#working">⚙️ See Working</a>
+        <a href="homepage.html#features">✨ Features</a>
     </div>
-    
-    <!-- Main Content -->
-    <div class="content mt-5">
-        <h2 class="mb-4">Upcoming Meetings</h2>
-        
-        <!-- Search/Filter Section -->
-        <div class="mb-4">
+
+    <!-- Dashboard -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Upcoming Meetings</h1>
+            <p class="dashboard-subtitle">Manage and view your scheduled meetings</p>
+        </div>
+
+        <!-- Search Card -->
+        <div class="glass-card search-card">
             <form id="searchForm">
-                <div class="row">
-                    <div class="col-md-4">
+                <div class="row g-3">
+                    <div class="col-md-4 col-12">
                         <input type="date" id="searchDate" class="form-control" placeholder="Select Date">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-12">
                         <select id="searchRoom" class="form-select">
                             <option value="">Select Room</option>
                             <option value="Room 1">Room 1</option>
@@ -107,78 +578,65 @@
                             <option value="Room 3">Room 3</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary">Search</button>
+                    <div class="col-md-4 col-12">
+                        <button type="submit" class="btn-search">
+                            🔍 Search Meetings
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- List View -->
-        <div class="list-view">
-            
-            <ul class="list-group">
-                <li class="list-group-item">Meeting with Team A - Room 1 - 2024-08-20</li>
-                <li class="list-group-item">Project Update - Room 2 - 2024-08-22</li>
-                <li class="list-group-item">Client Presentation - Room 3 - 2024-08-25</li>
-            </ul>
-        </div>
-    </div>
-        <!-- Footer Section -->
-        <footer class="bg-dark text-light pt-2 position-fixed fixed-bottom">
-            <div class="container text-center text-md-left">
+        <!-- Meeting List Card -->
+        <div class="glass-card">
+            <div class="card-header-custom">
+                <h2 class="card-title">Your Scheduled Meetings</h2>
+                <span class="meeting-count">3 meetings</span>
+            </div>
 
-                <!-- Legal Links and Social Media Icons -->
-                <div class="row align-items-center">
-                    <!-- Legal Links -->
-                    <div class="col-md-7 col-lg-8">
-                        <p class="text-center text-md-left">© 2024 Bookit. All rights reserved.
-                            <a href="#" class="text-light" style="text-decoration:none;">Terms & Conditions</a> |
-                            <a href="#" class="text-light" style="text-decoration:none;">Privacy Policy</a> |
-                            <a href="#" class="text-light" style="text-decoration:none;">Manage Cookies</a>
-                        </p>
-                    </div>
-
-                    <!-- Social Media Icons -->
-                    <div class="col-md-5 col-lg-4">
-                        <div class="text-center text-md-right">
-                            <ul class="list-unstyled list-inline">
-                                <li class="list-inline-item">
-                                    <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-facebook-f"></i> -->
-                                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/facebook-f.svg" alt="facebook" class="m-1" width="15px" height="20px" >
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-twitter"></i> -->
-                                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/twitter.svg" alt="twitter" class="m-1" width="15px" height="20px" >
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-linkedin-in"></i> -->
-                                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/linkedin.svg" alt="linkedin" class="m-1" width="15px" height="20px" >
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#" class="btn btn-outline-light bg-light btn-floating btn-sm">
-                                        <!-- <i class="fab fa-instagram"></i> -->
-                                        <img src="./assets/img/fontawesome-free-6.6.0-web/svgs/brands/instagram.svg" alt="instagram" class="m-1" width="15px" height="20px" >
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+            <div class="meeting-item">
+                <div class="meeting-icon">
+                    <i data-feather="calendar" width="18" height="18"></i>
+                </div>
+                <div class="meeting-details">
+                    <div class="meeting-title">Meeting with Team A</div>
+                    <div class="meeting-info">Room 1 • 2024-08-20</div>
                 </div>
             </div>
-        </footer>
+
+            <div class="meeting-item">
+                <div class="meeting-icon">
+                    <i data-feather="calendar" width="18" height="18"></i>
+                </div>
+                <div class="meeting-details">
+                    <div class="meeting-title">Project Update</div>
+                    <div class="meeting-info">Room 2 • 2024-08-22</div>
+                </div>
+            </div>
+
+            <div class="meeting-item">
+                <div class="meeting-icon">
+                    <i data-feather="calendar" width="18" height="18"></i>
+                </div>
+                <div class="meeting-details">
+                    <div class="meeting-title">Client Presentation</div>
+                    <div class="meeting-info">Room 3 • 2024-08-25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
     <!-- Custom JS -->
     <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Search Form Handler
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const searchDate = document.getElementById('searchDate').value;
@@ -187,24 +645,33 @@
             // Filter logic 
             alert(`Searching for meetings on ${searchDate} in room ${searchRoom}`);
         });
-    </script>
-    <script>
-        feather.replace();
-    </script>
 
-    <!-- js for bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- custom js file import -->
-    <script src="./js/homepage.js"></script>
-
-    <script>
+        // Logout Function
         function logout() {
             window.location.href = 'homepage.html';
         }
-    </script>
 
-    <!-- fontawsome  -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        // Mobile Menu Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const sidebarMobile = document.getElementById('sidebarMobile');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebar = document.getElementById('closeSidebar');
+
+        mobileToggle.addEventListener('click', function() {
+            sidebarMobile.classList.add('active');
+            sidebarOverlay.classList.add('active');
+            feather.replace();
+        });
+
+        closeSidebar.addEventListener('click', function() {
+            sidebarMobile.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', function() {
+            sidebarMobile.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+    </script>
 </body>
 </html>
