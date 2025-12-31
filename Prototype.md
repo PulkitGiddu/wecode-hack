@@ -49,18 +49,15 @@ The **Automated Meeting Room Booking System**, developed by **Team 404 Not Found
 ![Admin Page](images/AdminDashboard.png)
 
 
-4. Create Room Page:
+4. Manager Dashboard Page:
+   
+![Manager Dashboard Page](images/manager_dashboard.png)
+
+5. Create Room Page:
    
 ![CreateRoom Page](images/room%20.png)
 
-
-5. Manager Dashboard Page:
-
-    
-![Manager Dashboard Page](images/manager_dashboard.png)
-
 6. Notification:
-
     
 ![Noti](images/Screenshot%202025-12-31%20at%201.21.38 AM.png)
 
