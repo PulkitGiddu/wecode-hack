@@ -81,9 +81,8 @@ The system enforces a **Layered Authorization (RBAC)** model.
 
 ##  **WORKFLOW STRUCTURE**
 
-```
 ![Workflow](images/workflow.png)
-```
+
 ## Implementation Strategy & Team Distribution
 
 ### Sub-Team A: UI/UX  
