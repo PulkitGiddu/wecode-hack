@@ -40,26 +40,26 @@ The **Automated Meeting Room Booking System**, developed by **Team 404 Not Found
 ![Login Page](images/login.png)
 
 
-3. Highlights Page:
-   
+2. Highlights Page:
+
 ![Highlights](images/home.png)
 
-5. Admin Page:
+3. Admin Page:
    
 ![Admin Page](images/AdminDashboard.png)
 
 
-7. Create Room Page:
+4. Create Room Page:
    
 ![CreateRoom Page](images/room%20.png)
 
 
-8. Manager Dashboard Page:
+5. Manager Dashboard Page:
 
     
 ![Manager Dashboard Page](images/Manager.png)
 
-11.. Notification:
+6. Notification:
 
     
 ![Noti](images/Screenshot%202025-12-31%20at%201.21.38 AM.png)
