@@ -57,7 +57,7 @@ The **Automated Meeting Room Booking System**, developed by **Team 404 Not Found
 5. Manager Dashboard Page:
 
     
-![Manager Dashboard Page](images/Manager.png)
+![Manager Dashboard Page](images/manager_dashboard.png)
 
 6. Notification:
 
