@@ -50,6 +50,10 @@ The system enforces a **Layered Authorization (RBAC)** model.
 | Conference Call     | Conference Call Facility        |
 | Business Meeting    | Projector                       |
 
+## Data Flow Diagram
+
+![](images/DFD.png)
+
 ##  System workflow 
 
 ![system workflow](images/system_workflow.png)
@@ -157,6 +161,7 @@ The system enforces a **Layered Authorization (RBAC)** model.
 | Pulkit    | Backend API & Database                       |
 
 ## Project Documentation
+*Recommended
 👉 **[Click here to view the complete project documentation](https://docs.google.com/document/d/15EL4luxd8VmWfRGuHchPDdozEf4jHgQToxO-ctwLBG4/edit?tab=t.7u45fnw8850e#heading=h.gd8q705vbsli)**
 
 
