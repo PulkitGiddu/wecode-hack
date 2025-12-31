@@ -2,11 +2,9 @@
 **Team Name: 404 Not Found**
 
 
-
-## 📌 Executive Summary
+## Proposed Solution
 The **Automated Meeting Room Booking System**, developed by **Team 404 Not Found**, is a centralized enterprise-grade platform designed to optimize office meeting room utilization. It introduces a **credit-based booking economy** combined with **Role-Based Access Control (RBAC)** to ensure fair usage, eliminate scheduling conflicts, and enforce accountability through an automated and professional workflow.
 
----
 
 ## 🎯 Problem Statement & Scope
 
@@ -18,65 +16,34 @@ The **Automated Meeting Room Booking System**, developed by **Team 404 Not Found
 ### Proposed Scope
 The system delivers an end-to-end digital solution to:
 - Search and book meeting rooms based on seating capacity and amenities.
-- Manage a dynamic credit economy for managers.
-- Provide real-time visibility of room availability and bookings to all employees.
+- Prevent double bookings and handle concurrent access safely
+- Enforce fair usage through a credit-based system
+- Provide clear role-based access and responsibilities
+- Ensure configurability of rooms, amenities, and pricing
+- Offer visibility into schedules and booking history
 
----
 
-## 👥 User Roles & Authorization Model
+## User Roles & Authorization Model
 
 The system enforces a **Layered Authorization (RBAC)** model.
 
 | Role    | Key Permissions |
 |-------- |----------------|
 | Admin   | Create, configure, and edit meeting rooms; manage amenities and pricing |
-| Manager | Search rooms, book meetings, and spend allocated credits |
+| Manager | Search rooms, book meetings, and spend allocated credits , manage team|
 | Member  | View-only access to room schedules and booking status |
 
----
-
-## 💳 Credit Economy Engine
-
-### Pricing Logic
-The system follows a **utility-based pricing model**.
 
 ---
 
-### Credit Cost Sheet
-
-#### 🪑 Room Size
-| Capacity       | Credits / Hr |
-|--------------- |-------------|
-| ≤ 5 Seats      | 0           |
-| 6–10 Seats     | 10          |
-| > 10 Seats     | 20          |
-
-#### ⚙️ Amenities
-| Amenity                          | Credits / Hr |
-|---------------------------------|-------------|
-| Wi-Fi / TV / Coffee Machine     | 10 each     |
-| Conference Call Facility        | 15          |
-| Projector / Whiteboard / Water  | 5 each      |
-
----
-
-### Example Booking
-**Meeting:** Team Training  
-**Room Size:** 12 Seats → 20 credits  
-**Amenities:** Projector (5) + Wi-Fi (10)
-
-**Total Cost:** `35 Credits / Hour`
-
----
-
-## 🔁 Credit Wallet Rules
+## Credits Allotment
 - **Manager Wallet:** 2000 credits allocated by default.
 - **Automated Reset:** All manager wallets reset to 2000 credits every **Monday at 6:00 AM** via Cron Job.
 - **Restrictions:** Admins and Members have 0 credits and cannot initiate bookings.
 
 ---
 
-## 📋 Mandatory Amenities by Meeting Type
+## Amenities by Meeting Type
 
 | Meeting Type        | Mandatory Amenities              |
 |-------------------- |---------------------------------|
@@ -85,11 +52,9 @@ The system follows a **utility-based pricing model**.
 | Conference Call     | Conference Call Facility        |
 | Business Meeting    | Projector                       |
 
-The system automatically enforces these rules during booking.
+##  System Architecture 
 
----
 
-## 🏗️ Technical Architecture
 
 ### Technology Stack
 - **Frontend:** HTML, CSS, JavaScript (Component-based UI)
@@ -98,7 +63,7 @@ The system automatically enforces these rules during booking.
 
 ---
 
-## 🖥️ UI/UX Workflow
+## UI/UX Workflow
 
 ### Pages & Dashboards
 - **Home Page:** Login and navigation hub.
@@ -106,19 +71,23 @@ The system automatically enforces these rules during booking.
   - Create Room  
   - Edit Room  
   - Manage amenities and credit cost mappings
-- **Manager Portal:**  
-  - Advanced Search & Filter  
-  - Booking Confirmation with real-time credit deduction
+- **Manager Portal:**
+  - View all rooms 
+  - Advanced Search & Filter
+  - Book Rooms with real-time credit deduction
+  - View room analytics & ussage
+  - View Team
+  - Manage Notifications 
 - **Member View:**  
   - Read-only calendar/grid view of current and upcoming bookings
 
----
+
 ##  **WORKFLOW STRUCTURE**
 
 ```
 
 ```
-## 👨‍💻 Implementation Strategy & Team Distribution
+## Implementation Strategy & Team Distribution
 
 ### Sub-Team A: UI/UX  
 **Members:** Amanpreet, Rishita  
@@ -135,7 +104,7 @@ The system automatically enforces these rules during booking.
 
 ---
 
-## 📌 Project Plan: Round 2
+## Project Plan: Round 2
 
 ### 1. Core Technical Components
 
@@ -183,7 +152,7 @@ The system automatically enforces these rules during booking.
   Comprehensive project documentation.
 
 ---
-## 📄 Project Documentation
+## Project Documentation
 👉 **[Click here to view the complete project documentation](https://docs.google.com/document/d/15EL4luxd8VmWfRGuHchPDdozEf4jHgQToxO-ctwLBG4/edit?tab=t.7u45fnw8850e#heading=h.gd8q705vbsli)**
 
 
