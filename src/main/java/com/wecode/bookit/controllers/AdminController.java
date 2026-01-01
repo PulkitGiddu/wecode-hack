@@ -91,15 +91,26 @@ public class AdminController {
 
     @DeleteMapping("/rooms/{roomId}")
     public ResponseEntity<String> deleteRoom(@PathVariable UUID roomId) {
-        meetingRoomService.deleteRoom(roomId);
-        return ResponseEntity.ok("Room deleted successfully");
+        try {
+            meetingRoomService.deleteRoom(roomId);
+            return ResponseEntity.ok("Room deleted successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 
     @PostMapping("/addAmenitie")
     public ResponseEntity<Amenity> createAmenity(@RequestBody CreateAmenityDto createAmenityDto) {
-        Amenity amenity = amenityService.createAmenity(createAmenityDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(amenity);
+        try {
+            Amenity amenity = amenityService.createAmenity(createAmenityDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(amenity);
+        }
+        catch(Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PutMapping("/updateAmenitie")
