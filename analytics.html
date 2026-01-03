@@ -709,9 +709,9 @@
 
             // Update insights
             document.getElementById('occupancyInsight').textContent = 
-                `${selectedRoom} shows ${data.occupancyRate} occupancy rate this ${selectedTimeRange.toLowerCase()}.`;
+                `pts{selectedRoom} shows pts{data.occupancyRate} occupancy rate this pts{selectedTimeRange.toLowerCase()}.`;
             document.getElementById('comparisonInsight').textContent = 
-                `Average booking duration for ${selectedRoom} is ${data.avgDuration} during ${selectedTimeRange.toLowerCase()}.`;
+                `Average booking duration for pts{selectedRoom} is pts{data.avgDuration} during pts{selectedTimeRange.toLowerCase()}.`;
 
             // Update charts
             updateOccupancyChart(data.trendData);
