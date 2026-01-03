@@ -220,6 +220,14 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
+    @Override
+    public List<BookingResponseDto> getBookingsByManagerNameAndDate(String managerName, LocalDate meetingDate) {
+        List<Booking> bookings = bookingRepository.findByManagerNameAndDate(managerName, meetingDate);
+        return bookings.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Convert MeetingRoom entity to DTO
      */

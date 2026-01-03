@@ -18,5 +18,6 @@ public interface BookingService {
     void cancelBooking(UUID bookingId);
     List<TodayBookingsDto> getTodayBookingsByManager(UUID managerId, LocalDate date);
     CheckInResponseDto checkIn(UUID managerId, UUID bookingId);
+    List<BookingResponseDto> getBookingsByManagerNameAndDate(String managerName, LocalDate meetingDate);
 }
 
