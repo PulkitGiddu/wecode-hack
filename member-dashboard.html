@@ -305,6 +305,52 @@
             display: block;
         }
 
+        /* Search/Filter Card */
+        .search-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            margin-bottom: 24px;
+        }
+
+        .search-card .form-control {
+            border-radius: 10px;
+            border: 1px solid rgba(209, 213, 219, 0.5);
+            padding: 12px 16px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1F2937;
+            transition: all 0.3s;
+        }
+
+        .search-card .form-control:focus {
+            border-color: #0b307d;
+            box-shadow: 0 0 0 3px rgba(11, 48, 125, 0.1);
+            outline: none;
+        }
+
+        .search-card .btn-search {
+            background: linear-gradient(135deg, #0b307d, #1a345b);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 10px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(11, 48, 125, 0.3);
+        }
+
+        .search-card .btn-search:hover {
+            background: linear-gradient(135deg, #1a345b, #0b307d);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(11, 48, 125, 0.4);
+        }
+
         /* Sidebar for Mobile */
         .sidebar-mobile {
             position: fixed;
@@ -779,6 +825,25 @@
             </div>
         </div>
 
+        <!-- Search/Filter Card -->
+        <div class="search-card">
+            <form id="searchForm">
+                <div class="row g-3">
+                    <div class="col-md-5 col-12">
+                        <input type="date" id="searchDate" class="form-control" placeholder="Select Date">
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <input type="text" id="searchName" class="form-control" placeholder="Enter name to search">
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <button type="submit" class="btn-search">
+                            <i class="fas fa-search"></i> Find by Name
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
         <!-- Tabs -->
         <div class="tabs-container">
             <button class="tab-btn active" onclick="switchTab('upcoming')">
@@ -969,6 +1034,16 @@
     <!-- Custom JS -->
     <script>
         let currentTab = 'upcoming';
+
+        // Search Form Handler
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const searchDate = document.getElementById('searchDate').value;
+            const searchName = document.getElementById('searchName').value;
+            
+            // Filter logic 
+            alert(`Searching for meetings on ${searchDate} with name: ${searchName}`);
+        });
 
         // Tab Switching
         function switchTab(tab) {
