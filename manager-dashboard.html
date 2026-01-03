@@ -1850,7 +1850,7 @@
                                     <h3 class="room-card-title">${roomName}</h3>
                                     <p class="room-card-type">${roomType}</p>
                                 </div>
-                                <div class="room-price-badge">pts${roomCost}/hr</div>
+                                <div class="room-price-badge">${roomCost}pts/hr</div>
                             </div>
                             
                             <div class="room-info-row">
@@ -1897,7 +1897,7 @@
             document.getElementById('bookRoomName').value = roomName;
             document.getElementById('bookRoomType').value = roomType;
             document.getElementById('bookSeatingCapacity').value = `${seatingCapacity} people`;
-            document.getElementById('bookPerHourCost').value = `pts${roomCost}/hour`;
+            document.getElementById('bookPerHourCost').value = `${roomCost}pts/hour`;
 
             // Display amenities
             const amenitiesDisplay = document.getElementById('bookAmenities');
@@ -1962,10 +1962,10 @@
                     
                     // Calculate total cost
                     const totalCost = (hours * costPerHour).toFixed(2);
-                    document.getElementById('totalCostDisplay').textContent = `pts${totalCost}`;
+                    document.getElementById('totalCostDisplay').textContent = `${totalCost}pts`;
                 } else {
                     document.getElementById('durationDisplay').value = '';
-                    document.getElementById('totalCostDisplay').textContent = 'pts0';
+                    document.getElementById('totalCostDisplay').textContent = '0pts';
                     if (endTime && startTime) {
                         alert('End time must be after start time');
                     }

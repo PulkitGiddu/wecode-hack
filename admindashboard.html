@@ -833,32 +833,32 @@
                 
                 return `
                 <div class="glass-card">
-                    <img src="pts{room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" alt="pts{roomName}" class="room-image">
+                    <img src="${room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" alt="${roomName}" class="room-image">
                     <div class="capacity-badge">
                         <i data-feather="users" style="width: 14px; height: 14px;"></i>
-                        <span>pts{seatingCapacity} Seats</span>
+                        <span>${seatingCapacity} Seats</span>
                     </div>
                     <div class="card-actions-top">
-                        <button class="icon-btn" onclick='handleEditRoom("pts{roomId}")' title="Edit">
+                        <button class="icon-btn" onclick='handleEditRoom("${roomId}")' title="Edit">
                             <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
                         </button>
-                        <button class="icon-btn delete" onclick='handleDeleteRoom("pts{roomId}")' title="Delete">
+                        <button class="icon-btn delete" onclick='handleDeleteRoom("${roomId}")' title="Delete">
                             <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
                         </button>
                     </div>
                     <div class="room-card-content">
                         <div class="card-header-section">
                             <div style="flex: 1;">
-                                <h3 class="card-title-text">pts{roomName}</h3>
-                                <p class="card-subtitle">pts{roomType}</p>
+                                <h3 class="card-title-text">${roomName}</h3>
+                                <p class="card-subtitle">${roomType}</p>
                             </div>
                             <div style="text-align: right;">
-                                <div class="price-tag">ptspts{perHourCost}</div>
+                                <div class="price-tag">${perHourCost}pts</div>
                                 <div class="price-label">/ hour</div>
                             </div>
                         </div>
                         <div class="amenities-container">
-                            pts{Array.isArray(room.amenities) ? room.amenities.map(amenity => {
+                            ${Array.isArray(room.amenities) ? room.amenities.map(amenity => {
                                 // Format amenity name if it's in uppercase (e.g., COFFEE_MACHINE -> Coffee Machine)
                                 let formattedAmenity = amenity;
                                 if (typeof formatAmenityName === 'function') {
@@ -889,8 +889,8 @@
                                 };
                                 const icon = iconMap[formattedAmenity] || 'check-circle';
                                 return `<div class="amenity-badge">
-                                    <i data-feather="pts{icon}" style="width: 14px; height: 14px;"></i>
-                                    <span>pts{formattedAmenity}</span>
+                                    <i data-feather="${icon}" style="width: 14px; height: 14px;"></i>
+                                    <span>${formattedAmenity}</span>
                                 </div>`;
                             }).join('') : ''}
                         </div>
@@ -966,26 +966,26 @@
                 const isActive = amenity.is_active !== undefined ? amenity.is_active : true;
                 
                 return `
-                <div class="glass-card pts{!isActive ? 'opacity-50' : ''}">
+                <div class="glass-card ${!isActive ? 'opacity-50' : ''}">
                     <div class="card-header-section">
                         <div>
-                            <h3 class="card-title-text">pts{formattedName}</h3>
-                            <p class="card-subtitle">pts{amenity.description || `pts{formattedName} facility`}</p>
+                            <h3 class="card-title-text">${formattedName}</h3>
+                            <p class="card-subtitle">${amenity.description || `${formattedName} facility`}</p>
                         </div>
                         <div class="card-actions">
-                            <button class="icon-btn" onclick='handleEditAmenity("pts{amenityId}")'>
+                            <button class="icon-btn" onclick='handleEditAmenity("${amenityId}")'>
                                 <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
                             </button>
-                            <button class="icon-btn delete" onclick='handleDeleteAmenity("pts{amenityId}")'>
+                            <button class="icon-btn delete" onclick='handleDeleteAmenity("${amenityId}")'>
                                 <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
                             </button>
                         </div>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Credits Score</span>
-                        <span class="info-value">pts{creditCost} credits</span>
+                        <span class="info-value">${creditCost} credits</span>
                     </div>
-                    pts{!isActive ? '<div class="info-row"><span class="badge" style="background: #DC2626; color: white; padding: 4px 8px; border-radius: 4px;">Inactive</span></div>' : ''}
+                    ${!isActive ? '<div class="info-row"><span class="badge" style="background: #DC2626; color: white; padding: 4px 8px; border-radius: 4px;">Inactive</span></div>' : ''}
                 </div>
                 `;
             }).join('');
@@ -1067,7 +1067,7 @@
                 });
                 if (Array.isArray(room.amenities)) {
                     room.amenities.forEach(amenity => {
-                        const checkbox = document.querySelector(`input[name="amenity"][value="pts{amenity}"]`);
+                        const checkbox = document.querySelector(`input[name="amenity"][value="${amenity}"]`);
                         if (checkbox) checkbox.checked = true;
                     });
                 }
