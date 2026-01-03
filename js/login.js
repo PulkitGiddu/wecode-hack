@@ -11,8 +11,8 @@ function validateinput() {
 
     var nameField = document.getElementById("password").value;
     console.log(nameField);
-    if (nameField.length < 6) {
-        alerts += ("Password field cant be less than 6 digits long!");
+    if (nameField.length < 3) {
+        alerts += ("Password field cant be less than 3 digits long!");
         shouldShowAlert = true;
     }
 
