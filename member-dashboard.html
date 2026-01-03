@@ -858,108 +858,14 @@
 
         <!-- Upcoming Meetings Section -->
         <div id="upcomingSection" class="content-section active">
-            <div class="meetings-grid">
-                <!-- Meeting Card 1 -->
-                <div class="meeting-card">
-                    <div class="meeting-card-header">
-                        <div>
-                            <div class="meeting-title">Meeting with Team A</div>
-                            <span class="meeting-status upcoming">Upcoming</span>
-                        </div>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Room 1 - Conference Room</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="far fa-calendar"></i>
-                        <span>August 20, 2024</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="far fa-clock"></i>
-                        <span>10:00 AM - 11:00 AM</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="fas fa-users"></i>
-                        <span>8 participants</span>
-                    </div>
-                    <div class="meeting-actions">
-                        <button class="btn-action btn-primary-action" style="flex: none; width: 100%;">
-                            <i class="far fa-eye"></i>
-                            View Details
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Meeting Card 2 -->
-                <div class="meeting-card">
-                    <div class="meeting-card-header">
-                        <div>
-                            <div class="meeting-title">Project Update</div>
-                            <span class="meeting-status upcoming">Upcoming</span>
-                        </div>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Room 2 - Meeting Room</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="far fa-calendar"></i>
-                        <span>August 22, 2024</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="far fa-clock"></i>
-                        <span>2:00 PM - 3:30 PM</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="fas fa-users"></i>
-                        <span>6 participants</span>
-                    </div>
-                    <div class="meeting-actions">
-                        <button class="btn-action btn-primary-action" style="flex: none; width: 100%;">
-                            <i class="far fa-eye"></i>
-                            View Details
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Meeting Card 3 -->
-                <div class="meeting-card">
-                    <div class="meeting-card-header">
-                        <div>
-                            <div class="meeting-title">Client Presentation</div>
-                            <span class="meeting-status upcoming">Upcoming</span>
-                        </div>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Room 3 - Board Room</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="far fa-calendar"></i>
-                        <span>August 25, 2024</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="far fa-clock"></i>
-                        <span>4:00 PM - 5:00 PM</span>
-                    </div>
-                    <div class="meeting-info-row">
-                        <i class="fas fa-users"></i>
-                        <span>10 participants</span>
-                    </div>
-                    <div class="meeting-actions">
-                        <button class="btn-action btn-primary-action" style="flex: none; width: 100%;">
-                            <i class="far fa-eye"></i>
-                            View Details
-                        </button>
-                    </div>
-                </div>
+            <div class="meetings-grid" id="upcomingMeetingsGrid">
+                <!-- Meetings will be dynamically loaded here -->
             </div>
         </div>
 
         <!-- Meeting History Section -->
         <div id="historySection" class="content-section">
-            <div class="meetings-grid">
+            <div class="meetings-grid" id="historyMeetingsGrid">
                 <!-- Past Meeting Card 1 -->
                 <div class="meeting-card">
                     <div class="meeting-card-header">
@@ -1034,16 +940,171 @@
     <!-- Custom JS -->
     <script>
         let currentTab = 'upcoming';
+        let allMeetings = [];
+        let filteredMeetings = [];
+
+        // Format date to readable format
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // Format time to 12-hour format
+        function formatTime(timeString) {
+            const date = new Date(timeString);
+            return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+        }
+
+        // Create meeting card HTML
+        function createMeetingCard(meeting) {
+            const isUpcoming = meeting.status === 'ACTIVE';
+            const statusClass = isUpcoming ? 'upcoming' : '';
+            const statusText = isUpcoming ? 'Upcoming' : 'Completed';
+            
+            return `
+                <div class="meeting-card">
+                    <div class="meeting-card-header">
+                        <div>
+                            <div class="meeting-title">${meeting.meetingTitle}</div>
+                            <span class="meeting-status ${statusClass}">${statusText}</span>
+                        </div>
+                    </div>
+                    <div class="meeting-info-row">
+                        <i class="fas fa-door-open"></i>
+                        <span>${meeting.roomName}</span>
+                    </div>
+                    <div class="meeting-info-row">
+                        <i class="fas fa-tags"></i>
+                        <span>${meeting.meetingType}</span>
+                    </div>
+                    <div class="meeting-info-row">
+                        <i class="far fa-calendar"></i>
+                        <span>${formatDate(meeting.meetingDate)}</span>
+                    </div>
+                    <div class="meeting-info-row">
+                        <i class="far fa-clock"></i>
+                        <span>${formatTime(meeting.startTime)} - ${formatTime(meeting.endTime)}</span>
+                    </div>
+                    <div class="meeting-info-row">
+                        <i class="fas fa-coins"></i>
+                        <span>${meeting.totalCredits} Credits</span>
+                    </div>
+                    <div class="meeting-actions">
+                        <button class="btn-action btn-primary-action" style="flex: none; width: 100%;" onclick="viewMeetingDetails('${meeting.bookingId}')">
+                            <i class="far fa-eye"></i>
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render meetings
+        function renderMeetings(meetings) {
+            const upcomingGrid = document.getElementById('upcomingMeetingsGrid');
+            const historyGrid = document.getElementById('historyMeetingsGrid');
+            
+            const upcomingMeetings = meetings.filter(m => m.status === 'ACTIVE');
+            const completedMeetings = meetings.filter(m => m.status !== 'ACTIVE');
+            
+            // Update stats
+            document.querySelector('.stat-card .stat-value').textContent = meetings.length;
+            document.querySelector('.stat-card.blue .stat-value').textContent = upcomingMeetings.length;
+            document.querySelector('.stat-card.purple .stat-value').textContent = completedMeetings.length;
+            
+            // Render upcoming meetings
+            if (upcomingMeetings.length > 0) {
+                upcomingGrid.innerHTML = upcomingMeetings.map(meeting => createMeetingCard(meeting)).join('');
+            } else {
+                upcomingGrid.innerHTML = '<p style="text-align: center; color: #6B7280; padding: 40px;">No upcoming meetings found.</p>';
+            }
+            
+            // Render history meetings
+            if (completedMeetings.length > 0) {
+                historyGrid.innerHTML = completedMeetings.map(meeting => createMeetingCard(meeting)).join('');
+            } else {
+                historyGrid.innerHTML = '<p style="text-align: center; color: #6B7280; padding: 40px;">No completed meetings found.</p>';
+            }
+        }
+
+        // Fetch meetings from backend
+        async function fetchMeetings() {
+            try {
+                // Replace this URL with your actual backend endpoint
+                const response = await fetch('/api/meetings'); // Update with your API endpoint
+                const data = await response.json();
+                allMeetings = data;
+                filteredMeetings = data;
+                renderMeetings(filteredMeetings);
+            } catch (error) {
+                console.error('Error fetching meetings:', error);
+                // Use sample data for demo
+                useSampleData();
+            }
+        }
+
+        // Sample data for testing (remove when backend is ready)
+        function useSampleData() {
+            allMeetings = [
+                {
+                    "bookingId": "222ac7f3-a2c9-4df4-87f6-39728a326ad2",
+                    "roomId": "649cc30f-622b-462d-8ff4-e3dafb2b9195",
+                    "roomName": "Bhimtal",
+                    "meetingTitle": "R19 Release Activity",
+                    "meetingDate": "2025-12-30",
+                    "meetingType": "Hudle",
+                    "startTime": "2025-12-30T11:00:00",
+                    "endTime": "2025-12-30T12:00:00",
+                    "totalCredits": 140,
+                    "status": "ACTIVE",
+                    "createdAt": "2025-12-30T01:16:21.666653"
+                },
+                {
+                    "bookingId": "baa25992-c72a-462f-940f-e0269c5761b5",
+                    "roomId": "ed9eae36-d3d7-4258-a264-9b05878dc9f2",
+                    "roomName": "Conference Hall B",
+                    "meetingTitle": "R18 Release Activity",
+                    "meetingDate": "2025-12-30",
+                    "meetingType": "Hudle",
+                    "startTime": "2025-12-30T10:00:00",
+                    "endTime": "2025-12-30T11:00:00",
+                    "totalCredits": 135,
+                    "status": "ACTIVE",
+                    "createdAt": "2025-12-30T01:14:58.17167"
+                }
+            ];
+            filteredMeetings = allMeetings;
+            renderMeetings(filteredMeetings);
+        }
 
         // Search Form Handler
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const searchDate = document.getElementById('searchDate').value;
-            const searchName = document.getElementById('searchName').value;
+            const searchName = document.getElementById('searchName').value.toLowerCase();
             
-            // Filter logic 
-            alert(`Searching for meetings on ${searchDate} with name: ${searchName}`);
+            // Filter meetings
+            filteredMeetings = allMeetings.filter(meeting => {
+                const matchesDate = !searchDate || meeting.meetingDate === searchDate;
+                const matchesName = !searchName || 
+                    meeting.meetingTitle.toLowerCase().includes(searchName) ||
+                    meeting.roomName.toLowerCase().includes(searchName) ||
+                    meeting.meetingType.toLowerCase().includes(searchName);
+                
+                return matchesDate && matchesName;
+            });
+            
+            renderMeetings(filteredMeetings);
         });
+
+        // View meeting details
+        function viewMeetingDetails(bookingId) {
+            const meeting = allMeetings.find(m => m.bookingId === bookingId);
+            if (meeting) {
+                alert(`Meeting Details:\n\nTitle: ${meeting.meetingTitle}\nRoom: ${meeting.roomName}\nType: ${meeting.meetingType}\nDate: ${formatDate(meeting.meetingDate)}\nTime: ${formatTime(meeting.startTime)} - ${formatTime(meeting.endTime)}\nCredits: ${meeting.totalCredits}\nStatus: ${meeting.status}`);
+            }
+        }
 
         // Tab Switching
         function switchTab(tab) {
@@ -1088,6 +1149,11 @@
         sidebarOverlay.addEventListener('click', function() {
             sidebarMobile.classList.remove('active');
             sidebarOverlay.classList.remove('active');
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchMeetings();
         });
     </script>
 </body>
