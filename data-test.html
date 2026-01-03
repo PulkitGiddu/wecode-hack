@@ -197,7 +197,7 @@
             const sourceEl = document.getElementById('dataSource');
             
             sourceEl.textContent = source.toUpperCase();
-            statusEl.className = `status ${source}`;
+            statusEl.className = `status pts{source}`;
             
             if (source === 'dummy') {
                 statusEl.innerHTML = '📊 Current Data Source: <span id="dataSource">DUMMY DATA</span> (Testing/Development Mode)';
@@ -213,7 +213,7 @@
             } catch (error) {
                 document.getElementById('roomsData').innerHTML = `
                     <div style="color: #DC2626; font-weight: 600;">
-                        ❌ Error loading rooms: ${error.message}
+                        ❌ Error loading rooms: pts{error.message}
                     </div>
                 `;
             }
@@ -229,30 +229,30 @@
 
             container.innerHTML = rooms.map(room => `
                 <div class="room-card">
-                    <h3>🏠 ${room.roomName}</h3>
+                    <h3>🏠 pts{room.roomName}</h3>
                     <div class="room-info">
                         <div class="info-item">
                             <span class="info-label">Room Type</span>
-                            <span class="info-value">${room.roomType}</span>
+                            <span class="info-value">pts{room.roomType}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Capacity</span>
-                            <span class="info-value">${room.seatingCapacity} people</span>
+                            <span class="info-value">pts{room.seatingCapacity} people</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Base Cost</span>
-                            <span class="info-value">$${room.perHourCost}/hour</span>
+                            <span class="info-value">ptspts{room.perHourCost}/hour</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Total Cost</span>
-                            <span class="info-value"><span class="cost-badge">$${room.roomCost}/hour</span></span>
+                            <span class="info-value"><span class="cost-badge">ptspts{room.roomCost}/hour</span></span>
                         </div>
                     </div>
                     <div class="amenities-list">
-                        ${room.amenities.map(a => `<span class="amenity-tag">${formatAmenityName(a)}</span>`).join('')}
+                        pts{room.amenities.map(a => `<span class="amenity-tag">pts{formatAmenityName(a)}</span>`).join('')}
                     </div>
                     <div style="margin-top: 10px; font-size: 11px; color: #6B7280;">
-                        Room ID: ${room.roomId}
+                        Room ID: pts{room.roomId}
                     </div>
                 </div>
             `).join('');
@@ -265,7 +265,7 @@
             } catch (error) {
                 document.getElementById('amenitiesData').innerHTML = `
                     <div style="color: #DC2626; font-weight: 600;">
-                        ❌ Error loading amenities: ${error.message}
+                        ❌ Error loading amenities: pts{error.message}
                     </div>
                 `;
             }
@@ -281,19 +281,19 @@
 
             container.innerHTML = amenities.map(amenity => `
                 <div class="amenity-card">
-                    <h3>🎯 ${formatAmenityName(amenity.amenityName)}</h3>
+                    <h3>🎯 pts{formatAmenityName(amenity.amenityName)}</h3>
                     <div class="amenity-info">
                         <div class="info-item">
                             <span class="info-label">Credit Cost</span>
-                            <span class="info-value"><span class="cost-badge">$${amenity.creditCost}</span></span>
+                            <span class="info-value"><span class="cost-badge">ptspts{amenity.creditCost}</span></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Status</span>
-                            <span class="info-value">${amenity.is_active ? '✅ Active' : '❌ Inactive'}</span>
+                            <span class="info-value">pts{amenity.is_active ? '✅ Active' : '❌ Inactive'}</span>
                         </div>
                     </div>
                     <div style="margin-top: 10px; font-size: 11px; color: #6B7280;">
-                        Amenity ID: ${amenity.amenity_id}
+                        Amenity ID: pts{amenity.amenity_id}
                     </div>
                 </div>
             `).join('');
@@ -319,7 +319,7 @@
                 z-index: 1000;
                 font-weight: 600;
             `;
-            notification.textContent = `✅ Switched to ${getDataSource().toUpperCase()}`;
+            notification.textContent = `✅ Switched to pts{getDataSource().toUpperCase()}`;
             document.body.appendChild(notification);
             
             setTimeout(() => notification.remove(), 3000);
@@ -360,17 +360,17 @@
 
             const resultsHTML = `
                 <h3>Cost Calculation Tests</h3>
-                ${results.map(r => `
-                    <div style="padding: 10px; margin: 10px 0; background: ${r.passed ? '#D1FAE5' : '#FEE2E2'}; border-radius: 5px; border-left: 4px solid ${r.passed ? '#10B981' : '#DC2626'};">
-                        <strong>${r.passed ? '✅' : '❌'} ${r.name}</strong><br>
-                        Base Cost: $${r.baseCost}<br>
-                        Amenities: ${r.amenities.join(', ') || 'None'}<br>
-                        Expected: $${r.expected} | Calculated: $${r.calculated}
+                pts{results.map(r => `
+                    <div style="padding: 10px; margin: 10px 0; background: pts{r.passed ? '#D1FAE5' : '#FEE2E2'}; border-radius: 5px; border-left: 4px solid pts{r.passed ? '#10B981' : '#DC2626'};">
+                        <strong>pts{r.passed ? '✅' : '❌'} pts{r.name}</strong><br>
+                        Base Cost: ptspts{r.baseCost}<br>
+                        Amenities: pts{r.amenities.join(', ') || 'None'}<br>
+                        Expected: ptspts{r.expected} | Calculated: ptspts{r.calculated}
                     </div>
                 `).join('')}
                 
                 <h3 style="margin-top: 30px;">Sample Data</h3>
-                <pre>${JSON.stringify({
+                <pre>pts{JSON.stringify({
                     rooms: getDummyRooms().slice(0, 2),
                     amenities: getDummyAmenities().slice(0, 3)
                 }, null, 2)}</pre>

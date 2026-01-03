@@ -1498,7 +1498,7 @@
 
                 <div class="total-cost-display">
                     <span>Estimated Total Cost:</span>
-                    <span id="totalCostDisplay" class="cost-amount">$0</span>
+                    <span id="totalCostDisplay" class="cost-amount">pts0</span>
                 </div>
 
                 <div class="modal-actions-custom">
@@ -1701,7 +1701,7 @@
                 // Update dashboard subtitle with manager name
                 const subtitle = document.querySelector('.dashboard-subtitle');
                 if (subtitle && profile.name) {
-                    subtitle.textContent = `Welcome back, ${profile.name}. Here's an overview of your team's bookings and stats today.`;
+                    subtitle.textContent = `Welcome back, pts{profile.name}. Here's an overview of your team's bookings and stats today.`;
                     console.log('✅ Updated subtitle with name:', profile.name);
                 }
                 
@@ -1742,7 +1742,7 @@
                     // Update progress bar
                     const progressBar = document.getElementById('creditProgressBar');
                     if (progressBar) {
-                        progressBar.style.width = `${usagePercentage}%`;
+                        progressBar.style.width = `pts{usagePercentage}%`;
                         console.log('✅ Updated progress bar width:', usagePercentage + '%');
                     } else {
                         console.warn('⚠️ creditProgressBar element not found!');
@@ -1751,7 +1751,7 @@
                     // Update progress text
                     const progressText = document.getElementById('progressText');
                     if (progressText) {
-                        progressText.textContent = `${usagePercentage}%`;
+                        progressText.textContent = `pts{usagePercentage}%`;
                         console.log('✅ Updated progress text');
                     } else {
                         console.warn('⚠️ progressText element not found!');
@@ -1772,7 +1772,7 @@
                     // Update total credits display
                     const creditsTotal = document.querySelector('.credits-total');
                     if (creditsTotal) {
-                        creditsTotal.textContent = `of ${totalCredits} credits`;
+                        creditsTotal.textContent = `of pts{totalCredits} credits`;
                         console.log('✅ Updated credits total text');
                     } else {
                         console.warn('⚠️ creditsTotal element not found!');
@@ -1842,34 +1842,34 @@
 
                 return `
                     <div class="room-card">
-                        <img src="${room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" 
-                             alt="${roomName}" class="room-card-image">
+                        <img src="pts{room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" 
+                             alt="pts{roomName}" class="room-card-image">
                         <div class="room-card-content">
                             <div class="room-card-header">
                                 <div>
-                                    <h3 class="room-card-title">${roomName}</h3>
-                                    <p class="room-card-type">${roomType}</p>
+                                    <h3 class="room-card-title">pts{roomName}</h3>
+                                    <p class="room-card-type">pts{roomType}</p>
                                 </div>
-                                <div class="room-price-badge">$${roomCost}/hr</div>
+                                <div class="room-price-badge">ptspts{roomCost}/hr</div>
                             </div>
                             
                             <div class="room-info-row">
                                 <i data-feather="users" width="16" height="16"></i>
-                                <span>${seatingCapacity} people</span>
+                                <span>pts{seatingCapacity} people</span>
                             </div>
 
-                            ${amenities.length > 0 ? `
+                            pts{amenities.length > 0 ? `
                                 <div class="room-amenities">
-                                    ${amenities.map(amenity => {
+                                    pts{amenities.map(amenity => {
                                         const formattedAmenity = typeof formatAmenityName === 'function' ? 
                                             formatAmenityName(amenity) : 
                                             amenity.toLowerCase().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-                                        return `<span class="room-amenity-tag">${formattedAmenity}</span>`;
+                                        return `<span class="room-amenity-tag">pts{formattedAmenity}</span>`;
                                     }).join('')}
                                 </div>
                             ` : ''}
 
-                            <button class="book-room-btn" onclick='openBookModal(${JSON.stringify(room).replace(/'/g, "&apos;")})'>
+                            <button class="book-room-btn" onclick='openBookModal(pts{JSON.stringify(room).replace(/'/g, "&apos;")})'>
                                 <i data-feather="calendar" width="16" height="16"></i>
                                 Book This Room
                             </button>
@@ -1896,8 +1896,8 @@
             document.getElementById('selectedRoomCost').value = roomCost;
             document.getElementById('bookRoomName').value = roomName;
             document.getElementById('bookRoomType').value = roomType;
-            document.getElementById('bookSeatingCapacity').value = `${seatingCapacity} people`;
-            document.getElementById('bookPerHourCost').value = `$${roomCost}/hour`;
+            document.getElementById('bookSeatingCapacity').value = `pts{seatingCapacity} people`;
+            document.getElementById('bookPerHourCost').value = `ptspts{roomCost}/hour`;
 
             // Display amenities
             const amenitiesDisplay = document.getElementById('bookAmenities');
@@ -1906,7 +1906,7 @@
                     const formattedAmenity = typeof formatAmenityName === 'function' ? 
                         formatAmenityName(amenity) : 
                         amenity.toLowerCase().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-                    return `<span class="room-amenity-tag">${formattedAmenity}</span>`;
+                    return `<span class="room-amenity-tag">pts{formattedAmenity}</span>`;
                 }).join('');
             } else {
                 amenitiesDisplay.innerHTML = '<span style="color: #6B7280;">No amenities included</span>';
@@ -1919,7 +1919,7 @@
             document.getElementById('endTime').value = '';
             document.getElementById('durationDisplay').value = '';
             document.getElementById('meetingDescription').value = '';
-            document.getElementById('totalCostDisplay').textContent = '$0';
+            document.getElementById('totalCostDisplay').textContent = 'pts0';
 
             // Set minimum date to today
             const today = new Date().toISOString().split('T')[0];
@@ -1944,8 +1944,8 @@
 
             if (meetingDate && startTime && endTime && costPerHour) {
                 // Create datetime objects
-                const startDateTime = new Date(`${meetingDate}T${startTime}`);
-                const endDateTime = new Date(`${meetingDate}T${endTime}`);
+                const startDateTime = new Date(`pts{meetingDate}Tpts{startTime}`);
+                const endDateTime = new Date(`pts{meetingDate}Tpts{endTime}`);
                 
                 // Calculate duration in hours
                 const durationMs = endDateTime - startDateTime;
@@ -1956,16 +1956,16 @@
                     const hoursInt = Math.floor(hours);
                     const minutes = Math.round((hours - hoursInt) * 60);
                     const durationText = hoursInt > 0 ? 
-                        `${hoursInt} hour${hoursInt > 1 ? 's' : ''}${minutes > 0 ? ` ${minutes} min` : ''}` : 
-                        `${minutes} minutes`;
+                        `pts{hoursInt} hourpts{hoursInt > 1 ? 's' : ''}pts{minutes > 0 ? ` pts{minutes} min` : ''}` : 
+                        `pts{minutes} minutes`;
                     document.getElementById('durationDisplay').value = durationText;
                     
                     // Calculate total cost
                     const totalCost = (hours * costPerHour).toFixed(2);
-                    document.getElementById('totalCostDisplay').textContent = `$${totalCost}`;
+                    document.getElementById('totalCostDisplay').textContent = `ptspts{totalCost}`;
                 } else {
                     document.getElementById('durationDisplay').value = '';
-                    document.getElementById('totalCostDisplay').textContent = '$0';
+                    document.getElementById('totalCostDisplay').textContent = 'pts0';
                     if (endTime && startTime) {
                         alert('End time must be after start time');
                     }
@@ -1989,8 +1989,8 @@
             const bookingData = {
                 roomId: document.getElementById('selectedRoomId').value,
                 meetingTitle: document.getElementById('meetingTitle').value,
-                startDateTime: `${meetingDate}T${startTime}`,
-                endDateTime: `${meetingDate}T${endTime}`,
+                startDateTime: `pts{meetingDate}Tpts{startTime}`,
+                endDateTime: `pts{meetingDate}Tpts{endTime}`,
                 description: document.getElementById('meetingDescription').value
             };
 
@@ -2002,7 +2002,7 @@
                 closeBookModal();
                 
                 // Optionally redirect to organize-meeting page with pre-filled data
-                // window.location.href = `organize-meeting.html?roomId=${bookingData.roomId}`;
+                // window.location.href = `organize-meeting.html?roomId=pts{bookingData.roomId}`;
             } catch (error) {
                 console.error('Error booking room:', error);
                 alert('Error booking room: ' + error.message);
