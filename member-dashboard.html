@@ -689,6 +689,29 @@
             margin-bottom: 24px;
         }
 
+        /* Message Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .mobile-toggle {
@@ -1000,6 +1023,52 @@
             `;
         }
 
+        // Show message to user
+        function showMessage(message, type = 'info') {
+            // Remove existing message if any
+            const existingMsg = document.getElementById('statusMessage');
+            if (existingMsg) {
+                existingMsg.remove();
+            }
+            
+            // Create message element
+            const msgDiv = document.createElement('div');
+            msgDiv.id = 'statusMessage';
+            msgDiv.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 24px;
+                padding: 12px 20px;
+                border-radius: 10px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            `;
+            
+            // Set color based on type
+            const colors = {
+                success: { bg: '#10B981', text: '#fff' },
+                error: { bg: '#EF4444', text: '#fff' },
+                warning: { bg: '#F59E0B', text: '#fff' },
+                info: { bg: '#3B82F6', text: '#fff' }
+            };
+            
+            const color = colors[type] || colors.info;
+            msgDiv.style.backgroundColor = color.bg;
+            msgDiv.style.color = color.text;
+            msgDiv.textContent = message;
+            
+            document.body.appendChild(msgDiv);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                msgDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => msgDiv.remove(), 300);
+            }, 3000);
+        }
+
         // Render meetings
         function renderMeetings(meetings) {
             const upcomingGrid = document.getElementById('upcomingMeetingsGrid');
@@ -1029,73 +1098,71 @@
         }
 
         // Fetch meetings from backend
-        async function fetchMeetings() {
+        async function fetchMeetings(managerName = '', meetingDate = '') {
             try {
-                // Replace this URL with your actual backend endpoint
-                const response = await fetch('/api/meetings'); // Update with your API endpoint
+                let url = 'http://localhost:8081/api/auth/member/manager-meetings';
+                const params = new URLSearchParams();
+                
+                // Only add parameters if they have values
+                if (managerName && managerName.trim() !== '') {
+                    params.append('managerName', managerName.trim());
+                }
+                if (meetingDate && meetingDate.trim() !== '') {
+                    params.append('meetingDate', meetingDate.trim());
+                }
+                
+                if (params.toString()) {
+                    url += '?' + params.toString();
+                }
+                
+                const response = await fetch(url);
+                
+                // Check if response is ok
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
+                
+                // Check if data is an array
+                if (!Array.isArray(data)) {
+                    throw new Error('Invalid response format');
+                }
+                
                 allMeetings = data;
                 filteredMeetings = data;
                 renderMeetings(filteredMeetings);
+                
+                // Show success message if searching
+                if (managerName || meetingDate) {
+                    showMessage(`Found ${data.length} meeting(s)`, 'success');
+                }
             } catch (error) {
                 console.error('Error fetching meetings:', error);
-                // Use sample data for demo
-                useSampleData();
+                showMessage('Unable to fetch meetings. Please check your input and try again.', 'error');
+                // Clear the grids
+                document.getElementById('upcomingMeetingsGrid').innerHTML = '<p style="text-align: center; color: #DC2626; padding: 40px;">Failed to load meetings. Please try again.</p>';
+                document.getElementById('historyMeetingsGrid').innerHTML = '<p style="text-align: center; color: #DC2626; padding: 40px;">Failed to load meetings. Please try again.</p>';
             }
         }
 
-        // Sample data for testing (remove when backend is ready)
-        function useSampleData() {
-            allMeetings = [
-                {
-                    "bookingId": "222ac7f3-a2c9-4df4-87f6-39728a326ad2",
-                    "roomId": "649cc30f-622b-462d-8ff4-e3dafb2b9195",
-                    "roomName": "Bhimtal",
-                    "meetingTitle": "R19 Release Activity",
-                    "meetingDate": "2025-12-30",
-                    "meetingType": "Hudle",
-                    "startTime": "2025-12-30T11:00:00",
-                    "endTime": "2025-12-30T12:00:00",
-                    "totalCredits": 140,
-                    "status": "ACTIVE",
-                    "createdAt": "2025-12-30T01:16:21.666653"
-                },
-                {
-                    "bookingId": "baa25992-c72a-462f-940f-e0269c5761b5",
-                    "roomId": "ed9eae36-d3d7-4258-a264-9b05878dc9f2",
-                    "roomName": "Conference Hall B",
-                    "meetingTitle": "R18 Release Activity",
-                    "meetingDate": "2025-12-30",
-                    "meetingType": "Hudle",
-                    "startTime": "2025-12-30T10:00:00",
-                    "endTime": "2025-12-30T11:00:00",
-                    "totalCredits": 135,
-                    "status": "ACTIVE",
-                    "createdAt": "2025-12-30T01:14:58.17167"
-                }
-            ];
-            filteredMeetings = allMeetings;
-            renderMeetings(filteredMeetings);
-        }
-
         // Search Form Handler
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
+        document.getElementById('searchForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             const searchDate = document.getElementById('searchDate').value;
-            const searchName = document.getElementById('searchName').value.toLowerCase();
+            const searchName = document.getElementById('searchName').value.trim();
             
-            // Filter meetings
-            filteredMeetings = allMeetings.filter(meeting => {
-                const matchesDate = !searchDate || meeting.meetingDate === searchDate;
-                const matchesName = !searchName || 
-                    meeting.meetingTitle.toLowerCase().includes(searchName) ||
-                    meeting.roomName.toLowerCase().includes(searchName) ||
-                    meeting.meetingType.toLowerCase().includes(searchName);
-                
-                return matchesDate && matchesName;
-            });
+            // Validate that at least one field is filled
+            if (!searchName && !searchDate) {
+                showMessage('Please enter a name or select a date to search', 'warning');
+                return;
+            }
             
-            renderMeetings(filteredMeetings);
+            // Show loading state
+            showMessage('Searching meetings...', 'info');
+            
+            // Fetch meetings from backend with filters
+            await fetchMeetings(searchName, searchDate);
         });
 
         // View meeting details
