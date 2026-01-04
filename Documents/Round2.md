@@ -7,7 +7,7 @@
 ## 1. Core Technical Components
 
 - **Rate Limiting**  
-  Implement rate limiting to prevent API abuse and ensure overall system stability during peak usage.
+  Implementing rate limiting using "bucket4j" to prevent API abuse and ensure overall system stability during peak usage.
 
 - **Security & Authentication**  
   Setup JWT (JSON Web Tokens) for authentication and secure endpoints using `@PreAuthorize` rules for role-based access control.
