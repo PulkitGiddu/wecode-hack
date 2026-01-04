@@ -28,6 +28,9 @@
 - **“Ghosting” Penalty Mechanism**  
   Implement logic to deduct **50 extra credits** as a penalty if a manager fails to **check-in** after successfully booking a room.
 
+- **"Use cache"**
+  Use cache to reterive contant data from DB to avoid unnessary Api calls.
+
 - **Automated Bot / Event Trigger**  
   Trigger an automated process immediately after a successful booking to:
   - Send notifications
