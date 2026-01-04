@@ -163,6 +163,31 @@ MemberController
 /member/getMeetings -> date , manager name
                         get all meetings booked under mangerId.
 
+                       or what we can do is in manager section we can add one endpoint where manager's can add members and
+                       we will make group of people manager is adding
+                       it can be member or admin and we keep track of each member under that manager id
+
+                       now when member login it will automatically see all meetings under that manager.
+
+
+                        for members ->
+                        once current day or date is over ->  mark meeting is done and add endpoint to check all past meetings.
+                        http://localhost:8081/api/auth/member/manager-meetings?getpastMeetings&managerName=Ankit
+
+
+
+
+-> make cache for DB
+amenities ,
+seating capacity
+
+make sure to not make unnecessary api calls from the above DB table instead make cache memory for this
+so when our backend is UP get one call and get the data now anytime we need something from amenities ,
+                                                                                           seating capacity
+                                                                                           call cache instead of DB
+
+
+
 
 /logout -> 200ok
 frontend

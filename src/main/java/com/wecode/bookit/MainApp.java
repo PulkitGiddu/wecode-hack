@@ -1,4 +1,3 @@
-// java
 package com.wecode.bookit;
 
 import org.springframework.boot.SpringApplication;
