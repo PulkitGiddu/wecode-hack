@@ -1,419 +1,295 @@
 // API Configuration
-const API_CONFIG = {
-    BASE_URL: 'http://localhost:8081/api',
-    ADMIN: '/admin',
-    MANAGER: '/manager',
-    MEMBER: '/member',
-    USE_DUMMY_DATA: false // Set to true to use dummy data, false to use backend API
+const API_BASE_URL = 'http://localhost:8081/api';
+
+// API Endpoints
+const API_ENDPOINTS = {
+    AUTH: {
+        SIGNUP: '/auth/signUp',
+        LOGIN: '/auth/login',
+        LOGOUT: '/auth/logout'
+    },
+    ADMIN: {
+        // Rooms
+        GET_ALL_ROOMS: '/admin/getAllRoom',
+        GET_ROOM_BY_ID: '/admin/getRoomById/{roomId}',
+        CREATE_ROOM: '/admin/createRoom',
+        UPDATE_ROOM: '/admin/updateRoom',
+        DELETE_ROOM: '/admin/rooms/{roomId}',
+        // Amenities
+        GET_ALL_AMENITIES: '/admin/getAllAmenities',
+        GET_AMENITY_BY_ID: '/admin/getAmenitieById/{amenityId}',
+        CREATE_AMENITY: '/admin/addAmenitie',
+        UPDATE_AMENITY: '/admin/updateAmenitie',
+        DELETE_AMENITY: '/admin/amenities/{amenityId}'
+    },
+    MANAGER: {
+        GET_PROFILE: '/manager/profile'
+    },
+    MEMBER: {
+        GET_MANAGER_MEETINGS: '/member/manager-meetings'
+    }
 };
 
-// ============================================
-// ADMIN API - Rooms Management
-// ============================================
+// Helper function to build full URL
+function buildUrl(endpoint, params = {}) {
+    let url = API_BASE_URL + endpoint;
+    Object.keys(params).forEach(key => {
+        url = url.replace(`{${key}}`, params[key]);
+    });
+    return url;
+}
 
-/**
- * Get all rooms
- * @param {boolean} forceDummy - Force using dummy data
- * @returns {Promise<Array>} Array of room objects
- */
-async function getAllRooms(forceDummy = false) {
-    if (API_CONFIG.USE_DUMMY_DATA || forceDummy) {
-        console.log('Using dummy data for rooms');
-        return Promise.resolve(getDummyRooms());
-    }
-    
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/getAllRoom`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+// Generic API call function
+async function apiCall(endpoint, options = {}) {
+    const defaultOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
         }
-        return await response.json();
+    };
+
+    // Add auth token if available
+    const token = localStorage.getItem('userToken');
+    if (token) {
+        defaultOptions.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const config = { ...defaultOptions, ...options };
+
+    try {
+        const response = await fetch(endpoint, config);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || `HTTP error! status: ${response.status}`);
+        }
+        
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            return { success: true, data };
+        } else {
+            const text = await response.text();
+            return { success: true, data: text };
+        }
     } catch (error) {
-        console.error('Error fetching rooms, falling back to dummy data:', error);
-        return getDummyRooms();
+        console.error('API call failed:', error);
+        return { success: false, error: error.message };
     }
 }
 
-/**
- * Get room by ID
- * @param {string} roomId - UUID of the room
- * @returns {Promise<Object>} Room object
- */
+// Authentication API
+const AuthAPI = {
+    signUp: async (userData) => {
+        const url = buildUrl(API_ENDPOINTS.AUTH.SIGNUP);
+        return await apiCall(url, {
+            method: 'POST',
+            body: JSON.stringify(userData)
+        });
+    },
+
+    login: async (credentials) => {
+        const url = buildUrl(API_ENDPOINTS.AUTH.LOGIN);
+        return await apiCall(url, {
+            method: 'POST',
+            body: JSON.stringify(credentials)
+        });
+    },
+
+    logout: async () => {
+        const url = buildUrl(API_ENDPOINTS.AUTH.LOGOUT);
+        return await apiCall(url, { method: 'POST' });
+    }
+};
+
+// Admin Room API
+const AdminRoomAPI = {
+    getAll: async () => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.GET_ALL_ROOMS);
+        return await apiCall(url);
+    },
+
+    getById: async (roomId) => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.GET_ROOM_BY_ID, { roomId });
+        return await apiCall(url);
+    },
+
+    create: async (roomData) => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.CREATE_ROOM);
+        return await apiCall(url, {
+            method: 'POST',
+            body: JSON.stringify(roomData)
+        });
+    },
+
+    update: async (roomData) => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.UPDATE_ROOM);
+        return await apiCall(url, {
+            method: 'PUT',
+            body: JSON.stringify(roomData)
+        });
+    },
+
+    delete: async (roomId) => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.DELETE_ROOM, { roomId });
+        return await apiCall(url, { method: 'DELETE' });
+    }
+};
+
+// Admin Amenity API
+const AdminAmenityAPI = {
+    getAll: async () => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.GET_ALL_AMENITIES);
+        return await apiCall(url);
+    },
+
+    getById: async (amenityId) => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.GET_AMENITY_BY_ID, { amenityId });
+        return await apiCall(url);
+    },
+
+    create: async (amenityData) => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.CREATE_AMENITY);
+        return await apiCall(url, {
+            method: 'POST',
+            body: JSON.stringify(amenityData)
+        });
+    },
+
+    update: async (amenityData) => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.UPDATE_AMENITY);
+        return await apiCall(url, {
+            method: 'PUT',
+            body: JSON.stringify(amenityData)
+        });
+    },
+
+    delete: async (amenityId) => {
+        const url = buildUrl(API_ENDPOINTS.ADMIN.DELETE_AMENITY, { amenityId });
+        return await apiCall(url, { method: 'DELETE' });
+    }
+};
+
+// Manager API
+const ManagerAPI = {
+    getProfile: async () => {
+        const url = buildUrl(API_ENDPOINTS.MANAGER.GET_PROFILE);
+        return await apiCall(url);
+    }
+};
+
+// Member API
+const MemberAPI = {
+    getManagerMeetings: async (managerName = '', meetingDate = '') => {
+        const params = new URLSearchParams();
+        if (managerName) params.append('managerName', managerName);
+        if (meetingDate) params.append('meetingDate', meetingDate);
+        
+        const url = buildUrl(API_ENDPOINTS.MEMBER.GET_MANAGER_MEETINGS);
+        const fullUrl = params.toString() ? `${url}?${params.toString()}` : url;
+        return await apiCall(fullUrl);
+    }
+};
+
+// Export all API modules
+const API = {
+    Auth: AuthAPI,
+    AdminRoom: AdminRoomAPI,
+    AdminAmenity: AdminAmenityAPI,
+    Manager: ManagerAPI,
+    Member: MemberAPI
+};
+
+
+// ============================================
+// BACKWARD COMPATIBILITY FUNCTIONS
+// Keep old function names for existing code
+// ============================================
+
+async function getAllRooms() {
+    const result = await AdminRoomAPI.getAll();
+    return result.success ? result.data : [];
+}
+
 async function getRoomById(roomId) {
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/getRoomById/${roomId}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching room:', error);
-        throw error;
-    }
+    const result = await AdminRoomAPI.getById(roomId);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
 }
 
-/**
- * Create a new room
- * @param {Object} roomData - Room data object
- * @param {string} roomData.name - Room name
- * @param {string} roomData.roomType - Type of room
- * @param {number} roomData.seatingCapacity - Seating capacity
- * @param {Array<string>} roomData.amenities - Array of amenity names
- * @param {number} roomData.perHourCost - Cost per hour
- * @returns {Promise<Object>} Created room object
- */
 async function createRoom(roomData) {
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/createRoom`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(roomData)
-        });
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || `HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error creating room:', error);
-        throw error;
-    }
+    const result = await AdminRoomAPI.create(roomData);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
 }
 
-/**
- * Update an existing room
- * @param {Object} roomData - Room data object including roomId
- * @returns {Promise<Object>} Updated room object
- */
 async function updateRoom(roomData) {
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/updateRoom`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(roomData)
-        });
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || `HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error updating room:', error);
-        throw error;
-    }
+    const result = await AdminRoomAPI.update(roomData);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
 }
 
-/**
- * Delete a room
- * @param {string} roomId - UUID of the room to delete
- * @returns {Promise<string>} Success message
- */
 async function deleteRoom(roomId) {
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/rooms/${roomId}`, {
-            method: 'DELETE'
-        });
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || `HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.text();
-    } catch (error) {
-        console.error('Error deleting room:', error);
-        throw error;
-    }
+    const result = await AdminRoomAPI.delete(roomId);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
 }
 
-// ============================================
-// ADMIN API - Amenities Management
-// ============================================
-
-/**
- * Get all amenities
- * @param {boolean} forceDummy - Force using dummy data
- * @returns {Promise<Array>} Array of amenity objects
- */
-async function getAllAmenities(forceDummy = false) {
-    if (API_CONFIG.USE_DUMMY_DATA || forceDummy) {
-        console.log('Using dummy data for amenities');
-        return Promise.resolve(getDummyAmenities());
-    }
-    
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/getAllAmenities`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching amenities, falling back to dummy data:', error);
-        return getDummyAmenities();
-    }
+async function getAllAmenities() {
+    const result = await AdminAmenityAPI.getAll();
+    return result.success ? result.data : [];
 }
 
-/**
- * Get amenity by ID
- * @param {string} amenityId - UUID of the amenity
- * @returns {Promise<Object>} Amenity object
- */
 async function getAmenityById(amenityId) {
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/getAmenitieById/${amenityId}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching amenity:', error);
-        throw error;
-    }
+    const result = await AdminAmenityAPI.getById(amenityId);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
 }
 
-/**
- * Create a new amenity
- * @param {Object} amenityData - Amenity data object
- * @param {string} amenityData.name - Amenity name
- * @param {string} amenityData.description - Amenity description
- * @param {number} amenityData.creditsScore - Credits score
- * @returns {Promise<Object>} Created amenity object
- */
 async function createAmenity(amenityData) {
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/addAmenitie`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(amenityData)
-        });
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || `HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error creating amenity:', error);
-        throw error;
-    }
+    const result = await AdminAmenityAPI.create(amenityData);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
 }
 
-/**
- * Update an existing amenity
- * @param {Object} amenityData - Amenity data object including amenityId
- * @returns {Promise<Object>} Updated amenity object
- */
 async function updateAmenity(amenityData) {
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/updateAmenitie`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(amenityData)
-        });
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || `HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error updating amenity:', error);
-        throw error;
-    }
+    const result = await AdminAmenityAPI.update(amenityData);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
 }
 
-/**
- * Delete an amenity
- * @param {string} amenityId - UUID of the amenity to delete
- * @returns {Promise<string>} Success message
- */
 async function deleteAmenity(amenityId) {
-    try {
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ADMIN}/amenities/${amenityId}`, {
-            method: 'DELETE'
-        });
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || `HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.text();
-    } catch (error) {
-        console.error('Error deleting amenity:', error);
-        throw error;
+    const result = await AdminAmenityAPI.delete(amenityId);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
+}
+
+async function getManagerProfile() {
+    const result = await ManagerAPI.getProfile();
+    if (!result.success) {
+        // Fallback to dummy data
+        return {
+            availableCredits: 10,
+            role: 'MANAGER',
+            name: 'John Doe',
+            userId: '123e4567-e89b-12d3-a456-426614174000',
+            email: 'manager@example.com'
+        };
     }
+    return result.data;
 }
 
 // ============================================
-// DUMMY DATA (for fallback when API is unavailable)
-// ============================================
-// Data structure matches the backend database schema
-
-const DUMMY_DATA = {
-    // Amenities matching the backend database
-    amenities: [
-        { 
-            amenity_id: 'a1e4f8c2-1234-4567-89ab-cdef12345671',
-            amenityName: 'PROJECTOR',
-            creditCost: 5,
-            is_active: true
-        },
-        { 
-            amenity_id: 'a1e4f8c2-1234-4567-89ab-cdef12345672',
-            amenityName: 'WIFI',
-            creditCost: 10,
-            is_active: true
-        },
-        { 
-            amenity_id: 'a1e4f8c2-1234-4567-89ab-cdef12345673',
-            amenityName: 'CONFERENCE_CALL',
-            creditCost: 15,
-            is_active: true
-        },
-        { 
-            amenity_id: 'a1e4f8c2-1234-4567-89ab-cdef12345674',
-            amenityName: 'WHITEBOARD',
-            creditCost: 5,
-            is_active: true
-        },
-        { 
-            amenity_id: 'a1e4f8c2-1234-4567-89ab-cdef12345675',
-            amenityName: 'WATER_DISPENSER',
-            creditCost: 5,
-            is_active: true
-        },
-        { 
-            amenity_id: 'a1e4f8c2-1234-4567-89ab-cdef12345676',
-            amenityName: 'TV',
-            creditCost: 10,
-            is_active: true
-        },
-        { 
-            amenity_id: 'a1e4f8c2-1234-4567-89ab-cdef12345677',
-            amenityName: 'COFFEE_MACHINE',
-            creditCost: 10,
-            is_active: true
-        }
-    ],
-    
-    // Sample rooms matching your provided JSON structure
-    rooms: [
-        {
-            roomId: '649cc30f-622b-462d-8ff4-e3dafb2b9195',
-            roomName: 'Bhimtal',
-            roomType: 'Huddle',
-            seatingCapacity: 20,
-            perHourCost: 100,
-            amenities: ['COFFEE_MACHINE', 'WIFI'],
-            roomCost: 120, // perHourCost + sum of amenity costs (10 + 10)
-            isActive: true
-        },
-        {
-            roomId: '749cc30f-622b-462d-8ff4-e3dafb2b9196',
-            roomName: 'Nainital',
-            roomType: 'Conference',
-            seatingCapacity: 50,
-            perHourCost: 200,
-            amenities: ['PROJECTOR', 'WIFI', 'WHITEBOARD', 'CONFERENCE_CALL'],
-            roomCost: 235, // 200 + 5 + 10 + 5 + 15
-            isActive: true
-        },
-        {
-            roomId: '849cc30f-622b-462d-8ff4-e3dafb2b9197',
-            roomName: 'Ranikhet',
-            roomType: 'Meeting',
-            seatingCapacity: 30,
-            perHourCost: 150,
-            amenities: ['TV', 'WIFI', 'WATER_DISPENSER'],
-            roomCost: 175, // 150 + 10 + 10 + 5
-            isActive: true
-        },
-        {
-            roomId: '949cc30f-622b-462d-8ff4-e3dafb2b9198',
-            roomName: 'Mussoorie',
-            roomType: 'Board Room',
-            seatingCapacity: 100,
-            perHourCost: 300,
-            amenities: ['PROJECTOR', 'CONFERENCE_CALL', 'TV', 'WIFI', 'COFFEE_MACHINE'],
-            roomCost: 345, // 300 + 5 + 15 + 10 + 10 + 10
-            isActive: true
-        },
-        {
-            roomId: 'a49cc30f-622b-462d-8ff4-e3dafb2b9199',
-            roomName: 'Dehradun',
-            roomType: 'Huddle',
-            seatingCapacity: 15,
-            perHourCost: 80,
-            amenities: ['WHITEBOARD', 'WIFI'],
-            roomCost: 95, // 80 + 5 + 10
-            isActive: true
-        }
-    ]
-};
-
-/**
- * Get dummy rooms data
- * @returns {Array} Array of dummy room objects
- */
-function getDummyRooms() {
-    return DUMMY_DATA.rooms;
-}
-
-/**
- * Get dummy amenities data
- * @returns {Array} Array of dummy amenity objects
- */
-function getDummyAmenities() {
-    return DUMMY_DATA.amenities;
-}
-// ============================================
-// UTILITY FUNCTIONS FOR DATA MANAGEMENT
+// UTILITY FUNCTIONS
 // ============================================
 
 /**
- * Calculate room cost including amenities
- * @param {number} perHourCost - Base cost per hour
- * @param {Array<string>} amenityNames - Array of amenity names
- * @returns {number} Total cost including amenities
- */
-function calculateRoomCost(perHourCost, amenityNames = []) {
-    const amenityCosts = DUMMY_DATA.amenities
-        .filter(a => amenityNames.includes(a.amenityName))
-        .reduce((sum, a) => sum + a.creditCost, 0);
-    
-    return perHourCost + amenityCosts;
-}
-
-/**
- * Get amenity details by name
- * @param {string} amenityName - Name of the amenity
- * @returns {Object|null} Amenity object or null if not found
- */
-function getAmenityByName(amenityName) {
-    return DUMMY_DATA.amenities.find(a => a.amenityName === amenityName) || null;
-}
-
-/**
- * Format amenity name for display (e.g., 'COFFEE_MACHINE' -> 'Coffee Machine')
+ * Format amenity name for display
  * @param {string} amenityName - Amenity name in uppercase with underscores
  * @returns {string} Formatted amenity name
  */
 function formatAmenityName(amenityName) {
+    if (!amenityName) return '';
     return amenityName
         .toLowerCase()
         .split('_')
@@ -422,68 +298,12 @@ function formatAmenityName(amenityName) {
 }
 
 /**
- * Toggle between dummy data and backend API
- * @param {boolean} useDummy - Whether to use dummy data
+ * Calculate room cost including amenities
+ * @param {number} perHourCost - Base cost per hour
+ * @param {Array<Object>} amenities - Array of amenity objects with creditCost
+ * @returns {number} Total cost including amenities
  */
-function setDataSource(useDummy) {
-    API_CONFIG.USE_DUMMY_DATA = useDummy;
-    console.log(`Data source set to: ${useDummy ? 'Dummy Data' : 'Backend API'}`);
-}
-
-/**
- * Get current data source
- * @returns {string} Current data source ('dummy' or 'backend')
- */
-function getDataSource() {
-    return API_CONFIG.USE_DUMMY_DATA ? 'dummy' : 'backend';
-}
-
-// ============================================
-// MANAGER API - Profile Management
-// ============================================
-
-/**
- * Get manager profile
- * @returns {Promise<Object>} Manager profile object with availableCredits, role, name, userId, email
- */
-async function getManagerProfile() {
-    const url = `${API_CONFIG.BASE_URL}${API_CONFIG.MANAGER}/profile`;
-    console.log('🌐 Fetching manager profile from:', url);
-    
-    try {
-        console.log('📡 Making fetch request...');
-        const response = await fetch(url);
-        
-        console.log('📥 Response status:', response.status);
-        console.log('📥 Response ok:', response.ok);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('❌ HTTP error response:', errorText);
-            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-        }
-        
-        const data = await response.json();
-        console.log('✅ Profile data received:', data);
-        return data;
-    } catch (error) {
-        console.error('❌ Error fetching manager profile:', error);
-        console.error('Error details:', {
-            name: error.name,
-            message: error.message,
-            stack: error.stack
-        });
-        
-        // Fallback to dummy data
-        console.warn('⚠️ Using fallback dummy data');
-        const fallbackData = {
-            availableCredits: 10,
-            role: 'MANAGER',
-            name: 'John Doe',
-            userId: '123e4567-e89b-12d3-a456-426614174000',
-            email: 'manager@example.com'
-        };
-        console.log('📦 Fallback data:', fallbackData);
-        return fallbackData;
-    }
+function calculateRoomCost(perHourCost, amenities = []) {
+    const amenityCosts = amenities.reduce((sum, a) => sum + (a.creditCost || 0), 0);
+    return perHourCost + amenityCosts;
 }
