@@ -127,6 +127,13 @@
                     const data = await res.json();
                     console.log('Backend response:', data);
                     
+                    // Store user data in localStorage
+                    localStorage.setItem('userToken', data.token || '');
+                    localStorage.setItem('userName', data.name || data.username || email.split('@')[0]);
+                    localStorage.setItem('userEmail', data.email || email);
+                    localStorage.setItem('userRole', data.role || data.userRole || 'MEMBER');
+                    localStorage.setItem('userId', data.userId || data.id || '');
+                    
                     // Redirect based on user role from response
                     const role = data.role || data.userRole;
                     switch(role?.toUpperCase()) {

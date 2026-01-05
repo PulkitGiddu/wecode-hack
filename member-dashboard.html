@@ -25,38 +25,28 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #F3F4F6;
+            background: #F8F9FA;
             color: #1F2937;
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* Background Effects */
+        /* Clean Background */
         body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('./assets/img/bg.png') center center / cover no-repeat;
-            opacity: 0.2;
-            z-index: -1;
+            display: none;
         }
 
-        /* Glassmorphism Header */
+        /* Clean Header */
         .top-header {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            padding: 12px 0;
-            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 20px rgba(0, 0, 0, 0.05);
+            background: #FFFFFF;
+            padding: 16px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid #E5E7EB;
         }
 
         .header-container {
@@ -101,36 +91,36 @@
         }
 
         .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #0b307d, #1a345b);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .btn-logout {
             padding: 8px 16px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
             border-radius: 8px;
-            color: #DC2626;
-            font-size: 13px;
+            color: #6B7280;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .btn-logout:hover {
-            background: rgba(239, 68, 68, 0.2);
-            transform: translateY(-2px);
+            background: #E5E7EB;
+            color: #374151;
         }
 
         /* Mobile Menu Toggle */
@@ -179,55 +169,46 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            background: #FFFFFF;
             border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: all 0.3s;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
+            transition: all 0.2s;
             position: relative;
             overflow: hidden;
         }
 
         .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #0b307d, #1a345b);
+            display: none;
         }
 
         .stat-card.blue::before {
-            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            display: none;
         }
 
         .stat-card.purple::before {
-            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            display: none;
         }
 
         .stat-card.orange::before {
-            background: linear-gradient(135deg, #F59E0B, #D97706);
+            display: none;
         }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
+            width: 56px;
+            height: 56px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
-            background: rgb(0 0 0 / 10%);
-            color: #183461;
+            margin-bottom: 16px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
         }
 
         .stat-card.blue .stat-icon {
@@ -241,8 +222,8 @@
         }
 
         .stat-card.orange .stat-icon {
-            background: rgba(245, 158, 11, 0.1);
-            color: #F59E0B;
+            background: rgba(249, 115, 22, 0.1);
+            color: #F97316;
         }
 
         .stat-value {
@@ -263,11 +244,11 @@
             display: flex;
             gap: 8px;
             margin-bottom: 24px;
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(20px);
-            padding: 8px;
+            background: #FFFFFF;
+            padding: 6px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
         }
 
         .tab-btn {
@@ -279,21 +260,21 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .tab-btn:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: #183461;
+            background: #F3F4F6;
+            color: #374151;
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, #0b307d, #1a345b);
+            background: #3B82F6;
             color: white;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         /* Content Sections */
@@ -307,48 +288,45 @@
 
         /* Search/Filter Card */
         .search-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            background: #FFFFFF;
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
             margin-bottom: 24px;
         }
 
         .search-card .form-control {
             border-radius: 10px;
-            border: 1px solid rgba(209, 213, 219, 0.5);
+            border: 1px solid #D1D5DB;
             padding: 12px 16px;
             font-size: 14px;
-            background: rgba(255, 255, 255, 0.9);
+            background: #FFFFFF;
             color: #1F2937;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .search-card .form-control:focus {
-            border-color: #0b307d;
-            box-shadow: 0 0 0 3px rgba(11, 48, 125, 0.1);
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
             outline: none;
         }
 
         .search-card .btn-search {
-            background: linear-gradient(135deg, #0b307d, #1a345b);
+            background: #3B82F6;
             color: white;
             border: none;
-            padding: 12px 32px;
+            padding: 12px 28px;
             border-radius: 10px;
             font-weight: 600;
             width: 100%;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(11, 48, 125, 0.3);
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         .search-card .btn-search:hover {
-            background: linear-gradient(135deg, #1a345b, #0b307d);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(11, 48, 125, 0.4);
+            background: #2563EB;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
 
         /* Sidebar for Mobile */
@@ -419,21 +397,17 @@
 
         /* Glass Card */
         .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            background: #FFFFFF;
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
+            transition: all 0.2s;
             margin-bottom: 24px;
         }
 
         .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .card-header-custom {
@@ -459,29 +433,21 @@
         }
 
         .meeting-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 14px;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
             padding: 20px;
-            transition: all 0.3s;
+            transition: all 0.2s;
             position: relative;
             overflow: hidden;
         }
 
         .meeting-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #0b307d, #1a345b);
+            display: none;
         }
 
         .meeting-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .meeting-card-header {
@@ -499,18 +465,17 @@
         }
 
         .meeting-status {
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 6px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
-            text-transform: uppercase;
-            background: rgba(16, 185, 129, 0.1);
-            color: #183461;
+            background: rgba(34, 197, 94, 0.1);
+            color: #16A34A;
         }
 
         .meeting-status.upcoming {
-            background: rgba(59, 130, 246, 0.1);
-            color: #3B82F6;
+            background: rgba(251, 146, 60, 0.1);
+            color: #EA580C;
         }
 
         .meeting-info-row {
@@ -525,7 +490,7 @@
         .meeting-info-row i {
             width: 16px;
             height: 16px;
-            color: #183461;
+            color: #3B82F6;
         }
 
         .meeting-actions {
@@ -552,14 +517,14 @@
         }
 
         .btn-primary-action {
-            background: linear-gradient(135deg, #0b307d, #1a345b);
+            background: #3B82F6;
             color: white;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         .btn-primary-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            background: #2563EB;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
 
         .btn-secondary-action {
@@ -613,8 +578,8 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 12px;
-            background: rgba(16, 185, 129, 0.1);
-            color: #183461;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
         }
 
         .action-title {
@@ -636,22 +601,22 @@
             right: 24px;
             width: 56px;
             height: 56px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #0b307d, #1a345b);
+            border-radius: 50%;
+            background: #3B82F6;
             color: white;
             border: none;
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.2s;
             z-index: 999;
         }
 
         .fab:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 12px 32px rgba(16, 185, 129, 0.5);
+            background: #2563EB;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
         }
 
         /* Empty State */
@@ -668,12 +633,12 @@
             width: 80px;
             height: 80px;
             margin: 0 auto 20px;
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(59, 130, 246, 0.1);
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #183461;
+            color: #3B82F6;
         }
 
         .empty-title {
@@ -787,8 +752,8 @@
 
             <div class="header-actions">
                 <div class="user-info">
-                    <div class="user-avatar">M</div>
-                    <span style="font-size: 13px; font-weight: 500; color: #374151;">Member</span>
+                    <div class="user-avatar" id="userAvatar">M</div>
+                    <span style="font-size: 13px; font-weight: 500; color: #374151;" id="userNameDisplay">Member</span>
                 </div>
                 <button class="btn-logout" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i>
@@ -1100,49 +1065,101 @@
         // Fetch meetings from backend
         async function fetchMeetings(managerName = '', meetingDate = '') {
             try {
+                // Build URL with optional parameters
                 let url = 'http://localhost:8081/api/auth/member/manager-meetings';
                 const params = new URLSearchParams();
                 
-                // Only add parameters if they have values
+                // Add parameters if they have values
                 if (managerName && managerName.trim() !== '') {
                     params.append('managerName', managerName.trim());
                 }
                 if (meetingDate && meetingDate.trim() !== '') {
-                    params.append('meetingDate', meetingDate.trim());
+                    params.append('meetingDate', meetingDate);
                 }
                 
+                // If parameters exist, add to URL
                 if (params.toString()) {
                     url += '?' + params.toString();
                 }
                 
-                const response = await fetch(url);
+                // Get auth token from localStorage
+                const token = localStorage.getItem('userToken');
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+                
+                console.log('Fetching meetings from:', url);
+                console.log('Auth token present:', !!token);
+                
+                const response = await fetch(url, { headers });
+                
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
                 
                 // Check if response is ok
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    
+                    if (response.status === 404) {
+                        showMessage('No meetings found', 'info');
+                        document.getElementById('upcomingMeetingsGrid').innerHTML = '<p style="text-align: center; color: #6B7280; padding: 40px;">No meetings found</p>';
+                        document.getElementById('historyMeetingsGrid').innerHTML = '<p style="text-align: center; color: #6B7280; padding: 40px;">No meetings found</p>';
+                    } else if (response.status === 400) {
+                        showMessage('Please provide search criteria (manager name or date)', 'warning');
+                        document.getElementById('upcomingMeetingsGrid').innerHTML = '<p style="text-align: center; color: #6B7280; padding: 40px;">Enter manager name or date to search meetings</p>';
+                        document.getElementById('historyMeetingsGrid').innerHTML = '<p style="text-align: center; color: #6B7280; padding: 40px;">Enter manager name or date to search meetings</p>';
+                    } else if (response.status === 401 || response.status === 403) {
+                        showMessage('Authentication failed. Please login again', 'error');
+                        setTimeout(() => {
+                            localStorage.clear();
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    } else {
+                        showMessage(`Server error: ${response.status}`, 'error');
+                        document.getElementById('upcomingMeetingsGrid').innerHTML = '<p style="text-align: center; color: #DC2626; padding: 40px;">Failed to load meetings</p>';
+                        document.getElementById('historyMeetingsGrid').innerHTML = '<p style="text-align: center; color: #DC2626; padding: 40px;">Failed to load meetings</p>';
+                    }
+                    return;
                 }
                 
                 const data = await response.json();
+                console.log('Received data:', data);
                 
                 // Check if data is an array
                 if (!Array.isArray(data)) {
-                    throw new Error('Invalid response format');
+                    console.error('Data is not an array:', data);
+                    throw new Error('Invalid response format - expected array');
                 }
                 
                 allMeetings = data;
                 filteredMeetings = data;
                 renderMeetings(filteredMeetings);
                 
-                // Show success message if searching
-                if (managerName || meetingDate) {
+                // Show success message
+                if (data.length === 0) {
+                    showMessage('No meetings found', 'info');
+                } else {
                     showMessage(`Found ${data.length} meeting(s)`, 'success');
                 }
             } catch (error) {
                 console.error('Error fetching meetings:', error);
-                showMessage('Unable to fetch meetings. Please check your input and try again.', 'error');
-                // Clear the grids
-                document.getElementById('upcomingMeetingsGrid').innerHTML = '<p style="text-align: center; color: #DC2626; padding: 40px;">Failed to load meetings. Please try again.</p>';
-                document.getElementById('historyMeetingsGrid').innerHTML = '<p style="text-align: center; color: #DC2626; padding: 40px;">Failed to load meetings. Please try again.</p>';
+                console.error('Error details:', error.message);
+                
+                let errorMessage = 'Unable to fetch meetings. ';
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    errorMessage += 'Backend server not running at http://localhost:8081';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                showMessage(errorMessage, 'error');
+                
+                document.getElementById('upcomingMeetingsGrid').innerHTML = `<p style="text-align: center; color: #DC2626; padding: 40px;">Failed to load meetings.<br><small>Check if backend is running</small></p>`;
+                document.getElementById('historyMeetingsGrid').innerHTML = `<p style="text-align: center; color: #DC2626; padding: 40px;">Failed to load meetings.<br><small>Check if backend is running</small></p>`;
             }
         }
 
@@ -1152,9 +1169,9 @@
             const searchDate = document.getElementById('searchDate').value;
             const searchName = document.getElementById('searchName').value.trim();
             
-            // Validate that at least one field is filled
+            // At least one field should be filled
             if (!searchName && !searchDate) {
-                showMessage('Please enter a manager name or select a date to search', 'warning');
+                showMessage('Please enter a manager name or select a date', 'warning');
                 return;
             }
             
@@ -1218,8 +1235,28 @@
             sidebarOverlay.classList.remove('active');
         });
 
+        // Initialize user info from localStorage
+        function initializeUserInfo() {
+            const userName = localStorage.getItem('userName') || 'Member';
+            const userEmail = localStorage.getItem('userEmail') || '';
+            
+            // Update user name display
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            if (userNameDisplay) {
+                userNameDisplay.textContent = userName;
+            }
+            
+            // Update avatar with first letter of name
+            const userAvatar = document.getElementById('userAvatar');
+            if (userAvatar && userName) {
+                userAvatar.textContent = userName.charAt(0).toUpperCase();
+            }
+        }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
+            initializeUserInfo();
+            // Try to fetch all meetings on page load
             fetchMeetings();
         });
     </script>
