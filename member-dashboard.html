@@ -856,11 +856,11 @@
                         <input type="date" id="searchDate" class="form-control" placeholder="Select Date">
                     </div>
                     <div class="col-md-4 col-12">
-                        <input type="text" id="searchName" class="form-control" placeholder="Enter name to search">
+                        <input type="text" id="searchName" class="form-control" placeholder="Enter manager name to search meetings">
                     </div>
                     <div class="col-md-3 col-12">
                         <button type="submit" class="btn-search">
-                            <i class="fas fa-search"></i> Find by Name
+                            <i class="fas fa-search"></i> Search by Manager
                         </button>
                     </div>
                 </div>
@@ -1154,7 +1154,7 @@
             
             // Validate that at least one field is filled
             if (!searchName && !searchDate) {
-                showMessage('Please enter a name or select a date to search', 'warning');
+                showMessage('Please enter a manager name or select a date to search', 'warning');
                 return;
             }
             

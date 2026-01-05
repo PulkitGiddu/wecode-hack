@@ -57,22 +57,22 @@
 │   Room   │   Type    │ Capacity │        Amenities          │ Base  │  Total   │
 │   Name   │           │          │                           │ Cost  │  Cost    │
 ├──────────┼───────────┼──────────┼───────────────────────────┼───────┼──────────┤
-│ Bhimtal  │  Huddle   │    20    │ COFFEE_MACHINE, WIFI      │ $100  │  $120    │
-│          │           │          │ ($10 + $10)               │       │          │
+│ Bhimtal  │  Huddle   │    20    │ COFFEE_MACHINE, WIFI      │ 100  │  120    │
+│          │           │          │ (10 + 10)               │       │          │
 ├──────────┼───────────┼──────────┼───────────────────────────┼───────┼──────────┤
-│ Nainital │ Conference│    50    │ PROJECTOR, WIFI,          │ $200  │  $235    │
+│ Nainital │ Conference│    50    │ PROJECTOR, WIFI,          │ 200  │  235    │
 │          │           │          │ WHITEBOARD, CONFERENCE    │       │          │
-│          │           │          │ ($5+$10+$5+$15)           │       │          │
+│          │           │          │ (5+10+5+15)           │       │          │
 ├──────────┼───────────┼──────────┼───────────────────────────┼───────┼──────────┤
-│ Ranikhet │  Meeting  │    30    │ TV, WIFI, WATER_DISPENSER │ $150  │  $175    │
-│          │           │          │ ($10+$10+$5)              │       │          │
+│ Ranikhet │  Meeting  │    30    │ TV, WIFI, WATER_DISPENSER │ 150  │  175    │
+│          │           │          │ (10+10+5)              │       │          │
 ├──────────┼───────────┼──────────┼───────────────────────────┼───────┼──────────┤
-│Mussoorie │Board Room │   100    │ PROJECTOR, CONFERENCE,    │ $300  │  $345    │
+│Mussoorie │Board Room │   100    │ PROJECTOR, CONFERENCE,    │ 300  │  345    │
 │          │           │          │ TV, WIFI, COFFEE_MACHINE  │       │          │
-│          │           │          │ ($5+$15+$10+$10+$10)      │       │          │
+│          │           │          │ (5+15+10+10+10)      │       │          │
 ├──────────┼───────────┼──────────┼───────────────────────────┼───────┼──────────┤
-│ Dehradun │  Huddle   │    15    │ WHITEBOARD, WIFI          │  $80  │   $95    │
-│          │           │          │ ($5+$10)                  │       │          │
+│ Dehradun │  Huddle   │    15    │ WHITEBOARD, WIFI          │  80  │   95    │
+│          │           │          │ (5+10)                  │       │          │
 └──────────┴───────────┴──────────┴───────────────────────────┴───────┴──────────┘
 ```
 
@@ -84,11 +84,11 @@
 Room Total Cost = Base Per Hour Cost + Σ(Amenity Costs)
 
 Example: Bhimtal Room
-  Base Cost:          $100
-  + COFFEE_MACHINE:    $10
-  + WIFI:              $10
+  Base Cost:          100
+  + COFFEE_MACHINE:    10
+  + WIFI:              10
   ─────────────────────────
-  Total:              $120 per hour
+  Total:              120 per hour
 ```
 
 ---
