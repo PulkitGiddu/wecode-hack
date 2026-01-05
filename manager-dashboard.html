@@ -1269,7 +1269,7 @@
                 </div>
 
                 <a href="#" class="view-all-btn">View All →</a>
-                <button class="schedule-new-btn" onclick="window.location.href='organize-meeting.html'">
+                <button class="schedule-new-btn" onclick="showViewRooms()">
                     <i data-feather="plus-circle" width="16" height="16" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
                     Schedule a New Meeting
                 </button>
@@ -1308,13 +1308,13 @@
             <!-- Stats Overview -->
             <div class="dashboard-card">
                   <div class="action-buttons">
-                <a href="organize-meeting.html" class="action-btn">
+                <a href="#" onclick="showViewRooms(); return false;" class="action-btn">
                     <div class="action-icon">
                         <i data-feather="calendar" width="20" height="20"></i>
                     </div>
-                    <div class="action-title">Organize Meetings</div>
-                    <div class="action-desc">Schedule new meetings</div>
-                    <button class="action-btn-cta">Book Meeting</button>
+                    <div class="action-title">Book Meeting Rooms</div>
+                    <div class="action-desc">Browse and book rooms</div>
+                    <button class="action-btn-cta">View Rooms</button>
                 </a>
 
                 <a href="analytics.html" class="action-btn">
@@ -1808,6 +1808,11 @@
             feather.replace();
         }
 
+        // Helper function to show View Rooms section
+        function showViewRooms() {
+            showSection('viewRooms');
+        }
+
         // Load all rooms
         async function loadAllRooms() {
             const roomsGrid = document.getElementById('roomsGrid');
@@ -1918,7 +1923,6 @@
             document.getElementById('startTime').value = '';
             document.getElementById('endTime').value = '';
             document.getElementById('durationDisplay').value = '';
-            document.getElementById('meetingDescription').value = '';
             document.getElementById('totalCostDisplay').textContent = 'pts0';
 
             // Set minimum date to today
@@ -1990,8 +1994,7 @@
                 roomId: document.getElementById('selectedRoomId').value,
                 meetingTitle: document.getElementById('meetingTitle').value,
                 startDateTime: `${meetingDate}T${startTime}`,
-                endDateTime: `${meetingDate}T${endTime}`,
-                description: document.getElementById('meetingDescription').value
+                endDateTime: `${meetingDate}T${endTime}`
             };
 
             try {
