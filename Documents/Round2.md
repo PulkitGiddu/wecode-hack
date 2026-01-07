@@ -8,6 +8,7 @@
 
 - **Rate Limiting**  
   Implementing rate limiting using "bucket4j" to prevent API abuse and ensure overall system stability during peak usage.
+  DONE ✅
 
 - **Security & Authentication**  
   Setup JWT (JSON Web Tokens) for authentication and secure endpoints using `@PreAuthorize` rules for role-based access control.
@@ -27,15 +28,11 @@
 
 - **“Ghosting” Penalty Mechanism**  
   Implement logic to deduct **50 extra credits** as a penalty if a manager fails to **check-in** after successfully booking a room.
+  DONE ✅
 
 - **"Use cache"**
   Use cache to reterive contant data from DB to avoid unnessary Api calls.
-
-- **Automated Bot / Event Trigger**  
-  Trigger an automated process immediately after a successful booking to:
-  - Send notifications
-  - Log booking events
-  - Perform post-booking actions
+  DONE ✅
 
 ## Work Contributions
 
