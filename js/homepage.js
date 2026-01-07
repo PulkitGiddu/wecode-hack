@@ -270,3 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
         footerObserver.observe(section);
     });
 });
+
+// Attach functions to window for React onClick
+window.openSidebar = openSidebar;
+window.closeSidebar = closeSidebar;
+window.toggleFaq = toggleFaq;
