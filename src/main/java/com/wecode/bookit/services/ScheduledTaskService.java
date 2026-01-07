@@ -17,7 +17,6 @@ import java.util.UUID;
 
 /**
  * Scheduled Tasks Service
- * Handles:
  * 1. Marking completed meetings
  * 2. Applying penalties for no-shows
  * 3. Resetting manager credits
