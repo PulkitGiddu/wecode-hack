@@ -1,4 +1,4 @@
-package com.wecode.bookit.services.serviceImpl;
+package com.wecode.bookit.services;
 
 import com.wecode.bookit.entity.Booking;
 import com.wecode.bookit.entity.ManagerCreditSummary;

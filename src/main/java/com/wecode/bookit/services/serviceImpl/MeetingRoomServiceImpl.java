@@ -11,6 +11,7 @@ import com.wecode.bookit.exceptions.RoomNotFound;
 import com.wecode.bookit.repository.AmenityRepository;
 import com.wecode.bookit.repository.MeetingRoomRepository;
 import com.wecode.bookit.repository.SeatingCapacityCreditsRepository;
+import com.wecode.bookit.services.CacheService;
 import com.wecode.bookit.services.MeetingRoomService;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +28,16 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     private final MeetingRoomRepository meetingRoomRepository;
     private final AmenityRepository amenityRepository;
     private final SeatingCapacityCreditsRepository seatingCapacityCreditsRepository;
+    private final CacheService cacheService;
 
     public MeetingRoomServiceImpl(MeetingRoomRepository meetingRoomRepository,
                                   AmenityRepository amenityRepository,
-                                  SeatingCapacityCreditsRepository seatingCapacityCreditsRepository) {
+                                  SeatingCapacityCreditsRepository seatingCapacityCreditsRepository,
+                                  CacheService cacheService) {
         this.meetingRoomRepository = meetingRoomRepository;
         this.amenityRepository = amenityRepository;
         this.seatingCapacityCreditsRepository = seatingCapacityCreditsRepository;
+        this.cacheService = cacheService;
     }
 
     /**
@@ -46,19 +50,25 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
             throw new RoomAlreadyExistsException("Room with name '" + createRoomDto.getRoomName() + "' already exists");
         }
 
-        Integer seatingCapacityCredits = getSeatingCapacityCredits(createRoomDto.getSeatingCapacity());
+        // Use cache for seating capacity
+        SeatingCapacityCredits capacityCredits = cacheService.getSeatingCapacityCredits(createRoomDto.getSeatingCapacity());
+        if (capacityCredits == null) {
+            throw new RuntimeException("No credit mapping found for capacity: " + createRoomDto.getSeatingCapacity());
+        }
+        Integer seatingCapacityCredits = capacityCredits.getCreditCost();
 
         Set<Amenity> amenities = new HashSet<>();
         Integer amenityCredits = 0;
 
         if (createRoomDto.getAmenities() != null && !createRoomDto.getAmenities().isEmpty()) {
             for (String amenityName : createRoomDto.getAmenities()) {
-                Optional<Amenity> amenity = amenityRepository.findByAmenityName(amenityName);
-                if (amenity.isEmpty() || !amenity.get().getIsActive()) {
+
+                Amenity amenity = cacheService.getAmenityByName(amenityName);
+                if (amenity == null || !amenity.getIsActive()) {
                     throw new RuntimeException("Amenity not found or inactive: " + amenityName);
                 }
-                amenities.add(amenity.get());
-                amenityCredits += amenity.get().getCreditCost();
+                amenities.add(amenity);
+                amenityCredits += amenity.getCreditCost();
             }
         }
 
@@ -75,6 +85,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         room.setIsActive(true);
 
         MeetingRoom savedRoom = meetingRoomRepository.save(room);
+        cacheService.invalidateRoomCache(null);
         return convertToDto(savedRoom);
     }
 
@@ -99,26 +110,33 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         Integer seatingCapacityCredits;
         if (updateRoomDto.getSeatingCapacity() != null) {
             room.setSeatingCapacity(updateRoomDto.getSeatingCapacity());
-            seatingCapacityCredits = getSeatingCapacityCredits(updateRoomDto.getSeatingCapacity());
+            SeatingCapacityCredits capacityCredits = cacheService.getSeatingCapacityCredits(updateRoomDto.getSeatingCapacity());
+            if (capacityCredits == null) {
+                throw new RuntimeException("No credit mapping found for capacity: " + updateRoomDto.getSeatingCapacity());
+            }
+            seatingCapacityCredits = capacityCredits.getCreditCost();
         } else {
-            seatingCapacityCredits = getSeatingCapacityCredits(room.getSeatingCapacity());
+            SeatingCapacityCredits capacityCredits = cacheService.getSeatingCapacityCredits(room.getSeatingCapacity());
+            if (capacityCredits == null) {
+                throw new RuntimeException("No credit mapping found for capacity: " + room.getSeatingCapacity());
+            }
+            seatingCapacityCredits = capacityCredits.getCreditCost();
         }
 
         Integer perHourCost = updateRoomDto.getPerHourCost() != null ?
                 updateRoomDto.getPerHourCost() : room.getPerHourCost();
         room.setPerHourCost(perHourCost);
 
-
         Integer amenityCredits = 0;
         if (updateRoomDto.getAmenities() != null && !updateRoomDto.getAmenities().isEmpty()) {
             Set<Amenity> amenities = new HashSet<>();
             for (String amenityName : updateRoomDto.getAmenities()) {
-                Optional<Amenity> amenity = amenityRepository.findByAmenityName(amenityName);
-                if (amenity.isEmpty() || !amenity.get().getIsActive()) {
+                Amenity amenity = cacheService.getAmenityByName(amenityName);
+                if (amenity == null || !amenity.getIsActive()) {
                     throw new RuntimeException("Amenity not found or inactive: " + amenityName);
                 }
-                amenities.add(amenity.get());
-                amenityCredits += amenity.get().getCreditCost();
+                amenities.add(amenity);
+                amenityCredits += amenity.getCreditCost();
             }
             room.setAmenities(amenities);
         } else {
@@ -131,19 +149,24 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         room.setRoomCost(totalRoomCost);
 
         MeetingRoom updatedRoom = meetingRoomRepository.save(room);
+        cacheService.invalidateRoomCache(room.getRoomId());
         return convertToDto(updatedRoom);
     }
 
     @Override
     public MeetingRoomDto getRoomById(UUID roomId) {
-        MeetingRoom room = meetingRoomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("Room not found"));
+        MeetingRoom room = cacheService.getRoomById(roomId);
+        if (room == null) {
+            room = meetingRoomRepository.findById(roomId)
+                    .orElseThrow(() -> new RuntimeException("Room not found"));
+        }
         return convertToDto(room);
     }
 
     @Override
     public List<MeetingRoomDto> getAllRooms() {
-        return meetingRoomRepository.findAll().stream()
+        return cacheService.getAllRooms()
+                .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -154,16 +177,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
                 .orElseThrow(() -> new RuntimeException("Room not found"));
         room.setIsActive(false);
         meetingRoomRepository.save(room);
-    }
-
-    /**
-     * Get seating capacity credits based on capacity range
-     */
-    private Integer getSeatingCapacityCredits(Integer seatingCapacity) {
-        Optional<SeatingCapacityCredits> credits = seatingCapacityCreditsRepository
-                .findByCapacityRange(seatingCapacity);
-        return credits.map(SeatingCapacityCredits::getCreditCost)
-                .orElseThrow(() -> new RuntimeException("No credit mapping found for capacity: " + seatingCapacity));
+        cacheService.invalidateRoomCache(roomId);  // Invalidate room cache after deletion
     }
 
     /**

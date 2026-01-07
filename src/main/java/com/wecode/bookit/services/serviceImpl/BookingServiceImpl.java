@@ -14,6 +14,7 @@ import com.wecode.bookit.repository.ManagerCreditSummaryRepository;
 import com.wecode.bookit.repository.MeetingRoomRepository;
 import com.wecode.bookit.repository.UserRepository;
 import com.wecode.bookit.services.BookingService;
+import com.wecode.bookit.services.CacheService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,21 +32,24 @@ public class BookingServiceImpl implements BookingService {
     private final MeetingRoomRepository meetingRoomRepository;
     private final UserRepository userRepository;
     private final ManagerCreditSummaryRepository managerCreditSummaryRepository;
+    private final CacheService cacheService;
 
     public BookingServiceImpl(BookingRepository bookingRepository,
                             MeetingRoomRepository meetingRoomRepository,
                             UserRepository userRepository,
-                            ManagerCreditSummaryRepository managerCreditSummaryRepository) {
+                            ManagerCreditSummaryRepository managerCreditSummaryRepository,
+                            CacheService cacheService) {
         this.bookingRepository = bookingRepository;
         this.meetingRoomRepository = meetingRoomRepository;
         this.userRepository = userRepository;
         this.managerCreditSummaryRepository = managerCreditSummaryRepository;
+        this.cacheService = cacheService;
     }
 
     @Override
     public List<MeetingRoomDto> getAvailableMeetingRooms() {
-        return meetingRoomRepository.findAll().stream()
-                .filter(MeetingRoom::getIsActive)
+        return cacheService.getAllActiveRooms()
+                .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }

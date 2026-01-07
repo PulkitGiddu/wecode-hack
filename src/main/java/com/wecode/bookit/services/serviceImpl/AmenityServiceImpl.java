@@ -5,6 +5,7 @@ import com.wecode.bookit.dto.UpdateAmenityDto;
 import com.wecode.bookit.entity.Amenity;
 import com.wecode.bookit.repository.AmenityRepository;
 import com.wecode.bookit.services.AmenityService;
+import com.wecode.bookit.services.CacheService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,11 @@ import java.util.UUID;
 public class AmenityServiceImpl implements AmenityService {
 
     private final AmenityRepository amenityRepository;
+    private final CacheService cacheService;
 
-    public AmenityServiceImpl(AmenityRepository amenityRepository) {
+    public AmenityServiceImpl(AmenityRepository amenityRepository, CacheService cacheService) {
         this.amenityRepository = amenityRepository;
+        this.cacheService = cacheService;
     }
 
     @Override
@@ -31,7 +34,9 @@ public class AmenityServiceImpl implements AmenityService {
         amenity.setCreditCost(createAmenityDto.getCreditCost());
         amenity.setIsActive(true);
 
-        return amenityRepository.save(amenity);
+        Amenity saved = amenityRepository.save(amenity);
+        cacheService.invalidateAmenityCaches();
+        return saved;
     }
 
     @Override
@@ -55,7 +60,10 @@ public class AmenityServiceImpl implements AmenityService {
             amenity.setIsActive(updateAmenityDto.getIsActive());
         }
 
-        return amenityRepository.save(amenity);
+        Amenity updated = amenityRepository.save(amenity);
+        cacheService.invalidateAmenityCaches();
+        cacheService.invalidateRoomCache(null);
+        return updated;
     }
 
     @Override
@@ -66,7 +74,7 @@ public class AmenityServiceImpl implements AmenityService {
 
     @Override
     public List<Amenity> getAllAmenities() {
-        return amenityRepository.findAll();
+        return cacheService.getAllAmenities();
     }
 
     @Override
@@ -75,6 +83,8 @@ public class AmenityServiceImpl implements AmenityService {
                 .orElseThrow(() -> new RuntimeException("Amenity not found"));
         amenity.setIsActive(false);
         amenityRepository.save(amenity);
+        cacheService.invalidateAmenityCaches();
+        cacheService.invalidateRoomCache(null);
     }
 }
 

@@ -1,3 +1,35 @@
-#server:
-#  port: 8080
+server:
+  port: 8081
 
+spring:
+  application:
+    name: wecode-bookit
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name:
+
+# Scheduling Configuration
+  task:
+    scheduling:
+      pool:
+        size: 5
+      thread-name-prefix: scheduled-task-
+      shutdown:
+        await-termination: true
+        await-termination-period: 60s
+
+logging:
+  level:
+    root: INFO
+    com.wecode.bookit: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
