@@ -1,0 +1,11 @@
+# React
+react-version/node_modules
+react-version/dist
+react-version/.vite
+
+# IDE / OS
+.idea
+.DS_Store
+
+# Env
+.env
