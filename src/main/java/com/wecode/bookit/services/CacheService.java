@@ -14,12 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Cache Service for static and semi-static data
- *
- * Priority 1: Amenities & Seating Capacity (cached permanently)
- * Priority 2: Meeting Rooms (cached with 10-minute TTL)
- */
+
 @Service
 public class CacheService {
 

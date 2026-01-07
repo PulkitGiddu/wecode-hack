@@ -38,7 +38,7 @@ public class ScheduledTaskService {
     }
 
     /**
-     * Runs daily at 12:01 AM to mark completed meetings and apply penalties
+     * Runs daily at 12:01 AM to mark completed meetings and apply penalty
      */
     @Scheduled(cron = "0 1 0 * * *") // Daily at 12:01 AM
     @Transactional
@@ -134,7 +134,7 @@ public class ScheduledTaskService {
     }
 
     /**
-     * Mark specific booking as completed (can do this manually)
+     * Mark specific booking as completed (manually)
      */
     @Transactional
     public void markBookingAsCompleted(UUID bookingId) {
