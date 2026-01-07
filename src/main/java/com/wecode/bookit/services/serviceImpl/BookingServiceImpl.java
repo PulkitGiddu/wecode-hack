@@ -137,7 +137,6 @@ public class BookingServiceImpl implements BookingService {
         manager.setCredits(manager.getCredits() + booking.getTotalCredits());
         userRepository.save(manager);
 
-        // Update credit summary
         ManagerCreditSummary creditSummary = managerCreditSummaryRepository.findByUserId(booking.getUserId())
                 .orElseThrow(() -> new RuntimeException("Credit summary not found"));
         creditSummary.setTotalCredits(manager.getCredits());

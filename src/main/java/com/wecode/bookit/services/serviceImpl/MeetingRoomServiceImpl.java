@@ -7,7 +7,6 @@ import com.wecode.bookit.entity.Amenity;
 import com.wecode.bookit.entity.MeetingRoom;
 import com.wecode.bookit.entity.SeatingCapacityCredits;
 import com.wecode.bookit.exceptions.RoomAlreadyExistsException;
-import com.wecode.bookit.exceptions. RoomIdDoesNotExist;
 import com.wecode.bookit.exceptions.RoomNotFound;
 import com.wecode.bookit.repository.AmenityRepository;
 import com.wecode.bookit.repository.MeetingRoomRepository;

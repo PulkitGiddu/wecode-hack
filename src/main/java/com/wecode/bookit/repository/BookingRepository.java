@@ -22,5 +22,10 @@ public interface BookingRepository extends JpaRepository<Booking, UUID> {
 
     @Query("SELECT b FROM Booking b JOIN User u ON b.userId = u.userId WHERE u.name = :managerName AND b.meetingDate = :meetingDate")
     List<Booking> findByManagerNameAndDate(@Param("managerName") String managerName, @Param("meetingDate") LocalDate meetingDate);
-}
 
+    @Query("SELECT b FROM Booking b WHERE b.status = :status AND b.meetingDate < :date")
+    List<Booking> findByStatusAndMeetingDateBefore(@Param("status") String status, @Param("date") LocalDate date);
+
+    @Query("SELECT b FROM Booking b WHERE b.checkInStatus = 'PENDING' AND b.meetingDate < CURRENT_DATE")
+    List<Booking> findPendingCheckInsForPenalty();
+}
