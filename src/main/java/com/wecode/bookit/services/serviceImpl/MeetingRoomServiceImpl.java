@@ -14,6 +14,7 @@ import com.wecode.bookit.repository.SeatingCapacityCreditsRepository;
 import com.wecode.bookit.services.CacheService;
 import com.wecode.bookit.services.MeetingRoomService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -50,7 +51,6 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
             throw new RoomAlreadyExistsException("Room with name '" + createRoomDto.getRoomName() + "' already exists");
         }
 
-        // Use cache for seating capacity
         SeatingCapacityCredits capacityCredits = cacheService.getSeatingCapacityCredits(createRoomDto.getSeatingCapacity());
         if (capacityCredits == null) {
             throw new RuntimeException("No credit mapping found for capacity: " + createRoomDto.getSeatingCapacity());
@@ -164,6 +164,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MeetingRoomDto> getAllRooms() {
         return cacheService.getAllRooms()
                 .stream()
@@ -182,11 +183,26 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
 
     /**
      * Convert MeetingRoom entity to DTO
+     * Fetches amenities directly from database instead of lazy loading
      */
     private MeetingRoomDto convertToDto(MeetingRoom room) {
-        Set<String> amenityNames = room.getAmenities().stream()
-                .map(Amenity::getAmenityName)
-                .collect(Collectors.toSet());
+        if (room == null) {
+            return null;
+        }
+
+        // Fetch amenities directly from database instead of lazy loading
+        Set<String> amenityNames = new HashSet<>();
+        try {
+            List<Amenity> amenities = amenityRepository.findByRoomId(room.getRoomId());
+            if (amenities != null && !amenities.isEmpty()) {
+                amenityNames = amenities.stream()
+                        .map(Amenity::getAmenityName)
+                        .collect(Collectors.toSet());
+            }
+        } catch (Exception e) {
+            System.err.println("Warning: Could not load amenities for room: " + room.getRoomId());
+            amenityNames = new HashSet<>();
+        }
 
         return MeetingRoomDto.builder()
                 .roomId(room.getRoomId())

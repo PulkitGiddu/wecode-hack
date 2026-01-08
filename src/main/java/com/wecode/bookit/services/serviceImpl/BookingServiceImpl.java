@@ -5,10 +5,8 @@ import com.wecode.bookit.dto.BookingResponseDto;
 import com.wecode.bookit.dto.CheckInResponseDto;
 import com.wecode.bookit.dto.TodayBookingsDto;
 import com.wecode.bookit.dto.MeetingRoomDto;
-import com.wecode.bookit.entity.Booking;
-import com.wecode.bookit.entity.MeetingRoom;
-import com.wecode.bookit.entity.ManagerCreditSummary;
-import com.wecode.bookit.entity.User;
+import com.wecode.bookit.entity.*;
+import com.wecode.bookit.repository.AmenityRepository;
 import com.wecode.bookit.repository.BookingRepository;
 import com.wecode.bookit.repository.ManagerCreditSummaryRepository;
 import com.wecode.bookit.repository.MeetingRoomRepository;
@@ -16,10 +14,13 @@ import com.wecode.bookit.repository.UserRepository;
 import com.wecode.bookit.services.BookingService;
 import com.wecode.bookit.services.CacheService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -33,20 +34,24 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ManagerCreditSummaryRepository managerCreditSummaryRepository;
     private final CacheService cacheService;
+    private final AmenityRepository amenityRepository;
 
     public BookingServiceImpl(BookingRepository bookingRepository,
                             MeetingRoomRepository meetingRoomRepository,
                             UserRepository userRepository,
                             ManagerCreditSummaryRepository managerCreditSummaryRepository,
-                            CacheService cacheService) {
+                            CacheService cacheService,
+                            AmenityRepository amenityRepository) {
         this.bookingRepository = bookingRepository;
         this.meetingRoomRepository = meetingRoomRepository;
         this.userRepository = userRepository;
         this.managerCreditSummaryRepository = managerCreditSummaryRepository;
         this.cacheService = cacheService;
+        this.amenityRepository = amenityRepository;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MeetingRoomDto> getAvailableMeetingRooms() {
         return cacheService.getAllActiveRooms()
                 .stream()
@@ -195,7 +200,6 @@ public class BookingServiceImpl implements BookingService {
 
     /**
      * Apply penalty for no-show (when end time has passed without check-in)
-     * This should be called by a scheduled task for past bookings
      */
     public void applyNoShowPenalty(UUID bookingId) {
         Booking booking = bookingRepository.findByBookingId(bookingId)
@@ -233,17 +237,33 @@ public class BookingServiceImpl implements BookingService {
 
     /**
      * Convert MeetingRoom entity to DTO
+     * Fetches amenities directly from database instead of lazy loading
      */
     private MeetingRoomDto convertToDto(MeetingRoom room) {
+        if (room == null) {
+            return null;
+        }
+
+        Set<String> amenityNames = new HashSet<>();
+        try {
+            List<Amenity> amenities = amenityRepository.findByRoomId(room.getRoomId());
+            if (amenities != null && !amenities.isEmpty()) {
+                amenityNames = amenities.stream()
+                        .map(Amenity::getAmenityName)
+                        .collect(Collectors.toSet());
+            }
+        } catch (Exception e) {
+            System.err.println("Warning: Could not load amenities for room: " + room.getRoomId());
+            amenityNames = new HashSet<>();
+        }
+
         return MeetingRoomDto.builder()
                 .roomId(room.getRoomId())
                 .roomName(room.getRoomName())
                 .roomType(room.getRoomType())
                 .seatingCapacity(room.getSeatingCapacity())
                 .perHourCost(room.getPerHourCost())
-                .amenities(room.getAmenities().stream()
-                        .map(amenity -> amenity.getAmenityName())
-                        .collect(Collectors.toSet()))
+                .amenities(amenityNames)
                 .roomCost(room.getRoomCost())
                 .isActive(room.getIsActive())
                 .build();

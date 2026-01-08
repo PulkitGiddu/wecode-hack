@@ -139,3 +139,41 @@ INSERT INTO seating_capacity_credits VALUES
 (0, 5, 0),
 (6, 10, 10),
 (11, 1000, 20);
+
+-- Pessimistic Locking
+-- Handles concurrent booking requests with first-come-first-serve approach
+CREATE TABLE booking_locks (
+    lock_id UUID PRIMARY KEY,
+    room_id UUID NOT NULL,
+    user_id UUID NOT NULL,
+    meeting_date DATE NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+    locked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE'
+        CHECK (status IN ('ACTIVE', 'RELEASED', 'EXPIRED')),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_lock_room FOREIGN KEY (room_id)
+        REFERENCES meeting_rooms(room_id),
+    CONSTRAINT fk_lock_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id),
+    CONSTRAINT chk_lock_time CHECK (end_time > start_time)
+);
+
+-- Indexes for faster lookups
+CREATE INDEX idx_lock_room_date_time
+    ON booking_locks(room_id, meeting_date, start_time, end_time, status);
+
+CREATE INDEX idx_lock_user_active
+    ON booking_locks(user_id, status)
+    WHERE status = 'ACTIVE';
+
+CREATE INDEX idx_lock_expires_at
+    ON booking_locks(expires_at)
+    WHERE status = 'ACTIVE';
+
+CREATE INDEX idx_lock_status
+    ON booking_locks(status);
+
