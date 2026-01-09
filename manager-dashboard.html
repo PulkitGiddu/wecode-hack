@@ -1507,7 +1507,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./js/api.js"></script>
+    <script src="./api.js"></script>
     <script>
         // Initialize Feather Icons
         feather.replace();
@@ -1687,8 +1687,7 @@
                 const profile = await getManagerProfile();
                 
                 console.log('✅ Profile received:', profile);
-                console.log('📊 Available Credits:', profile.availableCredits);
-                console.log('👤 Manager Name:', profile.name);
+                console.log('� Manager Name:', profile.name);
                 console.log('📧 Email:', profile.email);
                 console.log('🎭 Role:', profile.role);
                 
@@ -1698,6 +1697,67 @@
                     subtitle.textContent = `Welcome back, ${profile.name}. Here's an overview of your team's bookings and stats today.`;
                     console.log('✅ Updated subtitle with name:', profile.name);
                 }
+                
+                // Load credit summary
+                console.log('📡 Calling getManagerCreditSummary()...');
+                const creditSummary = await getManagerCreditSummary();
+                
+                console.log('✅ Credit Summary received:', creditSummary);
+                console.log('💰 Total Credits:', creditSummary.totalCredits);
+                console.log('📊 Credits Used:', creditSummary.creditsUsed);
+                console.log('✨ Credits Remaining:', creditSummary.creditsRemaining);
+                console.log('⚠️ Penalty:', creditSummary.penalty);
+                
+                // Update credits data and UI
+                creditsData.total = creditSummary.totalCredits || 2000;
+                creditsData.used = creditSummary.creditsUsed || 0;
+                creditsData.remaining = creditSummary.creditsRemaining || (creditsData.total - creditsData.used);
+                
+                // Update credits display
+                const creditsRemainingElement = document.getElementById('creditsRemaining');
+                if (creditsRemainingElement) {
+                    creditsRemainingElement.textContent = creditsData.remaining;
+                }
+                
+                const creditsUsedElement = document.getElementById('creditsUsed');
+                if (creditsUsedElement) {
+                    creditsUsedElement.textContent = creditsData.used;
+                }
+                
+                const totalCreditsElement = document.getElementById('totalCredits');
+                if (totalCreditsElement) {
+                    totalCreditsElement.textContent = creditsData.total;
+                }
+                
+                // Update penalty if displayed
+                const penaltyElement = document.getElementById('penalty');
+                if (penaltyElement) {
+                    penaltyElement.textContent = creditSummary.penalty || 0;
+                }
+                
+                // Update progress bar
+                const progressBar = document.getElementById('creditProgressBar');
+                const progressText = document.getElementById('progressText');
+                if (progressBar && progressText) {
+                    const percentage = (creditsData.remaining / creditsData.total) * 100;
+                    progressBar.style.width = percentage + '%';
+                    progressText.textContent = Math.round(percentage) + '%';
+                    
+                    // Update progress bar color based on percentage
+                    if (percentage < 20) {
+                        progressBar.classList.add('bg-danger');
+                        progressBar.classList.remove('bg-warning', 'bg-success');
+                    } else if (percentage < 50) {
+                        progressBar.classList.add('bg-warning');
+                        progressBar.classList.remove('bg-danger', 'bg-success');
+                    } else {
+                        progressBar.classList.add('bg-success');
+                        progressBar.classList.remove('bg-danger', 'bg-warning');
+                    }
+                }
+                
+                console.log('✅ Manager profile and credits loaded successfully');
+                
                 
                 // Update user avatar with initials
                 const avatar = document.querySelector('.user-avatar');
@@ -1809,14 +1869,24 @@
 
         // Load all rooms
         async function loadAllRooms() {
+            console.log('🏢 Loading all rooms for manager dashboard...');
             const roomsGrid = document.getElementById('roomsGrid');
             roomsGrid.innerHTML = '<div class="loading-message">Loading rooms...</div>';
 
             try {
+                console.log('📞 Calling getAllRooms()...');
                 const rooms = await getAllRooms();
+                console.log('📦 Rooms received:', rooms);
+                console.log('📊 Number of rooms:', rooms ? rooms.length : 0);
+                
+                if (!rooms || rooms.length === 0) {
+                    console.warn('⚠️ No rooms returned from API');
+                }
+                
                 displayRooms(rooms);
             } catch (error) {
-                console.error('Error loading rooms:', error);
+                console.error('❌ Error loading rooms:', error);
+                console.error('Error details:', error.message, error.stack);
                 roomsGrid.innerHTML = '<div class="loading-message">Error loading rooms. Please try again later.</div>';
             }
         }

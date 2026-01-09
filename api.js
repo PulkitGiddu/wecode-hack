@@ -23,7 +23,14 @@ const API_ENDPOINTS = {
         DELETE_AMENITY: '/admin/amenities/{amenityId}'
     },
     MANAGER: {
-        GET_PROFILE: '/manager/profile'
+        GET_PROFILE: '/auth/manager/profile',
+        VIEW_AVAILABLE_MEETINGS: '/auth/manager/viewAvailableMeetingRoom',
+        BOOK_ROOM: '/auth/manager/bookRoom',
+        GET_MY_BOOKINGS: '/auth/manager/myBookings',
+        CANCEL_BOOKING: '/auth/manager/booking/{bookingId}',
+        GET_TODAY_BOOKING: '/auth/manager/check-in/today-bookings',
+        GET_CREDIT_SUMMARY: '/auth/manager/credit-summary',
+        GET_ALL_ROOMS: '/auth/manager/viewAvailableMeetingRoom'
     },
     MEMBER: {
         GET_MANAGER_MEETINGS: '/member/manager-meetings'
@@ -52,6 +59,13 @@ async function apiCall(endpoint, options = {}) {
     const token = localStorage.getItem('userToken');
     if (token) {
         defaultOptions.headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    // Add userId to query params for manager endpoints if available
+    const userId = localStorage.getItem('userId');
+    if (userId && endpoint.includes('/auth/manager/')) {
+        const separator = endpoint.includes('?') ? '&' : '?';
+        endpoint = `${endpoint}${separator}userId=${userId}`;
     }
 
     const config = { ...defaultOptions, ...options };
@@ -175,6 +189,49 @@ const ManagerAPI = {
     getProfile: async () => {
         const url = buildUrl(API_ENDPOINTS.MANAGER.GET_PROFILE);
         return await apiCall(url);
+    },
+    
+    getCreditSummary: async () => {
+        const url = buildUrl(API_ENDPOINTS.MANAGER.GET_CREDIT_SUMMARY);
+        return await apiCall(url);
+    },
+    
+    viewAvailableMeetings: async () => {
+        const url = buildUrl(API_ENDPOINTS.MANAGER.VIEW_AVAILABLE_MEETINGS);
+        return await apiCall(url);
+    },
+    
+    bookRoom: async (bookingData) => {
+        const url = buildUrl(API_ENDPOINTS.MANAGER.BOOK_ROOM);
+        return await apiCall(url, {
+            method: 'POST',
+            body: JSON.stringify(bookingData)
+        });
+    },
+    
+    getMyBookings: async () => {
+        const url = buildUrl(API_ENDPOINTS.MANAGER.GET_MY_BOOKINGS);
+        return await apiCall(url);
+    },
+    
+    cancelBooking: async (bookingId) => {
+        const url = buildUrl(API_ENDPOINTS.MANAGER.CANCEL_BOOKING, { bookingId });
+        return await apiCall(url, { method: 'DELETE' });
+    },
+    
+    getTodayBookings: async (date) => {
+        // If no date provided, use today's date
+        if (!date) {
+            date = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        }
+        const url = buildUrl(API_ENDPOINTS.MANAGER.GET_TODAY_BOOKING);
+        const fullUrl = `${url}&date=${date}`;
+        return await apiCall(fullUrl);
+    },
+    
+    getAllRooms: async () => {
+        const url = buildUrl(API_ENDPOINTS.MANAGER.GET_ALL_ROOMS);
+        return await apiCall(url);
     }
 };
 
@@ -207,7 +264,37 @@ const API = {
 // ============================================
 
 async function getAllRooms() {
+    console.log('🔄 getAllRooms() called');
+    
+    // Try to get user role from localStorage
+    const userRole = localStorage.getItem('userRole');
+    const userId = localStorage.getItem('userId');
+    
+    console.log('👤 User Role:', userRole);
+    console.log('🆔 User ID:', userId);
+    
+    // If user is a manager, use manager endpoint
+    if (userRole === 'MANAGER') {
+        console.log('📡 Fetching rooms from Manager API...');
+        const result = await ManagerAPI.getAllRooms();
+        console.log('✅ Manager API result:', result);
+        
+        if (!result.success) {
+            console.error('❌ Manager API failed:', result.error);
+        }
+        
+        return result.success ? result.data : [];
+    }
+    
+    // Otherwise use admin endpoint
+    console.log('📡 Fetching rooms from Admin API...');
     const result = await AdminRoomAPI.getAll();
+    console.log('✅ Admin API result:', result);
+    
+    if (!result.success) {
+        console.error('❌ Admin API failed:', result.error);
+    }
+    
     return result.success ? result.data : [];
 }
 
@@ -267,16 +354,52 @@ async function deleteAmenity(amenityId) {
 async function getManagerProfile() {
     const result = await ManagerAPI.getProfile();
     if (!result.success) {
-        // Fallback to dummy data
+        console.error('Failed to load manager profile:', result.error);
+        throw new Error(result.error || 'Failed to load profile');
+    }
+    return result.data;
+}
+
+async function getManagerCreditSummary() {
+    const result = await ManagerAPI.getCreditSummary();
+    if (!result.success) {
+        console.error('Failed to load credit summary:', result.error);
+        // Return default values if API fails
         return {
-            availableCredits: 10,
-            role: 'MANAGER',
-            name: 'John Doe',
-            userId: '123e4567-e89b-12d3-a456-426614174000',
-            email: 'manager@example.com'
+            totalCredits: 2000,
+            creditsUsed: 0,
+            creditsRemaining: 2000,
+            penalty: 0
         };
     }
     return result.data;
+}
+
+async function viewAvailableMeetings() {
+    const result = await ManagerAPI.viewAvailableMeetings();
+    return result.success ? result.data : [];
+}
+
+async function bookRoom(bookingData) {
+    const result = await ManagerAPI.bookRoom(bookingData);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
+}
+
+async function getMyBookings() {
+    const result = await ManagerAPI.getMyBookings();
+    return result.success ? result.data : [];
+}
+
+async function cancelBooking(bookingId) {
+    const result = await ManagerAPI.cancelBooking(bookingId);
+    if (!result.success) throw new Error(result.error);
+    return result.data;
+}
+
+async function getTodayBookings() {
+    const result = await ManagerAPI.getTodayBookings();
+    return result.success ? result.data : [];
 }
 
 // ============================================
