@@ -389,6 +389,48 @@
             border-color: rgba(217, 119, 6, 0.2);
         }
 
+        .check-in-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            border: 1px solid;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+            border-color: rgba(59, 130, 246, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .check-in-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .check-in-btn.checking-in {
+            background: rgba(251, 191, 36, 0.15);
+            color: #F59E0B;
+            border-color: rgba(245, 158, 11, 0.3);
+            pointer-events: none;
+        }
+
+        .check-in-btn.checked-in {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10B981;
+            border-color: rgba(16, 185, 129, 0.3);
+            pointer-events: none;
+        }
+
+        .check-in-btn i {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
         .view-all-btn {
             display: block;
             text-align: right;
@@ -1226,7 +1268,10 @@
                         <div class="meeting-time">9:30 AM - 10:30 AM</div>
                         <div class="meeting-room">Room 204</div>
                     </div>
-                    <span class="meeting-status status-done">✓ Checking</span>
+                    <button class="check-in-btn" onclick="handleCheckIn(this, 'meeting-1')" data-status="scheduled">
+                        <i data-feather="log-in" width="14" height="14"></i>
+                        Check In
+                    </button>
                 </div>
 
                 <div class="meeting-item">
@@ -1274,24 +1319,24 @@
                 </h3>
                 <div class="linear-progress-container">
                     <div class="progress-stats">
-                        <div class="credits-remaining" id="creditsRemaining">10</div>
-                        <div class="credits-total">of 90 credits</div>
+                        <div class="credits-remaining" id="creditsRemaining">2000</div>
+                        <div class="credits-total">of <span id="totalCreditsDisplay">2000</span> credits</div>
                     </div>
                     <div class="progress-bar-wrapper">
                         <div class="progress-bar-fill" id="creditProgressBar" style="width: 0%"></div>
-                        <div class="progress-bar-text" id="progressText">11%</div>
+                        <div class="progress-bar-text" id="progressText">100%</div>
                     </div>
                     <div class="credits-breakdown">
                         <div class="breakdown-item">
-                            <div class="breakdown-value" style="color: #10B981;">10</div>
+                            <div class="breakdown-value" id="creditsAvailable" style="color: #10B981;">2000</div>
                             <div class="breakdown-label">Available</div>
                         </div>
                         <div class="breakdown-item">
-                            <div class="breakdown-value" style="color: #EF4444;">80</div>
+                            <div class="breakdown-value" id="creditsUsed" style="color: #EF4444;">0</div>
                             <div class="breakdown-label">Used</div>
                         </div>
                         <div class="breakdown-item">
-                            <div class="breakdown-value" style="color: #6B7280;">90</div>
+                            <div class="breakdown-value" id="totalCredits" style="color: #6B7280;">2000</div>
                             <div class="breakdown-label">Total</div>
                         </div>
                     </div>
@@ -1514,30 +1559,78 @@
 
         // Credits data
         const creditsData = {
-            total: 90,
-            used: 80,
-            remaining: 10
+            total: 2000,
+            used: 0,
+            remaining: 2000
         };
 
         // Animate linear progress bar on load
         window.addEventListener('load', function() {
-            const progressBar = document.getElementById('creditProgressBar');
-            const progressText = document.getElementById('progressText');
-            
-            if (progressBar) {
-                setTimeout(() => {
-                    const percentage = (creditsData.remaining / creditsData.total) * 100;
-                    progressBar.style.width = percentage + '%';
-                    progressText.textContent = Math.round(percentage) + '%';
-                }, 200);
-            }
-
             // Initialize Time Spend Chart
             initTimeSpendChart();
         });
 
         // Time Spend Chart
         let timeSpendChart;
+
+        // Function to update all credit displays
+        function updateCreditDisplay() {
+            console.log('🔄 Updating credit display...');
+            console.log('Credits Data:', creditsData);
+            
+            // Update main credit number
+            const creditsRemainingElement = document.getElementById('creditsRemaining');
+            if (creditsRemainingElement) {
+                creditsRemainingElement.textContent = creditsData.remaining;
+            }
+            
+            // Update breakdown - Available
+            const creditsAvailableElement = document.getElementById('creditsAvailable');
+            if (creditsAvailableElement) {
+                creditsAvailableElement.textContent = creditsData.remaining;
+            }
+            
+            // Update breakdown - Used
+            const creditsUsedElement = document.getElementById('creditsUsed');
+            if (creditsUsedElement) {
+                creditsUsedElement.textContent = creditsData.used;
+            }
+            
+            // Update breakdown - Total
+            const totalCreditsElement = document.getElementById('totalCredits');
+            if (totalCreditsElement) {
+                totalCreditsElement.textContent = creditsData.total;
+            }
+            
+            // Update "of X credits" display
+            const totalCreditsDisplayElement = document.getElementById('totalCreditsDisplay');
+            if (totalCreditsDisplayElement) {
+                totalCreditsDisplayElement.textContent = creditsData.total;
+            }
+            
+            // Update progress bar
+            const progressBar = document.getElementById('creditProgressBar');
+            const progressText = document.getElementById('progressText');
+            if (progressBar && progressText) {
+                const percentage = creditsData.total > 0 ? (creditsData.remaining / creditsData.total) * 100 : 0;
+                
+                setTimeout(() => {
+                    progressBar.style.width = Math.max(0, percentage) + '%';
+                    progressText.textContent = Math.round(Math.max(0, percentage)) + '%';
+                    
+                    // Update progress bar color based on percentage
+                    if (percentage < 20) {
+                        progressBar.style.background = '#EF4444';
+                    } else if (percentage < 50) {
+                        progressBar.style.background = '#F59E0B';
+                    } else {
+                        progressBar.style.background = 'linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%)';
+                    }
+                }, 200);
+            }
+            
+            console.log('✅ Credit display updated');
+        }
 
         const chartData = {
             week: {
@@ -1677,6 +1770,33 @@
             timeSpendChart.update('active');
         }
 
+        // Check-in button handler
+        function handleCheckIn(button, meetingId) {
+            console.log('🔔 Check-in clicked for meeting:', meetingId);
+            
+            // Change to "Checking In..." state
+            button.classList.add('checking-in');
+            button.innerHTML = '<i data-feather="clock" width="14" height="14"></i> Checking In...';
+            feather.replace();
+            
+            // Simulate API call (replace with actual API call)
+            setTimeout(() => {
+                // Change to "Checked In" state
+                button.classList.remove('checking-in');
+                button.classList.add('checked-in');
+                button.innerHTML = '<i data-feather="check" width="14" height="14"></i> Checked In';
+                feather.replace();
+                
+                console.log('✅ Check-in successful for meeting:', meetingId);
+            }, 1500);
+            
+            // TODO: Make actual API call to check-in endpoint
+            // const userId = localStorage.getItem('userId');
+            // const response = await fetch(`/api/auth/manager/check-in/${meetingId}?userId=${userId}`, {
+            //     method: 'POST'
+            // });
+        }
+
         // Load Manager Profile
         async function loadManagerProfile() {
             console.log('🔄 Starting to load manager profile...');
@@ -1711,49 +1831,19 @@
                 // Update credits data and UI
                 creditsData.total = creditSummary.totalCredits || 2000;
                 creditsData.used = creditSummary.creditsUsed || 0;
-                creditsData.remaining = creditSummary.creditsRemaining || (creditsData.total - creditsData.used);
+                creditsData.remaining = (creditsData.total - creditsData.used - (creditSummary.penalty || 0));
                 
-                // Update credits display
-                const creditsRemainingElement = document.getElementById('creditsRemaining');
-                if (creditsRemainingElement) {
-                    creditsRemainingElement.textContent = creditsData.remaining;
-                }
+                // Ensure no negative values
+                if (creditsData.remaining < 0) creditsData.remaining = 0;
+                if (creditsData.used < 0) creditsData.used = 0;
                 
-                const creditsUsedElement = document.getElementById('creditsUsed');
-                if (creditsUsedElement) {
-                    creditsUsedElement.textContent = creditsData.used;
-                }
-                
-                const totalCreditsElement = document.getElementById('totalCredits');
-                if (totalCreditsElement) {
-                    totalCreditsElement.textContent = creditsData.total;
-                }
+                // Update all credit displays
+                updateCreditDisplay();
                 
                 // Update penalty if displayed
                 const penaltyElement = document.getElementById('penalty');
                 if (penaltyElement) {
                     penaltyElement.textContent = creditSummary.penalty || 0;
-                }
-                
-                // Update progress bar
-                const progressBar = document.getElementById('creditProgressBar');
-                const progressText = document.getElementById('progressText');
-                if (progressBar && progressText) {
-                    const percentage = (creditsData.remaining / creditsData.total) * 100;
-                    progressBar.style.width = percentage + '%';
-                    progressText.textContent = Math.round(percentage) + '%';
-                    
-                    // Update progress bar color based on percentage
-                    if (percentage < 20) {
-                        progressBar.classList.add('bg-danger');
-                        progressBar.classList.remove('bg-warning', 'bg-success');
-                    } else if (percentage < 50) {
-                        progressBar.classList.add('bg-warning');
-                        progressBar.classList.remove('bg-danger', 'bg-success');
-                    } else {
-                        progressBar.classList.add('bg-success');
-                        progressBar.classList.remove('bg-danger', 'bg-warning');
-                    }
                 }
                 
                 console.log('✅ Manager profile and credits loaded successfully');
