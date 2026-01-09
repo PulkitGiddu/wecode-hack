@@ -127,16 +127,19 @@
                     const data = await res.json();
                     console.log('Backend response:', data);
                     
-                    // Store user data in localStorage
-                    localStorage.setItem('userToken', data.token || '');
+                    // Store user data in localStorage - no validation, just store what we get
+                    localStorage.setItem('userToken', data.token || data.accessToken || data.jwt || 'dummy-token');
                     localStorage.setItem('userName', data.name || data.username || email.split('@')[0]);
                     localStorage.setItem('userEmail', data.email || email);
-                    localStorage.setItem('userRole', data.role || data.userRole || 'MEMBER');
+                    localStorage.setItem('userRole', (data.role || data.userRole || 'MEMBER').toUpperCase());
                     localStorage.setItem('userId', data.userId || data.id || '');
                     
+                    console.log('✅ Login successful!');
+                    console.log('Redirecting to dashboard...');
+                    
                     // Redirect based on user role from response
-                    const role = data.role || data.userRole;
-                    switch(role?.toUpperCase()) {
+                    const userRole = (data.role || data.userRole || 'MEMBER').toUpperCase();
+                    switch(userRole) {
                         case 'ADMIN':
                             window.location.href = 'admindashboard.html';
                             break;
