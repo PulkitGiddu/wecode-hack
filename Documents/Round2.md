@@ -11,20 +11,21 @@
   DONE ✅
 
 - **Security & Authentication**  
-  Setup JWT (JSON Web Tokens) for authentication and secure endpoints using `@PreAuthorize` rules for role-based access control.
+  Setup JWT (JSON Web Tokens) for authentication and secure endpoints using `@PreAuthorize` rules for role-based access control. 
+  DONE ✅
 
 - **Database Integrity & Concurrency Control**  
   Implement database transactions and concurrency control mechanisms to prevent race conditions during simultaneous booking attempts.  
-  (Refer: Image 1.2 – Booking Concurrency Flow)
+  DONE ✅
 
 - **Infrastructure Connectivity**  
   Establish seamless connectivity between:
-  - Frontend ↔ Backend  
-  - Backend ↔ Database  
+  - Frontend ↔ Backend  ✅
+  - Backend ↔ Database  ✅
 
-- **5-Minute Reservation Timer**  
-  Utilize a Redis cache to store temporary **Reservation Keys** with a **300-second TTL (Time-To-Live)**.  
-  This ensures a room is locked temporarily while a manager completes the booking process.
+- **5-Minute Locking Mechanism**  
+  Implement Pessimistic Locking for Concurrent Access to book meeting rooms. 
+  DONE ✅
 
 - **“Ghosting” Penalty Mechanism**  
   Implement logic to deduct **50 extra credits** as a penalty if a manager fails to **check-in** after successfully booking a room.
