@@ -908,22 +908,37 @@
         // Load Amenities
         async function loadAmenities() {
             try {
-                console.log('Starting to load amenities...');
+                console.log('🔄 Starting to load amenities...');
                 // Fetch amenities from API
                 const amenities = await getAllAmenities();
-                console.log('Received amenities from API:', amenities);
-                console.log('Type:', typeof amenities, 'Is Array:', Array.isArray(amenities));
+                
+                console.log('✅ Received amenities from API:', amenities);
+                console.log('📊 Total amenities count:', amenities ? amenities.length : 0);
+                console.log('📦 Type:', typeof amenities, 'Is Array:', Array.isArray(amenities));
                 
                 if (amenities && amenities.length > 0) {
-                    console.log('First amenity:', amenities[0]);
+                    console.log('');
+                    console.log('🎯 AMENITIES DATA STRUCTURE - FOR BOOKING MAPPING:');
+                    console.log('================================================');
+                    amenities.forEach((amenity, index) => {
+                        console.log(`\nAmenity #${index + 1}:`);
+                        console.log('  - amenityId:', amenity.amenityId);
+                        console.log('  - amenityName:', amenity.amenityName);
+                        console.log('  - creditCost:', amenity.creditCost);
+                        console.log('  - description:', amenity.description);
+                        console.log('  Full object:', JSON.stringify(amenity, null, 2));
+                    });
+                    console.log('================================================');
+                    console.log('');
+                    
                     displayAmenities(amenities);
                 } else {
-                    console.log('No amenities from API, using dummy data');
+                    console.log('⚠️ No amenities from API, using dummy data');
                     displayAmenities(getDummyAmenities());
                 }
             } catch (error) {
-                console.error('Error loading amenities:', error);
-                console.log('Falling back to dummy data');
+                console.error('❌ Error loading amenities:', error);
+                console.log('🔄 Falling back to dummy data');
                 // Use dummy data on error
                 displayAmenities(getDummyAmenities());
             }
