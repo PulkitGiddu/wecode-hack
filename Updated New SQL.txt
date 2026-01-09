@@ -1,0 +1,179 @@
+CREATE TABLE USERS (
+    user_id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'MANAGER', 'MEMBER')),
+    credits INTEGER DEFAULT 0 CHECK (credits >= 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE meeting_rooms (
+   room_id UUID PRIMARY KEY,
+   room_name VARCHAR(100) UNIQUE NOT NULL,
+   room_type VARCHAR(100) NOT NULL,
+   seating_capacity INTEGER NOT NULL CHECK (seating_capacity > 0),
+   per_hour_cost INTEGER NOT NULL DEFAULT 0 CHECK (per_hour_cost >= 0),
+   room_cost INTEGER NOT NULL DEFAULT 0 CHECK (room_cost >= 0),
+   is_active BOOLEAN DEFAULT TRUE,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE bookings (
+   booking_id UUID PRIMARY KEY,
+   room_id UUID NOT NULL,
+   user_id UUID NOT NULL,
+   meeting_title VARCHAR(200) NOT NULL,
+   meeting_date DATE NOT NULL,
+   meeting_type VARCHAR(50) NOT NULL,
+   room_name VARCHAR(100) NOT NULL,
+   start_time TIMESTAMP NOT NULL,
+   end_time TIMESTAMP NOT NULL,
+   total_credits INTEGER NOT NULL CHECK (total_credits >= 0),
+   check_in_status VARCHAR(20) DEFAULT 'PENDING' CHECK (check_in_status IN ('PENDING', 'CHECKED_IN', 'NO_SHOW')),
+   penalty_applied BOOLEAN DEFAULT FALSE,
+   penalty_amount INTEGER DEFAULT 0 CHECK (penalty_amount >= 0),
+   status VARCHAR(20) DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'CANCELLED')),
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   cancelled_at TIMESTAMP,
+   CONSTRAINT fk_booking_room FOREIGN KEY (room_id) REFERENCES meeting_rooms(room_id),
+   CONSTRAINT fk_booking_user FOREIGN KEY (user_id) REFERENCES users(user_id),
+   CONSTRAINT chk_booking_time CHECK (end_time > start_time)
+);
+
+CREATE TABLE credit_transactions (
+   transaction_id UUID PRIMARY KEY,
+   user_id UUID NOT NULL,
+   booking_id UUID,
+   amount INTEGER NOT NULL,
+   transaction_type VARCHAR(20) NOT NULL
+       CHECK (transaction_type IN ('BOOKING', 'REFUND', 'RESET')),
+   description VARCHAR(255),
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   CONSTRAINT fk_transaction_user
+       FOREIGN KEY (user_id)
+       REFERENCES users(user_id),
+   CONSTRAINT fk_transaction_booking
+       FOREIGN KEY (booking_id)
+       REFERENCES bookings(booking_id)
+);
+
+CREATE TABLE room_schedule (
+   schedule_id UUID PRIMARY KEY,
+   booking_id UUID UNIQUE NOT NULL,
+   room_id UUID NOT NULL,
+   booked_by UUID NOT NULL,
+   room_name VARCHAR(100) NOT NULL,
+   meeting_title VARCHAR(200),
+   meeting_type VARCHAR(20),
+   start_time TIMESTAMP NOT NULL,
+   end_time TIMESTAMP NOT NULL,
+   status VARCHAR(20)
+       CHECK (status IN ('ACTIVE', 'CANCELLED')),
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   CONSTRAINT fk_schedule_booking
+       FOREIGN KEY (booking_id)
+       REFERENCES bookings(booking_id),
+   CONSTRAINT fk_schedule_room
+       FOREIGN KEY (room_id)
+       REFERENCES meeting_rooms(room_id),
+   CONSTRAINT fk_schedule_user
+       FOREIGN KEY (booked_by)
+       REFERENCES users(user_id)
+);
+
+CREATE TABLE manager_credit_summary (
+   user_id UUID PRIMARY KEY,
+   manager_name VARCHAR(100) NOT NULL,
+   email VARCHAR(255) NOT NULL,
+   total_credits INTEGER NOT NULL DEFAULT 2000,
+   credits_used INTEGER NOT NULL DEFAULT 0,
+   penalty INTEGER NOT NULL DEFAULT 0,
+   last_reset_at TIMESTAMP,
+   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   CONSTRAINT fk_manager_summary_user
+       FOREIGN KEY (user_id)
+       REFERENCES users(user_id)
+);
+
+CREATE TABLE IF NOT EXISTS amenities (
+    amenity_id UUID PRIMARY KEY,
+    amenity_name VARCHAR(50) UNIQUE NOT NULL,
+    credit_cost INT NOT NULL,
+    is_active BOOLEAN DEFAULT true
+);
+
+
+CREATE TABLE IF NOT EXISTS room_amenities (
+    room_id UUID NOT NULL,
+    amenity_id UUID NOT NULL,
+    PRIMARY KEY (room_id, amenity_id),
+    FOREIGN KEY (room_id) REFERENCES meeting_rooms(room_id) ON DELETE CASCADE,
+    FOREIGN KEY (amenity_id) REFERENCES amenities(amenity_id) ON DELETE CASCADE
+);
+
+
+CREATE INDEX IF NOT EXISTS idx_room_amenities_amenity_id ON room_amenities(amenity_id);
+
+INSERT INTO amenities (amenity_name, credit_cost) VALUES
+('PROJECTOR', 5),
+('WIFI', 10),
+('CONFERENCE_CALL', 15),
+('WHITEBOARD', 5),
+('WATER_DISPENSER', 5),
+('TV', 10),
+('COFFEE_MACHINE', 10);
+
+CREATE TABLE seating_capacity_credits (
+   min_capacity INTEGER NOT NULL,
+   max_capacity INTEGER NOT NULL,
+   credit_cost INTEGER NOT NULL,
+   CONSTRAINT pk_seating_capacity PRIMARY KEY (min_capacity, max_capacity)
+);
+
+INSERT INTO seating_capacity_credits VALUES
+(0, 5, 0),
+(6, 10, 10),
+(11, 1000, 20);
+
+-- Pessimistic Locking
+-- Handles concurrent booking requests with first-come-first-serve approach
+CREATE TABLE booking_locks (
+    lock_id UUID PRIMARY KEY,
+    room_id UUID NOT NULL,
+    user_id UUID NOT NULL,
+    meeting_date DATE NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+    locked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE'
+        CHECK (status IN ('ACTIVE', 'RELEASED', 'EXPIRED')),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_lock_room FOREIGN KEY (room_id)
+        REFERENCES meeting_rooms(room_id),
+    CONSTRAINT fk_lock_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id),
+    CONSTRAINT chk_lock_time CHECK (end_time > start_time)
+);
+
+-- Indexes for faster lookups
+CREATE INDEX idx_lock_room_date_time
+    ON booking_locks(room_id, meeting_date, start_time, end_time, status);
+
+CREATE INDEX idx_lock_user_active
+    ON booking_locks(user_id, status)
+    WHERE status = 'ACTIVE';
+
+CREATE INDEX idx_lock_expires_at
+    ON booking_locks(expires_at)
+    WHERE status = 'ACTIVE';
+
+CREATE INDEX idx_lock_status
+    ON booking_locks(status);
+
