@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,4 +29,19 @@ public interface BookingRepository extends JpaRepository<Booking, UUID> {
 
     @Query("SELECT b FROM Booking b WHERE b.checkInStatus = 'PENDING' AND b.meetingDate < CURRENT_DATE")
     List<Booking> findPendingCheckInsForPenalty();
+
+    /**
+     * Find bookings that conflict with the requested time slot make sure to avoid double booking
+     */
+    @Query("SELECT b FROM Booking b WHERE b.roomId = :roomId " +
+            "AND b.meetingDate = :meetingDate " +
+            "AND b.status = :status " +
+            "AND b.startTime < :endTime " +
+            "AND b.endTime > :startTime")
+    List<Booking> findConflictingBookings(
+            @Param("roomId") UUID roomId,
+            @Param("meetingDate") LocalDate meetingDate,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime,
+            @Param("status") String status);
 }

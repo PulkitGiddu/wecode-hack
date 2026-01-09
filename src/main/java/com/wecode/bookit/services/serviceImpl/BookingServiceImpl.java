@@ -13,6 +13,7 @@ import com.wecode.bookit.repository.MeetingRoomRepository;
 import com.wecode.bookit.repository.UserRepository;
 import com.wecode.bookit.services.BookingService;
 import com.wecode.bookit.services.CacheService;
+import com.wecode.bookit.services.LockingService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,19 +36,22 @@ public class BookingServiceImpl implements BookingService {
     private final ManagerCreditSummaryRepository managerCreditSummaryRepository;
     private final CacheService cacheService;
     private final AmenityRepository amenityRepository;
+    private final LockingService lockingService;
 
     public BookingServiceImpl(BookingRepository bookingRepository,
                             MeetingRoomRepository meetingRoomRepository,
                             UserRepository userRepository,
                             ManagerCreditSummaryRepository managerCreditSummaryRepository,
                             CacheService cacheService,
-                            AmenityRepository amenityRepository) {
+                            AmenityRepository amenityRepository,
+                            LockingService lockingService) {
         this.bookingRepository = bookingRepository;
         this.meetingRoomRepository = meetingRoomRepository;
         this.userRepository = userRepository;
         this.managerCreditSummaryRepository = managerCreditSummaryRepository;
         this.cacheService = cacheService;
         this.amenityRepository = amenityRepository;
+        this.lockingService = lockingService;
     }
 
     @Override
@@ -61,61 +65,109 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponseDto bookRoom(UUID managerId, BookingRequestDto bookingRequestDto) {
+        UUID lockId = null;
 
-        User manager = userRepository.findById(managerId)
-                .orElseThrow(() -> new RuntimeException("Manager not found"));
+        try {
+            User manager = userRepository.findById(managerId)
+                    .orElseThrow(() -> new RuntimeException("Manager not found"));
 
-        MeetingRoom room = meetingRoomRepository.findById(bookingRequestDto.getRoomId())
-                .orElseThrow(() -> new RuntimeException("Room not found"));
+            MeetingRoom room = meetingRoomRepository.findById(bookingRequestDto.getRoomId())
+                    .orElseThrow(() -> new RuntimeException("Room not found"));
 
-        if (!room.getIsActive()) {
-            throw new RuntimeException("Room is not active");
+            if (!room.getIsActive()) {
+                throw new RuntimeException("Room is not active");
+            }
+
+            long durationInMinutes = java.time.Duration.between(
+                    bookingRequestDto.getStartTime(),
+                    bookingRequestDto.getEndTime()
+            ).toMinutes();
+
+            if (durationInMinutes <= 0) {
+                throw new RuntimeException("End time must be after start time");
+            }
+
+            try {
+                lockId = lockingService.acquireLock(
+                        bookingRequestDto.getRoomId(),
+                        managerId,
+                        bookingRequestDto.getMeetingDate(),
+                        bookingRequestDto.getStartTime(),
+                        bookingRequestDto.getEndTime()
+                );
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Cannot book room: " + e.getMessage());
+            }
+
+            // Check if there are existing bookings that conflict with this time slot
+            List<Booking> conflictingBookings = bookingRepository.findConflictingBookings(
+                    bookingRequestDto.getRoomId(),
+                    bookingRequestDto.getMeetingDate(),
+                    bookingRequestDto.getStartTime(),
+                    bookingRequestDto.getEndTime(),
+                    "ACTIVE"
+            );
+
+            if (!conflictingBookings.isEmpty()) {
+                lockingService.releaseLock(lockId, managerId);
+                Booking existingBooking = conflictingBookings.get(0);
+                User bookedByManager = userRepository.findById(existingBooking.getUserId()).orElse(null);
+                String bookedByName = (bookedByManager != null) ? bookedByManager.getName() : "Unknown Manager";
+                throw new RuntimeException("Cannot book room: Room is already booked by " + bookedByName +
+                        " from " + existingBooking.getStartTime() + " to " + existingBooking.getEndTime() +
+                        ". This room will be free from " + existingBooking.getEndTime());
+            }
+
+            double durationInHours = Math.ceil(durationInMinutes / 60.0);
+            Integer totalBookingCost = (int) (room.getRoomCost() * durationInHours);
+
+            if (manager.getCredits() < totalBookingCost) {
+                lockingService.releaseLock(lockId, managerId);
+                throw new RuntimeException("Insufficient credits. Required: " + totalBookingCost + ", Available: " + manager.getCredits());
+            }
+
+            manager.setCredits(manager.getCredits() - totalBookingCost);
+            userRepository.save(manager);
+
+            ManagerCreditSummary creditSummary = managerCreditSummaryRepository.findByUserId(managerId)
+                    .orElse(new ManagerCreditSummary());
+            creditSummary.setUserId(managerId);
+            creditSummary.setManagerName(manager.getName());
+            creditSummary.setEmail(manager.getEmail());
+            creditSummary.setTotalCredits(manager.getCredits());
+            creditSummary.setCreditsUsed(creditSummary.getCreditsUsed() + totalBookingCost);
+            managerCreditSummaryRepository.save(creditSummary);
+
+            Booking booking = new Booking();
+            booking.setBookingId(UUID.randomUUID());
+            booking.setRoomId(bookingRequestDto.getRoomId());
+            booking.setUserId(managerId);
+            booking.setMeetingTitle(bookingRequestDto.getMeetingTitle());
+            booking.setMeetingDate(bookingRequestDto.getMeetingDate());
+            booking.setMeetingType(bookingRequestDto.getMeetingType());
+            booking.setRoomName(room.getRoomName());
+            booking.setStartTime(bookingRequestDto.getStartTime());
+            booking.setEndTime(bookingRequestDto.getEndTime());
+            booking.setTotalCredits(totalBookingCost);
+            booking.setCheckInStatus("PENDING");
+            booking.setStatus("ACTIVE");
+
+            Booking savedBooking = bookingRepository.save(booking);
+
+            lockingService.releaseLock(lockId, managerId);
+
+            return convertToDto(savedBooking);
+
+        } catch (RuntimeException e) {
+            if (lockId != null) {
+                try {
+                    lockingService.releaseLock(lockId, managerId);
+                } catch (Exception lockException) {
+                    System.err.println("Error releasing lock: " + lockException.getMessage());
+                }
+            }
+            throw e;
         }
-
-        long durationInMinutes = java.time.Duration.between(
-                bookingRequestDto.getStartTime(),
-                bookingRequestDto.getEndTime()
-        ).toMinutes();
-
-        if (durationInMinutes <= 0) {
-            throw new RuntimeException("End time must be after start time");
-        }
-
-        double durationInHours = Math.ceil(durationInMinutes / 60.0);
-        Integer totalBookingCost = (int) (room.getRoomCost() * durationInHours);
-
-        if (manager.getCredits() < totalBookingCost) {
-            throw new RuntimeException("Insufficient credits. Required: " + totalBookingCost + ", Available: " + manager.getCredits());
-        }
-
-        manager.setCredits(manager.getCredits() - totalBookingCost);
-        userRepository.save(manager);
-
-        ManagerCreditSummary creditSummary = managerCreditSummaryRepository.findByUserId(managerId)
-                .orElse(new ManagerCreditSummary());
-        creditSummary.setUserId(managerId);
-        creditSummary.setManagerName(manager.getName());
-        creditSummary.setEmail(manager.getEmail());
-        creditSummary.setTotalCredits(manager.getCredits());
-        creditSummary.setCreditsUsed(creditSummary.getCreditsUsed() + totalBookingCost);
-        managerCreditSummaryRepository.save(creditSummary);
-
-        Booking booking = new Booking();
-        booking.setBookingId(UUID.randomUUID());
-        booking.setRoomId(bookingRequestDto.getRoomId());
-        booking.setUserId(managerId);
-        booking.setMeetingTitle(bookingRequestDto.getMeetingTitle());
-        booking.setMeetingDate(bookingRequestDto.getMeetingDate());
-        booking.setMeetingType(bookingRequestDto.getMeetingType());
-        booking.setRoomName(room.getRoomName());
-        booking.setStartTime(bookingRequestDto.getStartTime());
-        booking.setEndTime(bookingRequestDto.getEndTime());
-        booking.setTotalCredits(totalBookingCost);
-        booking.setCheckInStatus("PENDING");
-        booking.setStatus("ACTIVE");
-
-        Booking savedBooking = bookingRepository.save(booking);
-        return convertToDto(savedBooking);
     }
 
     @Override
