@@ -17,15 +17,12 @@
 - **Database Integrity & Concurrency Control**  
   Implement database transactions and concurrency control mechanisms to prevent race conditions during simultaneous booking attempts.  
   DONE ✅
+  Implement Pessimistic Locking for Concurrent Access to book meeting rooms. DONE ✅
 
 - **Infrastructure Connectivity**  
   Establish seamless connectivity between:
   - Frontend ↔ Backend  ✅
   - Backend ↔ Database  ✅
-
-- **5-Minute Locking Mechanism**  
-  Implement Pessimistic Locking for Concurrent Access to book meeting rooms. 
-  DONE ✅
 
 - **“Ghosting” Penalty Mechanism**  
   Implement logic to deduct **50 extra credits** as a penalty if a manager fails to **check-in** after successfully booking a room.
