@@ -19,9 +19,11 @@
   ![](images)
 
 - **Database Integrity & Concurrency Control**  
-  Implement database transactions and concurrency control mechanisms to prevent race conditions during simultaneous booking attempts.  
+  - Implement database transactions and concurrency control mechanisms to prevent race conditions during simultaneous booking attempts.  
   DONE ✅
-  Implement Pessimistic Locking for Concurrent Access to book meeting rooms. DONE ✅
+  
+  - Implement Pessimistic Locking for Concurrent Access to book meeting rooms. DONE ✅
+  
   ![](images/DB%20Lock.png)
 
 - **Infrastructure Connectivity**  
@@ -34,11 +36,14 @@
 - **“Ghosting” Penalty Mechanism**  
   Implement logic to deduct **50 extra credits** as a penalty if a manager fails to **check-in** after successfully booking a room.
   DONE ✅
+
   ![](images)
 
 - **"Use cache"**
   Use cache to reterive constant data from DB to avoid unnessary Api calls.
   DONE ✅
+
+  ![](images/Cache.png)
 
 ## Work Contributions
 
