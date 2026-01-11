@@ -697,36 +697,40 @@
                     <label class="form-label">Select Amenities</label>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 200px; overflow-y: auto; padding: 12px; background: rgba(243, 244, 246, 0.5); border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="PROJECTOR" style="width: 16px; height: 16px;">
-                            <span>Projector</span>
+                            <input type="checkbox" name="amenity" value="VIDEO_CONFERENCING" style="width: 16px; height: 16px;">
+                            <span>Video Conferencing</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                             <input type="checkbox" name="amenity" value="WHITEBOARD" style="width: 16px; height: 16px;">
                             <span>Whiteboard</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="WIFI" style="width: 16px; height: 16px;">
-                            <span>WiFi</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="VIDEO_CONFERENCE" style="width: 16px; height: 16px;">
-                            <span>Video Conference</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="SMART_TV" style="width: 16px; height: 16px;">
-                            <span>Smart TV</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                             <input type="checkbox" name="amenity" value="COFFEE_MACHINE" style="width: 16px; height: 16px;">
                             <span>Coffee Machine</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="AIR_CONDITIONING" style="width: 16px; height: 16px;">
-                            <span>Air Conditioning</span>
+                            <input type="checkbox" name="amenity" value="CONFERENCE_CALL" style="width: 16px; height: 16px;">
+                            <span>Conference Call</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
-                            <input type="checkbox" name="amenity" value="SOUND_SYSTEM" style="width: 16px; height: 16px;">
-                            <span>Sound System</span>
+                            <input type="checkbox" name="amenity" value="AUDIO_SYSTEM" style="width: 16px; height: 16px;">
+                            <span>Audio System</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="WATER_DISPENSER" style="width: 16px; height: 16px;">
+                            <span>Water Dispenser</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="PROJECTOR" style="width: 16px; height: 16px;">
+                            <span>Projector</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="WIFI" style="width: 16px; height: 16px;">
+                            <span>WiFi</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="ZOOM_CALL" style="width: 16px; height: 16px;">
+                            <span>Zoom Call</span>
                         </label>
                     </div>
                 </div>
@@ -1049,7 +1053,8 @@
                 roomType: document.getElementById('roomType').value,
                 seatingCapacity: parseInt(document.getElementById('seatingCapacity').value),
                 amenities: selectedAmenities,
-                perHourCost: parseFloat(document.getElementById('perHourCost').value)
+                perHourCost: parseFloat(document.getElementById('perHourCost').value),
+                userId: localStorage.getItem('userId')
             };
 
             try {
@@ -1121,7 +1126,8 @@
             const amenityData = {
                 name: document.getElementById('amenityName').value,
                 description: document.getElementById('amenityDescription').value,
-                creditsScore: parseFloat(document.getElementById('creditsScore').value)
+                creditsScore: parseFloat(document.getElementById('creditsScore').value),
+                userId: localStorage.getItem('userId')
             };
 
             try {
@@ -1182,6 +1188,7 @@
 
         // Initialize
         loadRooms();
+        loadAmenities();
     </script>
 </body>
 </html>
