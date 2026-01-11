@@ -131,10 +131,6 @@ The system enforces a **Layered Authorization (RBAC)** model.
 
 
 ## Demo Video
-<video width="640" controls>
-  <source src="https://youtu.be/I3oUlAKQm4I" type="video/mp4">
-</video>
 
-https://github.com/PulkitGiddu/wecode-hack/blob/main/images/Bookit.mp4
-
+https://github.com/user-attachments/assets/2e97482a-348b-4381-9cab-d4186b0a6f0e
 **Pushed to perfection by *Team 404 Not Found* 💪🏻🛠**
