@@ -68,7 +68,21 @@ async function apiCall(endpoint, options = {}) {
         endpoint = `${endpoint}${separator}userId=${userId}`;
     }
 
-    const config = { ...defaultOptions, ...options };
+    const config = { 
+        ...defaultOptions, 
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...(options.headers || {})
+        }
+    };
+
+    console.log('🌐 API Call:', {
+        endpoint,
+        method: config.method,
+        body: config.body,
+        headers: config.headers
+    });
 
     try {
         const response = await fetch(endpoint, config);
@@ -203,6 +217,10 @@ const ManagerAPI = {
     
     bookRoom: async (bookingData) => {
         const url = buildUrl(API_ENDPOINTS.MANAGER.BOOK_ROOM);
+        console.log('🔵 ManagerAPI.bookRoom called');
+        console.log('📤 URL:', url);
+        console.log('📦 Booking Data:', bookingData);
+        console.log('📝 JSON String:', JSON.stringify(bookingData));
         return await apiCall(url, {
             method: 'POST',
             body: JSON.stringify(bookingData)

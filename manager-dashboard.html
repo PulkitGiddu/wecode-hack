@@ -2075,16 +2075,18 @@
                 amenitiesDisplay.innerHTML = '<span style="color: #6B7280;">No amenities included</span>';
             }
 
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            
             // Clear previous form data
             document.getElementById('meetingTitle').value = '';
-            document.getElementById('meetingDate').value = '';
+            document.getElementById('meetingDate').value = today;
             document.getElementById('startTime').value = '';
             document.getElementById('endTime').value = '';
             document.getElementById('durationDisplay').value = '';
             document.getElementById('totalCostDisplay').textContent = 'pts0';
 
             // Set minimum date to today
-            const today = new Date().toISOString().split('T')[0];
             document.getElementById('meetingDate').setAttribute('min', today);
 
             // Show modal
@@ -2145,23 +2147,39 @@
             e.preventDefault();
 
             const meetingDate = document.getElementById('meetingDate').value;
-            const startTime = document.getElementById('startTime').value;
-            const endTime = document.getElementById('endTime').value;
+            const startTimeInput = document.getElementById('startTime').value;
+            const endTimeInput = document.getElementById('endTime').value;
+            const meetingTitle = document.getElementById('meetingTitle').value;
+            const roomId = document.getElementById('selectedRoomId').value;
+            const userId = localStorage.getItem('userId');
 
+            // Validation
+            if (!meetingDate || !startTimeInput || !endTimeInput || !meetingTitle || !roomId || !userId) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Backend expects: meetingDate (LocalDate), startTime (LocalDateTime), endTime (LocalDateTime)
             const bookingData = {
-                userId: localStorage.getItem('userId'),
-                roomId: document.getElementById('selectedRoomId').value,
-                meetingTitle: document.getElementById('meetingTitle').value,
-                startDateTime: `${meetingDate}T${startTime}`,
-                endDateTime: `${meetingDate}T${endTime}`
+                userId: userId,
+                roomId: roomId,
+                meetingTitle: meetingTitle,
+                meetingDate: meetingDate,                               // LocalDate: "2026-01-12"
+                meetingType: "REGULAR",                                 // Default meeting type
+                startTime: `${meetingDate}T${startTimeInput}:00`,      // LocalDateTime: "2026-01-12T14:30:00"
+                endTime: `${meetingDate}T${endTimeInput}:00`           // LocalDateTime: "2026-01-12T16:00:00"
             };
 
             try {
-                console.log('Booking data:', bookingData);
+                console.log('📋 Booking data being sent:', bookingData);
+                console.log('📅 Meeting Date:', bookingData.meetingDate);
+                console.log('⏰ Start Time:', bookingData.startTime);
+                console.log('⏰ End Time:', bookingData.endTime);
+                console.log('📝 JSON:', JSON.stringify(bookingData, null, 2));
                 
                 // Call booking API
                 const result = await bookRoom(bookingData);
-                console.log('Booking result:', result);
+                console.log('✅ Booking result:', result);
                 
                 alert('Meeting booked successfully!');
                 closeBookModal();
@@ -2169,7 +2187,7 @@
                 // Reload available rooms to reflect updated availability
                 loadAvailableRooms();
             } catch (error) {
-                console.error('Error booking room:', error);
+                console.error('❌ Error booking room:', error);
                 alert('Error booking room: ' + error.message);
             }
         });
