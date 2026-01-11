@@ -2149,6 +2149,7 @@
             const endTime = document.getElementById('endTime').value;
 
             const bookingData = {
+                userId: localStorage.getItem('userId'),
                 roomId: document.getElementById('selectedRoomId').value,
                 meetingTitle: document.getElementById('meetingTitle').value,
                 startDateTime: `${meetingDate}T${startTime}`,
@@ -2156,14 +2157,17 @@
             };
 
             try {
-                // TODO: Call your booking API endpoint here
                 console.log('Booking data:', bookingData);
+                
+                // Call booking API
+                const result = await bookRoom(bookingData);
+                console.log('Booking result:', result);
                 
                 alert('Meeting booked successfully!');
                 closeBookModal();
                 
-                // Optionally redirect to organize-meeting page with pre-filled data
-                // window.location.href = `organize-meeting.html?roomId=${bookingData.roomId}`;
+                // Reload available rooms to reflect updated availability
+                loadAvailableRooms();
             } catch (error) {
                 console.error('Error booking room:', error);
                 alert('Error booking room: ' + error.message);
