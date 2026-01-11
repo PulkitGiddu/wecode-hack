@@ -130,5 +130,7 @@ The system enforces a **Layered Authorization (RBAC)** model.
 👉 **[Click here to view the complete project documentation](https://docs.google.com/document/d/15EL4luxd8VmWfRGuHchPDdozEf4jHgQToxO-ctwLBG4/edit?tab=t.7u45fnw8850e#heading=h.gd8q705vbsli)**
 
 
+## Demo Video
+![](images/Bookit.mp4)
 
 **Pushed to perfection by *Team 404 Not Found* 💪🏻🛠**
