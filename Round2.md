@@ -9,27 +9,35 @@
 - **Rate Limiting**  
   Implementing rate limiting using "bucket4j" to prevent API abuse and ensure overall system stability during peak usage.
   DONE ✅
+  
+  ![](images/Rate_Limiter.png)
 
 - **Security & Authentication**  
   Setup JWT (JSON Web Tokens) for authentication and secure endpoints using `@PreAuthorize` rules for role-based access control. 
   DONE ✅
 
+  ![](images)
+
 - **Database Integrity & Concurrency Control**  
   Implement database transactions and concurrency control mechanisms to prevent race conditions during simultaneous booking attempts.  
   DONE ✅
   Implement Pessimistic Locking for Concurrent Access to book meeting rooms. DONE ✅
+  ![](images/DB%20Lock.png)
 
 - **Infrastructure Connectivity**  
   Establish seamless connectivity between:
   - Frontend ↔ Backend  ✅
   - Backend ↔ Database  ✅
+  
+  ![](images/INFCON.jpeg)
 
 - **“Ghosting” Penalty Mechanism**  
   Implement logic to deduct **50 extra credits** as a penalty if a manager fails to **check-in** after successfully booking a room.
   DONE ✅
+  ![](images)
 
 - **"Use cache"**
-  Use cache to reterive contant data from DB to avoid unnessary Api calls.
+  Use cache to reterive constant data from DB to avoid unnessary Api calls.
   DONE ✅
 
 ## Work Contributions

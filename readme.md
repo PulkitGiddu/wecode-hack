@@ -77,7 +77,7 @@ The system enforces a **Layered Authorization (RBAC)** model.
 
 ##  **System Interactions**
 
-![Workflow](images/workflow.png)
+![Workflow](images/INFCON.jpeg)
 
 ## Implementation Strategy & Team Distribution
 
