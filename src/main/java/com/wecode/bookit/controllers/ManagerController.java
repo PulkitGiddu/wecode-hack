@@ -7,8 +7,10 @@ import com.wecode.bookit.dto.TodayBookingsDto;
 import com.wecode.bookit.dto.MeetingRoomDto;
 import com.wecode.bookit.entity.Role;
 import com.wecode.bookit.entity.User;
+import com.wecode.bookit.handler.BookingHandler;
 import com.wecode.bookit.repository.UserRepository;
 import com.wecode.bookit.services.BookingService;
+import com.wecode.bookit.validator.ManagerValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +28,15 @@ public class ManagerController {
 
     private final BookingService bookingService;
     private final UserRepository userRepository;
+    private final ManagerValidator managerValidator;
+    private final BookingHandler bookingHandler;
 
-    public ManagerController(BookingService bookingService, UserRepository userRepository) {
+    public ManagerController(BookingService bookingService, UserRepository userRepository,
+                           ManagerValidator managerValidator, BookingHandler bookingHandler) {
         this.bookingService = bookingService;
         this.userRepository = userRepository;
+        this.managerValidator = managerValidator;
+        this.bookingHandler = bookingHandler;
     }
 
     private void verifyManagerRole(UUID userId) {
@@ -49,14 +56,16 @@ public class ManagerController {
 
     @PostMapping("/bookRoom")
     public ResponseEntity<BookingResponseDto> bookRoom(@RequestBody BookingRequestDto bookingRequestDto) {
+        ManagerValidator.ValidationResult validationResult = managerValidator.validateBookingRequest(bookingRequestDto);
+        if (!validationResult.isValid()) {
+            return bookingHandler.handleValidationError(validationResult.getMessage());
+        }
         verifyManagerRole(bookingRequestDto.getUserId());
         try {
             BookingResponseDto booking = bookingService.bookRoom(bookingRequestDto.getUserId(), bookingRequestDto);
-            booking.setStatusCode(HttpStatus.CREATED.value());
-            booking.setMessage("Room booked successfully by manager: " + bookingRequestDto.getUserId());
-            return ResponseEntity.status(HttpStatus.CREATED).body(booking);
+            return ResponseEntity.status(HttpStatus.CREATED).body(bookingHandler.buildSuccessResponse(booking));
         } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+            return bookingHandler.handleBookingException(e);
         }
     }
 
@@ -77,19 +86,12 @@ public class ManagerController {
     }
 
     @DeleteMapping("/booking/{bookingId}")
-    public ResponseEntity<Map<String, String>> cancelBooking(
+    public ResponseEntity<String> cancelBooking(
             @RequestParam UUID userId,
             @PathVariable UUID bookingId) {
         verifyManagerRole(userId);
-        try {
-            bookingService.cancelBooking(bookingId);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Booking cancelled successfully by manager: " + userId);
-            response.put("statusCode", String.valueOf(HttpStatus.OK.value()));
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        bookingService.cancelBooking(bookingId);
+        return ResponseEntity.ok("Booking cancelled successfully");
     }
 
     @GetMapping("/profile")
@@ -119,13 +121,17 @@ public class ManagerController {
     public ResponseEntity<CheckInResponseDto> checkIn(
             @RequestParam UUID userId,
             @PathVariable UUID bookingId) {
-        verifyManagerRole(userId);
-        try {
-            CheckInResponseDto checkInResponse = bookingService.checkIn(userId, bookingId);
-            return ResponseEntity.ok(checkInResponse);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+        ManagerValidator.ValidationResult userValidation = managerValidator.validateUserId(userId);
+        if (!userValidation.isValid()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        ManagerValidator.ValidationResult bookingValidation = managerValidator.validateBookingId(bookingId);
+        if (!bookingValidation.isValid()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        verifyManagerRole(userId);
+        CheckInResponseDto checkInResponse = bookingService.checkIn(userId, bookingId);
+        return ResponseEntity.ok(checkInResponse);
     }
 }
 
