@@ -43,7 +43,7 @@ The system enforces a **Layered Authorization (RBAC)** model.
 
 ## Data Flow Diagram
 
-![](images/DFD.png)
+![](images/dataflow.png)
 
 ##  System workflow 
 
@@ -132,5 +132,8 @@ The system enforces a **Layered Authorization (RBAC)** model.
 
 ## Demo Video
 
-https://github.com/user-attachments/assets/2e97482a-348b-4381-9cab-d4186b0a6f0e
+<video width="640" height="300" controls>
+  <source src="images/Bookit.mp4" type="video/mp4">
+</video>
+
 **Pushed to perfection by *Team 404 Not Found* 💪🏻🛠**
