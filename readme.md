@@ -132,8 +132,9 @@ The system enforces a **Layered Authorization (RBAC)** model.
 
 ## Demo Video
 
-<video width="640" height="300" controls>
-  <source src="images/Bookit.mp4" type="video/mp4">
+https://github.com/user-attachments/assets/926f9159-8c09-469e-a990-9d01c022d20c
+
+4" type="video/mp4">
 </video>
 
 **Pushed to perfection by *Team 404 Not Found* 💪🏻🛠**
