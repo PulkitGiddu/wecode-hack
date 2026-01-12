@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BookIt</title>
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F3F4F6;
+            color: #1F2937;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('./assets/img/bg.png') center center / cover no-repeat;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        /* Header */
+        .top-header {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 12px 0;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            height: 32px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            background: rgba(243, 244, 246, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-logout {
+            padding: 8px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            color: #DC2626;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 90px 24px 30px;
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 6px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        /* Tabs Navigation */
+        .tabs-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border-radius: 16px;
+            padding: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .room-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .room-card-content {
+            padding: 20px;
+        }
+
+        .capacity-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #3B82F6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-actions-top {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+
+        .card-title-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: #6B7280;
+            text-transform: capitalize;
+        }
+
+        .price-tag {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .amenities-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .amenity-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #3B82F6;
+            font-weight: 500;
+        }
+
+        .add-amenity-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            background: transparent;
+            border: 1px dashed rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            color: #3B82F6;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .add-amenity-btn:hover {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: #3B82F6;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #6B7280;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #3B82F6;
+            transform: translateY(-2px);
+        }
+
+        .icon-btn.delete:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #DC2626;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(41px);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(243, 244, 246, 0.5);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(209, 213, 219, 0.6);
+            border-radius: 10px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #1F2937;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: white;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 12px 24px;
+            background: rgba(107, 114, 128, 0.1);
+            border: 1px solid rgba(107, 114, 128, 0.3);
+            border-radius: 10px;
+            color: #4B5563;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(107, 114, 128, 0.2);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(40px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3B82F6;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty-description {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 24px;
+        }
+
+      
+
+        .add-room-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .add-room-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .tabs-container {
+                overflow-x: auto;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="./assets/img/bookitlogo.png" alt="Bookit">
+                
+            </div>
+            <div class="header-actions">
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <span style="font-size: 13px; font-weight: 500; color: #374151;">Admin</span>
+                </div>
+                <button class="btn-logout" onclick="logout()">
+                    <i data-feather="log-out" style="width: 16px; height: 16px;"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 class="page-title">Admin Dashboard</h1>
+                <p class="page-subtitle">Manage rooms and amenities for your organization</p>
+            </div>
+            <button class="add-room-btn" onclick="openCreateModal()">
+                <i data-feather="plus" style="width: 16px; height: 16px;"></i>
+                <span id="addBtnText">Add Room</span>
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('rooms')">
+                <i data-feather="home" style="width: 16px; height: 16px;"></i>
+                Rooms Management
+            </button>
+            <button class="tab-btn" onclick="switchTab('amenities')">
+                <i data-feather="package" style="width: 16px; height: 16px;"></i>
+                Amenities 
+            </button>
+        </div>
+
+        <!-- Rooms Section -->
+        <div id="roomsSection" class="content-section active">
+            <div id="roomsList" class="cards-grid">
+                <!-- Rooms will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Amenities Section -->
+        <div id="amenitiesSection" class="content-section">
+            <div id="amenitiesList" class="cards-grid">
+                <!-- Amenities will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FAB for current tab -->
+    <!-- <button class="fab" id="fabBtn" onclick="openCreateModal()">
+        <i data-feather="plus" style="width: 18px; height: 18px;"></i>
+        <span id="fabText">Add Room</span>
+    </button> -->
+
+    <!-- Room Modal -->
+    <div id="roomModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="roomModalTitle">Create Room</h2>
+                <button class="modal-close" onclick="closeRoomModal()">
+                    <i data-feather="x" style="width: 18px; height: 18px;"></i>
+                </button>
+            </div>
+            <form id="roomForm">
+                <input type="hidden" id="roomId">
+                <div class="form-group">
+                    <label class="form-label">Room Name</label>
+                    <input type="text" class="form-input" id="roomName" placeholder="e.g., Conference Room A" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Room Type</label>
+                    <select class="form-select" id="roomType" required>
+                        <option value="">Select Room Type</option>
+                        <option value="Conference Room">Conference Room</option>
+                        <option value="Meeting Room">Meeting Room</option>
+                        <option value="Training Room">Training Room</option>
+                        <option value="Board Room">Board Room</option>
+                        <option value="Discussion Room">Discussion Room</option>
+                        <option value="Huddle Room">Huddle Room</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Seating Capacity</label>
+                    <input type="number" class="form-input" id="seatingCapacity" placeholder="e.g., 10" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Select Amenities</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 200px; overflow-y: auto; padding: 12px; background: rgba(243, 244, 246, 0.5); border-radius: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="VIDEO_CONFERENCING" style="width: 16px; height: 16px;">
+                            <span>Video Conferencing</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="WHITEBOARD" style="width: 16px; height: 16px;">
+                            <span>Whiteboard</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="COFFEE_MACHINE" style="width: 16px; height: 16px;">
+                            <span>Coffee Machine</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="CONFERENCE_CALL" style="width: 16px; height: 16px;">
+                            <span>Conference Call</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="AUDIO_SYSTEM" style="width: 16px; height: 16px;">
+                            <span>Audio System</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="WATER_DISPENSER" style="width: 16px; height: 16px;">
+                            <span>Water Dispenser</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="PROJECTOR" style="width: 16px; height: 16px;">
+                            <span>Projector</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="WIFI" style="width: 16px; height: 16px;">
+                            <span>WiFi</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="amenity" value="ZOOM_CALL" style="width: 16px; height: 16px;">
+                            <span>Zoom Call</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Per Hour Cost (pts)</label>
+                    <input type="number" step="0.01" class="form-input" id="perHourCost" placeholder="e.g., 50.00" min="0" required>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="submit" class="btn-primary">
+                        <span id="roomBtnText">Create Room</span>
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="closeRoomModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Amenity Modal -->
+    <div id="amenityModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="amenityModalTitle">Create Amenity</h2>
+                <button class="modal-close" onclick="closeAmenityModal()">
+                    <i data-feather="x" style="width: 18px; height: 18px;"></i>
+                </button>
+            </div>
+            <form id="amenityForm">
+                <input type="hidden" id="amenityId">
+                <div class="form-group">
+                    <label class="form-label">Amenity Name</label>
+                    <input type="text" class="form-input" id="amenityName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="amenityDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Credits Score</label>
+                    <input type="number" step="0.01" class="form-input" id="creditsScore" required>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="submit" class="btn-primary">
+                        <span id="amenityBtnText">Create Amenity</span>
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="closeAmenityModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load API Module -->
+    <script src="./api.js"></script>
+    
+    <!-- Load Security Layer -->
+    <script src="./js/common.js"></script>
+    
+    <script>
+        feather.replace();
+
+        let currentTab = 'rooms';
+
+        // Tab Switching
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            
+            if (tab === 'rooms') {
+                document.querySelector('[onclick="switchTab(\'rooms\')"]').classList.add('active');
+                document.getElementById('roomsSection').classList.add('active');
+                document.getElementById('addBtnText').textContent = 'Add Room';
+                document.getElementById('fabText').textContent = 'Add Room';
+                loadRooms();
+            } else {
+                document.querySelector('[onclick="switchTab(\'amenities\')"]').classList.add('active');
+                document.getElementById('amenitiesSection').classList.add('active');
+                document.getElementById('addBtnText').textContent = 'Add Amenity';
+                document.getElementById('fabText').textContent = 'Add Amenity';
+                loadAmenities();
+            }
+            feather.replace();
+        }
+
+        // Load Rooms
+        async function loadRooms() {
+            try {
+                // Fetch rooms from API
+                const rooms = await getAllRooms();
+                displayRooms(rooms && rooms.length > 0 ? rooms : getDummyRooms());
+            } catch (error) {
+                console.error('Error loading rooms:', error);
+                // Use dummy data on error
+                displayRooms(getDummyRooms());
+            }
+        }
+
+        // Display Rooms
+        function displayRooms(rooms) {
+            const roomsList = document.getElementById('roomsList');
+            roomsList.innerHTML = rooms.map(room => {
+                // Handle both backend format (roomName, roomId) and old format (name, id)
+                const roomName = room.roomName || room.name || 'Unnamed Room';
+                const roomId = room.roomId || room.id;
+                const seatingCapacity = room.seatingCapacity || 0;
+                const perHourCost = room.perHourCost || 0;
+                const roomType = room.roomType || 'Meeting Room';
+                
+                return `
+                <div class="glass-card">
+                    <img src="${room.image || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'}" alt="${roomName}" class="room-image">
+                    <div class="capacity-badge">
+                        <i data-feather="users" style="width: 14px; height: 14px;"></i>
+                        <span>${seatingCapacity} Seats</span>
+                    </div>
+                    <div class="card-actions-top">
+                        <button class="icon-btn" onclick='handleEditRoom("${roomId}")' title="Edit">
+                            <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button class="icon-btn delete" onclick='handleDeleteRoom("${roomId}")' title="Delete">
+                            <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                    <div class="room-card-content">
+                        <div class="card-header-section">
+                            <div style="flex: 1;">
+                                <h3 class="card-title-text">${roomName}</h3>
+                                <p class="card-subtitle">${roomType}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="price-tag">${perHourCost}pts</div>
+                                <div class="price-label">/ hour</div>
+                            </div>
+                        </div>
+                        <div class="amenities-container">
+                            ${Array.isArray(room.amenities) ? room.amenities.map(amenity => {
+                                // Format amenity name if it's in uppercase (e.g., COFFEE_MACHINE -> Coffee Machine)
+                                let formattedAmenity = amenity;
+                                if (typeof formatAmenityName === 'function') {
+                                    formattedAmenity = formatAmenityName(amenity);
+                                } else {
+                                    // Fallback formatting
+                                    formattedAmenity = amenity
+                                        .toLowerCase()
+                                        .split('_')
+                                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                        .join(' ');
+                                }
+                                
+                                const iconMap = {
+                                    'Projector': 'monitor',
+                                    'Whiteboard': 'edit-3',
+                                    'Wifi': 'wifi',
+                                    'WiFi': 'wifi',
+                                    'Video Conference': 'video',
+                                    'Conference Call': 'phone',
+                                    'Smart TV': 'tv',
+                                    'TV': 'tv',
+                                    'Tv': 'tv',
+                                    'Coffee Machine': 'coffee',
+                                    'Air Conditioning': 'wind',
+                                    'Sound System': 'speaker',
+                                    'Water Dispenser': 'droplet'
+                                };
+                                const icon = iconMap[formattedAmenity] || 'check-circle';
+                                return `<div class="amenity-badge">
+                                    <i data-feather="${icon}" style="width: 14px; height: 14px;"></i>
+                                    <span>${formattedAmenity}</span>
+                                </div>`;
+                            }).join('') : ''}
+                        </div>
+                        <button class="add-amenity-btn" onclick="alert('Add amenity functionality coming soon!')">
+                            <i data-feather="plus" style="width: 16px; height: 16px;"></i>
+                            Add Amenity
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            feather.replace();
+        }
+
+        // Load Amenities
+        async function loadAmenities() {
+            try {
+                console.log('🔄 Starting to load amenities...');
+                // Fetch amenities from API
+                const amenities = await getAllAmenities();
+                
+                console.log('✅ Received amenities from API:', amenities);
+                console.log('📊 Total amenities count:', amenities ? amenities.length : 0);
+                console.log('📦 Type:', typeof amenities, 'Is Array:', Array.isArray(amenities));
+                
+                if (amenities && amenities.length > 0) {
+                    console.log('');
+                    console.log('🎯 AMENITIES DATA STRUCTURE - FOR BOOKING MAPPING:');
+                    console.log('================================================');
+                    amenities.forEach((amenity, index) => {
+                        console.log(`\nAmenity #${index + 1}:`);
+                        console.log('  - amenityId:', amenity.amenityId);
+                        console.log('  - amenityName:', amenity.amenityName);
+                        console.log('  - creditCost:', amenity.creditCost);
+                        console.log('  - description:', amenity.description);
+                        console.log('  Full object:', JSON.stringify(amenity, null, 2));
+                    });
+                    console.log('================================================');
+                    console.log('');
+                    
+                    displayAmenities(amenities);
+                } else {
+                    console.log('⚠️ No amenities from API, using dummy data');
+                    displayAmenities(getDummyAmenities());
+                }
+            } catch (error) {
+                console.error('❌ Error loading amenities:', error);
+                console.log('🔄 Falling back to dummy data');
+                // Use dummy data on error
+                displayAmenities(getDummyAmenities());
+            }
+        }
+
+        // Display Amenities
+        function displayAmenities(amenities) {
+            console.log('Displaying amenities:', amenities); // Debug log
+            
+            const amenitiesList = document.getElementById('amenitiesList');
+            
+            if (!amenities || amenities.length === 0) {
+                amenitiesList.innerHTML = '<div class="glass-card"><p class="text-center">No amenities available</p></div>';
+                return;
+            }
+            
+            amenitiesList.innerHTML = amenities.map(amenity => {
+                console.log('Processing amenity:', amenity); // Debug log
+                
+                // Handle both backend format (amenityName, creditCost) and old format (name, creditsScore)
+                const amenityName = amenity.amenityName || amenity.name || 'Unnamed Amenity';
+                console.log('Amenity name:', amenityName); // Debug log
+                
+                // Format the name (e.g., COFFEE_MACHINE -> Coffee Machine)
+                let formattedName = amenityName;
+                if (typeof formatAmenityName === 'function') {
+                    formattedName = formatAmenityName(amenityName);
+                } else {
+                    // Fallback formatting if function not available
+                    formattedName = amenityName
+                        .toLowerCase()
+                        .split('_')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ');
+                }
+                console.log('Formatted name:', formattedName); // Debug log
+                
+                const creditCost = amenity.creditCost || amenity.creditsScore || 0;
+                const amenityId = amenity.amenity_id || amenity.amenityId || amenity.id;
+                const isActive = amenity.is_active !== undefined ? amenity.is_active : true;
+                
+                return `
+                <div class="glass-card ${!isActive ? 'opacity-50' : ''}">
+                    <div class="card-header-section">
+                        <div>
+                            <h3 class="card-title-text">${formattedName}</h3>
+                            <p class="card-subtitle">${amenity.description || `${formattedName} facility`}</p>
+                        </div>
+                        <div class="card-actions">
+                            <button class="icon-btn" onclick='handleEditAmenity("${amenityId}")'>
+                                <i data-feather="edit-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                            <button class="icon-btn delete" onclick='handleDeleteAmenity("${amenityId}")'>
+                                <i data-feather="trash-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Credits Score</span>
+                        <span class="info-value">${creditCost} credits</span>
+                    </div>
+                    ${!isActive ? '<div class="info-row"><span class="badge" style="background: #DC2626; color: white; padding: 4px 8px; border-radius: 4px;">Inactive</span></div>' : ''}
+                </div>
+                `;
+            }).join('');
+            feather.replace();
+        }
+
+        // Modal Functions
+        function openCreateModal() {
+            if (currentTab === 'rooms') {
+                document.getElementById('roomModalTitle').textContent = 'Create Room';
+                document.getElementById('roomBtnText').textContent = 'Create Room';
+                document.getElementById('roomForm').reset();
+                document.getElementById('roomId').value = '';
+                document.getElementById('roomModal').classList.add('active');
+            } else {
+                document.getElementById('amenityModalTitle').textContent = 'Create Amenity';
+                document.getElementById('amenityBtnText').textContent = 'Create Amenity';
+                document.getElementById('amenityForm').reset();
+                document.getElementById('amenityId').value = '';
+                document.getElementById('amenityModal').classList.add('active');
+            }
+            feather.replace();
+        }
+
+        function closeRoomModal() {
+            document.getElementById('roomModal').classList.remove('active');
+        }
+
+        function closeAmenityModal() {
+            document.getElementById('amenityModal').classList.remove('active');
+        }
+
+        // Room CRUD
+        document.getElementById('roomForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const roomId = document.getElementById('roomId').value;
+            const selectedAmenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked'))
+                .map(checkbox => checkbox.value);
+            
+            const roomData = {
+                roomName: document.getElementById('roomName').value,
+                roomType: document.getElementById('roomType').value,
+                seatingCapacity: parseInt(document.getElementById('seatingCapacity').value),
+                amenities: selectedAmenities,
+                perHourCost: parseFloat(document.getElementById('perHourCost').value),
+                userId: localStorage.getItem('userId')
+            };
+
+            try {
+                if (roomId) {
+                    roomData.roomId = roomId;
+                    await updateRoom(roomData);
+                    alert('Room updated successfully!');
+                } else {
+                    await createRoom(roomData);
+                    alert('Room created successfully!');
+                }
+                closeRoomModal();
+                loadRooms();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving room: ' + error.message);
+            }
+        });
+
+        async function handleEditRoom(id) {
+            try {
+                const room = await getRoomById(id);
+                
+                document.getElementById('roomId').value = room.roomId || room.id;
+                document.getElementById('roomName').value = room.roomName || room.name || '';
+                document.getElementById('roomType').value = room.roomType || '';
+                document.getElementById('seatingCapacity').value = room.seatingCapacity || '';
+                document.getElementById('perHourCost').value = room.perHourCost || '';
+                
+                // Check the appropriate amenity checkboxes
+                document.querySelectorAll('input[name="amenity"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                if (Array.isArray(room.amenities)) {
+                    room.amenities.forEach(amenity => {
+                        const checkbox = document.querySelector(`input[name="amenity"][value="${amenity}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                
+                document.getElementById('roomModalTitle').textContent = 'Edit Room';
+                document.getElementById('roomBtnText').textContent = 'Update Room';
+                document.getElementById('roomModal').classList.add('active');
+                feather.replace();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error loading room details: ' + error.message);
+            }
+        }
+
+        async function handleDeleteRoom(id) {
+            if (!confirm('Are you sure you want to delete this room?')) return;
+            
+            try {
+                await deleteRoom(id);
+                loadRooms();
+                alert('Room deleted successfully!');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting room: ' + error.message);
+            }
+        }
+
+        // Amenity CRUD
+        document.getElementById('amenityForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const amenityId = document.getElementById('amenityId').value;
+            const amenityData = {
+                name: document.getElementById('amenityName').value,
+                description: document.getElementById('amenityDescription').value,
+                creditsScore: parseFloat(document.getElementById('creditsScore').value),
+                userId: localStorage.getItem('userId')
+            };
+
+            try {
+                if (amenityId) {
+                    amenityData.amenityId = amenityId;
+                    await updateAmenity(amenityData);
+                    alert('Amenity updated successfully!');
+                } else {
+                    await createAmenity(amenityData);
+                    alert('Amenity created successfully!');
+                }
+                closeAmenityModal();
+                loadAmenities();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving amenity: ' + error.message);
+            }
+        });
+
+        async function handleEditAmenity(id) {
+            try {
+                const amenity = await getAmenityById(id);
+                
+                document.getElementById('amenityId').value = amenity.amenityId || amenity.id;
+                document.getElementById('amenityName').value = amenity.name || '';
+                document.getElementById('amenityDescription').value = amenity.description || '';
+                document.getElementById('creditsScore').value = amenity.creditsScore || '';
+                
+                document.getElementById('amenityModalTitle').textContent = 'Edit Amenity';
+                document.getElementById('amenityBtnText').textContent = 'Update Amenity';
+                document.getElementById('amenityModal').classList.add('active');
+                feather.replace();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error loading amenity details: ' + error.message);
+            }
+        }
+
+        async function handleDeleteAmenity(id) {
+            if (!confirm('Are you sure you want to delete this amenity?')) return;
+            
+            try {
+                await deleteAmenity(id);
+                loadAmenities();
+                alert('Amenity deleted successfully!');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting amenity: ' + error.message);
+            }
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Initialize
+        loadRooms();
+        loadAmenities();
+    </script>
+</body>
+</html>

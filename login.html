@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bookit</title>
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/login_new.css">
+</head>
+<body>
+    <!-- Login Container -->
+    <div class="login-container">
+        <!-- Left Side - Branding -->
+        <div class="login-left">
+            <div class="brand-content">
+                <div class="logo-wrapper">
+                    <img src="./assets/img/bookitlogo.png" alt="Bookit" class="logo">
+                </div>
+               
+                <div class="intro-text">
+                    <h2 class="intro-heading">Transform Your Meeting Experience</h2>
+                    <p class="intro-description">
+                        Streamline room bookings, optimize space utilization, and enhance collaboration across your organization with our <em>intelligent</em> meeting room management platform.
+                    </p>
+                </div>
+
+                <div class="features-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span class="feature-text">Smart Meetings Scheduling</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span class="feature-text">Real-time availability</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span class="feature-text">Seamless integrations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Login Form -->
+        <div class="login-right">
+            <div class="glass-card">
+                <div class="form-container">
+                    <h2 class="welcome-title">Welcome Back</h2>
+                    <p class="welcome-subtitle">Enter your credentials to access your dashboard</p>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                class="form-input" 
+                                id="email" 
+                                placeholder="user@company.com"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="password-wrapper">
+                                <input 
+                                    type="password" 
+                                    name="password" 
+                                    class="form-input" 
+                                    id="password" 
+                                    placeholder="Enter password"
+                                    required
+                                >
+                                <button type="button" class="password-toggle" id="togglePassword">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-login">Sign In</button>
+                    </form>
+                    
+                    <div style="text-align: center; margin-top: 20px; color: #666; font-size: 14px;">
+                        <p>Don't have an Account? <a href="signup.html" style="color: #4F46E5; text-decoration: none; font-weight: 500;">Sign up</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password toggle functionality
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.classList.toggle('active');
+        });
+
+        // Backend communication
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const loginData = { email, password };
+            console.log('Frontend sending:', loginData);
+            
+            try {
+                const res = await fetch('http://localhost:8081/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(loginData)
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    console.log('Backend response:', data);
+                    
+                    // Store user data in localStorage - no validation, just store what we get
+                    localStorage.setItem('userToken', data.token || data.accessToken || data.jwt || 'dummy-token');
+                    localStorage.setItem('userName', data.name || data.username || email.split('@')[0]);
+                    localStorage.setItem('userEmail', data.email || email);
+                    localStorage.setItem('userRole', (data.role || data.userRole || 'MEMBER').toUpperCase());
+                    localStorage.setItem('userId', data.userId || data.id || '');
+                    
+                    console.log('✅ Login successful!');
+                    console.log('Redirecting to dashboard...');
+                    
+                    // Redirect based on user role from response
+                    const userRole = (data.role || data.userRole || 'MEMBER').toUpperCase();
+                    switch(userRole) {
+                        case 'ADMIN':
+                            window.location.href = 'admindashboard.html';
+                            break;
+                        case 'MANAGER':
+                            window.location.href = 'manager-dashboard.html';
+                            break;
+                        case 'MEMBER':
+                            window.location.href = 'member-dashboard.html';
+                            break;
+                        default:
+                            window.location.href = 'member-dashboard.html';
+                    }
+                } else {
+                    const errorText = await res.text();
+                    console.error('Login failed:', errorText);
+                    alert('Login failed. Please check your credentials.');
+                }
+            } catch (err) {
+                console.error('Request failed:', err);
+                alert('Login failed. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+</html>

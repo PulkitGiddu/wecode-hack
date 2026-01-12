@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+    <link rel="stylesheet" href="./css/homepage.css">
+    <title>Organize Meeting</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        /* Changed dark gradient to light, professional gradient background */
+        body {
+            padding-top: 70px;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e3eef7 50%, #f0f4f8 100%);
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Header - matching dashboard style */
+        header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 6px 0;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        header .container-fluid {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header .navbar {
+            padding: 0;
+            border: none;
+        }
+
+        header .navbar-brand {
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-right: auto !important;
+            display: flex;
+            align-items: center;
+        }
+
+        header .navbar-brand::before,
+        header .navbar-brand::after {
+            display: none !important;
+        }
+
+        header .navbar-brand img {
+            border: none !important;
+            height: 28px;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+
+        /* Navigation links */
+        header .nav-link {
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B7280;
+            transition: all 0.3s;
+            border: none;
+            border-radius: 8px;
+        }
+
+        header .nav-link:hover {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        header .navbar-nav {
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Logout button */
+        header .navbar-nav .btn-primary {
+            padding: 9px 20px !important;
+            margin: 0 0 0 10px !important;
+            width: auto !important;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            color: white;
+        }
+
+        header .navbar-nav .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        
+
+        /* Improved header with proper max-width container and better alignment */
+        .organize-meeting {
+            padding: 20px 0 50px;
+            min-height: calc(100vh - 70px - 120px);
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        /* Enhanced heading with better styling */
+        .organize-meeting h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b3558;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        /* Added subtitle styling */
+        .organize-meeting .subtitle {
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-bottom: 22px;
+            font-weight: 400;
+        }
+
+        .organize-meeting h2::after {
+            content: "";
+            display: block;
+            width: 70px;
+            height: 3.5px;
+            background: linear-gradient(90deg, #3369FF, #5b8fff);
+            margin: 8px auto 12px;
+            border-radius: 6px;
+        }
+
+        /* Increased border-radius for more rounded form card */
+        #organizeMeetingForm {
+            background: white;
+            padding: 32px 38px;
+            border-radius: 20px;
+            box-shadow: 0 8px 35px rgba(11, 53, 88, 0.15);
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid rgba(51, 105, 255, 0.12);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #0b3558;
+            margin-bottom: 7px;
+            font-size: 0.89rem;
+        }
+
+        /* Styled inputs with better focus states */
+        .form-control, .form-select {
+            border: 1px solid #d0dbe6;
+            border-radius: 8px;
+            padding: 10px 13px;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+            font-size: 0.91rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #3369FF;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(51, 105, 255, 0.1);
+        }
+
+        /* Updated button to use primary blue from brand color */
+        .btn-primary {
+            background: linear-gradient(135deg, #3369FF 0%, #5b8fff 100%);
+            border: none;
+            padding: 11px 45px;
+            border-radius: 9px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: auto;
+            max-width: 260px;
+            margin: 18px auto 0;
+            box-shadow: 0 4px 15px rgba(51, 105, 255, 0.3);
+            font-size: 0.94rem;
+            display: block;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2557e0 0%, #3369FF 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(51, 105, 255, 0.4);
+        }
+
+        footer {
+            margin-top: auto;
+            position: relative;
+        }
+
+        /* Better responsive layout */
+        @media (max-width: 768px) {
+            #organizeMeetingForm {
+                padding: 22px 18px;
+            }
+            
+            .organize-meeting h2 {
+                font-size: 1.75rem;
+            }
+
+            .btn-primary {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Adjusted zoom for large screens - slightly more zoomed in */
+        @media (min-width: 1600px) {
+            body {
+                zoom: 0.95;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+
+    <!-- Main content -->
+    <div id="main">
+        <!-- Header Section -->
+        <header>
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light">
+          
+                    <a class="navbar-brand me-auto" href="./homepage.html">
+                        <img src="./assets/img/bookitlogo.png" alt="Bookit">
+                    </a>
+                  
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a class="nav-link" href="manager-dashboard.html">Manager Dashboard</a></li>
+                            <li class="nav-item"><a class="btn btn-primary" href="homepage.html" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>   
+    </div>  
+    
+    <!-- Organize Meeting Content -->
+    <section class="organize-meeting">
+        <div class="container">
+            <h2 class="text-center">Organize Meeting</h2>
+            <form id="organizeMeetingForm">
+                <div class="mb-3">
+                    <label for="meetingTitle" class="form-label">Meeting Title</label>
+                    <input type="text" class="form-control" id="meetingTitle" placeholder="Enter meeting title" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="meetingDate" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="meetingDate" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="startTime" class="form-label">Start Time</label>
+                        <input type="time" class="form-control" id="startTime" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="endTime" class="form-label">End Time</label>
+                        <input type="time" class="form-control" id="endTime" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="roomSelection" class="form-label">Select Room</label>
+                    <select class="form-select" id="roomSelection" required>
+                        <option value="">Choose a room</option>
+                        <option value="Room 1">Room 1</option>
+                        <option value="Room 2">Room 2</option>
+                        <option value="Room 3">Room 3</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="meetingType" class="form-label">Meeting Type</label>
+                    <select class="form-select" id="meetingType" required>
+                        <option value="">Select Meeting Type</option>
+                        <option value="Conference Room">Conference Room</option>
+                        <option value="Meeting Room">Meeting Room</option>
+                        <option value="Training Room">Training Room</option>
+                        <option value="Board Room">Board Room</option>
+                        <option value="Discussion Room">Discussion Room</option>
+                         <option value="Huddle Room">Huddle Room</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary" onclick="window.location.href = 'manager-dashboard.html';">Book Meeting</button>
+            </form>
+        </div>
+    </section>
+
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        function logout() {
+            window.location.href = 'homepage.html';
+        }
+
+        document.getElementById('organizeMeetingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Calculate duration from start and end time
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            
+            if (!startTime || !endTime) {
+                alert('Please enter both start and end times.');
+                return;
+            }
+            
+            // Convert time strings to hours
+            const [startHour, startMinute] = startTime.split(':').map(Number);
+            const [endHour, endMinute] = endTime.split(':').map(Number);
+            
+            const startInMinutes = startHour * 60 + startMinute;
+            const endInMinutes = endHour * 60 + endMinute;
+            
+            if (endInMinutes <= startInMinutes) {
+                alert('End time must be after start time.');
+                return;
+            }
+            
+            const durationInMinutes = endInMinutes - startInMinutes;
+            const meetingDuration = Math.ceil(durationInMinutes / 60); // Convert to hours, rounding up
+            
+            alert(`Meeting booked successfully!\nDuration: pts{meetingDuration} hour(s)`);
+        });
+    </script>
+
+    <!-- custom js file import -->
+    <script src="./js/homepage.js"></script>
+
+    <!-- fontawsome  -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+    <title>Analyze Meetings - Bookit</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #E5E7EB;
+            color: #1F2937;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            zoom: 0.9;
+        }
+
+        /* Added background matching dashboard */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('./assets/img/bg.png') center center / cover no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(219, 234, 254, 0.4) 0%, rgba(243, 244, 246, 0.5) 50%, rgba(239, 246, 255, 0.4) 100%);
+            z-index: -1;
+        }
+
+        /* Updated header to match dashboard exactly */
+        .top-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 6px 0;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(243, 244, 246, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #6B7280;
+        }
+
+        .header-icon-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #3B82F6;
+            transform: translateY(-2px);
+        }
+
+        /* Changed user avatar to logout button */
+        .logout-btn {
+            padding: 6px 14px;
+            border-radius: 8px;
+            background: rgba(243, 244, 246, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #6B7280;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #EF4444;
+            transform: translateY(-2px);
+        }
+
+        /* Navigation Tabs matching dashboard */
+        .nav-tabs-container {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            top: 46px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            padding: 0;
+        }
+
+        .nav-tabs-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-tab {
+            padding: 10px 18px;
+            background: transparent;
+            border: none;
+            color: #6B7280;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-tab:hover {
+            color: #3B82F6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .nav-tab.active {
+            color: #3B82F6;
+            border-bottom-color: #3B82F6;
+        }
+
+        /* Main Dashboard */
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 100px 24px 30px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 20px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 12px;
+            color: #6B7280;
+            font-weight: 400;
+        }
+
+        /* Updated filters bar - removed All Rooms dropdown, keeping only room selector */
+        .filters-bar {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border-radius: 16px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            border: 0.5px solid rgba(255, 255, 255, 0.4);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        /* Room buttons instead of dropdown */
+        .room-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .room-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            border-radius: 8px;
+            background: rgba(249, 250, 251, 0.6);
+            backdrop-filter: blur(10px);
+            color: #6B7280;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .room-btn:hover {
+            background: rgba(239, 246, 255, 0.8);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #3B82F6;
+        }
+
+        .room-btn.active {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            border-color: #3B82F6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Time range tabs matching dashboard style */
+        .time-range-tabs {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .time-range-tabs button {
+            padding: 6px 16px;
+            border: none;
+            background: transparent;
+            color: #6B7280;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .time-range-tabs button:hover {
+            background: rgba(243, 244, 246, 0.8);
+            color: #1F2937;
+        }
+
+        .time-range-tabs button.active {
+            background: rgba(239, 246, 255, 0.8);
+            color: #3B82F6;
+        }
+
+        /* Updated stats grid matching dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: rgba(249, 250, 251, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 14px;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-card:hover {
+            background: rgba(239, 246, 255, 0.7);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.12);
+        }
+
+        .stat-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(239, 246, 255, 0.8);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3B82F6;
+            margin-bottom: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .stat-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .stat-icon.calendar {
+            background: rgba(239, 246, 255, 0.8);
+        }
+
+        .stat-icon.calendar svg {
+            stroke: #3B82F6;
+        }
+
+        .stat-icon.clock {
+            background: rgba(243, 232, 255, 0.8);
+        }
+
+        .stat-icon.clock svg {
+            stroke: #7C3AED;
+        }
+
+        .stat-icon.chart {
+            background: rgba(220, 252, 231, 0.8);
+        }
+
+        .stat-icon.chart svg {
+            stroke: #10B981;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #6B7280;
+            line-height: 1.3;
+            font-weight: 500;
+        }
+
+        /* Charts section with side-by-side layout on desktop */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            border: 0.5px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.4s;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .chart-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 280px;
+        }
+
+        .chart-insight {
+            font-size: 11px;
+            color: #6B7280;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .filters-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .time-range-tabs {
+                margin-left: 0;
+                justify-content: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Updated header to match Manager Dashboard -->
+    <header class="top-header">
+        <div class="header-container">
+            <a class="logo" href="./homepage.html">
+                <img src="./assets/img/bookitlogo.png" alt="Bookit">
+              
+            </a>
+            
+            <div class="header-actions">
+                <button class="header-icon-btn">
+                    <i data-feather="search" style="width: 16px; height: 16px;"></i>
+                </button>
+                <button class="header-icon-btn">
+                    <i data-feather="bell" style="width: 16px; height: 16px;"></i>
+                </button>
+                <button class="header-icon-btn">
+                    <i data-feather="settings" style="width: 16px; height: 16px;"></i>
+                </button>
+                <button class="logout-btn" onclick="logout()">
+                    <i data-feather="log-out" style="width: 14px; height: 14px;"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation tabs matching dashboard -->
+    <div class="nav-tabs-container">
+        <div class="nav-tabs-wrapper">
+            <a href="manager-dashboard.html" class="nav-tab">
+                <i data-feather="calendar" style="width: 14px; height: 14px;"></i>
+                Organize Meetings
+            </a>
+            <a href="analytics.html" class="nav-tab active">
+                <i data-feather="bar-chart-2" style="width: 14px; height: 14px;"></i>
+                Analyze Meetings
+            </a>
+            <a href="manageTeam.html" class="nav-tab">
+                <i data-feather="users" style="width: 14px; height: 14px;"></i>
+                Team
+            </a>
+            <a href="notifications.html" class="nav-tab">
+                <i data-feather="bell" style="width: 14px; height: 14px;"></i>
+                Notifications
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Analyze Meetings</h1>
+            <p class="dashboard-subtitle">View performance reports and room analytics</p>
+        </div>
+
+        <!-- Updated filters bar with room buttons instead of dropdown -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label>Select Room:</label>
+                <div class="room-buttons">
+                    <button class="room-btn" onclick="selectRoom('Room 1')">Room 1</button>
+                    <button class="room-btn" onclick="selectRoom('Room 2')">Room 2</button>
+                    <button class="room-btn" onclick="selectRoom('Room 3')">Room 3</button>
+                </div>
+            </div>
+            
+            <div class="time-range-tabs">
+                <button class="active" onclick="setTimeRange('Week', this)">Week</button>
+                <button onclick="setTimeRange('Month', this)">Month</button>
+                <button onclick="setTimeRange('Year', this)">Year</button>
+            </div>
+        </div>
+
+        <!-- Stats grid showing analytics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon calendar">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                    </svg>
+                </div>
+                <div class="stat-value" id="totalBookings">-</div>
+                <div class="stat-label">Total Bookings</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon chart">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                    </svg>
+                </div>
+                <div class="stat-value" id="occupancyRate">-</div>
+                <div class="stat-label">Occupancy Rate</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon clock">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="stat-value" id="avgDuration">-</div>
+                <div class="stat-label">Average Duration</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon chart">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                    </svg>
+                </div>
+                <div class="stat-value" id="peakHours">-</div>
+                <div class="stat-label">Peak Hours</div>
+            </div>
+        </div>
+
+        <!-- Charts section -->
+        <div class="charts-section">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Occupancy Trend Over Time</h3>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="occupancyTrendChart"></canvas>
+                </div>
+                <p class="chart-insight" id="occupancyInsight">Select a room to view occupancy trends.</p>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Booking Duration Distribution</h3>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="roomComparisonChart"></canvas>
+                </div>
+                <p class="chart-insight" id="comparisonInsight">Select a room to view booking patterns.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize feather icons
+        feather.replace();
+
+        let selectedRoom = null;
+        let selectedTimeRange = 'Week';
+        let occupancyChart = null;
+        let comparisonChart = null;
+
+        function selectRoom(roomName) {
+            selectedRoom = roomName;
+            
+            // Update button states
+            document.querySelectorAll('.room-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === roomName) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Load analytics for selected room
+            updateAnalytics();
+        }
+
+        function setTimeRange(range, element) {
+            selectedTimeRange = range;
+            
+            // Update button states
+            document.querySelectorAll('.time-range-tabs button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (element) {
+                element.classList.add('active');
+            }
+            
+            // Update analytics if room is selected
+            if (selectedRoom) {
+                updateAnalytics();
+            }
+        }
+
+        function updateAnalytics() {
+            if (!selectedRoom) {
+                return;
+            }
+
+            // Simulate fetching data based on selected room and time range
+            const mockData = {
+                'Room 1': {
+                    totalBookings: 45,
+                    occupancyRate: '78%',
+                    avgDuration: '1.2h',
+                    peakHours: '2-4 PM',
+                    trendData: [65, 70, 75, 72, 78, 82, 80],
+                    durationData: [15, 25, 35, 20, 5]
+                },
+                'Room 2': {
+                    totalBookings: 38,
+                    occupancyRate: '65%',
+                    avgDuration: '1.5h',
+                    peakHours: '10-12 PM',
+                    trendData: [60, 62, 68, 65, 70, 72, 69],
+                    durationData: [10, 20, 30, 30, 10]
+                },
+                'Room 3': {
+                    totalBookings: 52,
+                    occupancyRate: '89%',
+                    avgDuration: '1.8h',
+                    peakHours: '1-3 PM',
+                    trendData: [80, 85, 88, 86, 90, 92, 89],
+                    durationData: [8, 15, 25, 35, 17]
+                }
+            };
+
+            const data = mockData[selectedRoom];
+
+            // Update stats
+            document.getElementById('totalBookings').textContent = data.totalBookings;
+            document.getElementById('occupancyRate').textContent = data.occupancyRate;
+            document.getElementById('avgDuration').textContent = data.avgDuration;
+            document.getElementById('peakHours').textContent = data.peakHours;
+
+            // Update insights
+            document.getElementById('occupancyInsight').textContent = 
+                `pts{selectedRoom} shows pts{data.occupancyRate} occupancy rate this pts{selectedTimeRange.toLowerCase()}.`;
+            document.getElementById('comparisonInsight').textContent = 
+                `Average booking duration for pts{selectedRoom} is pts{data.avgDuration} during pts{selectedTimeRange.toLowerCase()}.`;
+
+            // Update charts
+            updateOccupancyChart(data.trendData);
+            updateComparisonChart(data.durationData);
+        }
+
+        function updateOccupancyChart(data) {
+            const ctx = document.getElementById('occupancyTrendChart').getContext('2d');
+            
+            if (occupancyChart) {
+                occupancyChart.destroy();
+            }
+
+            const labels = selectedTimeRange === 'Week' ? 
+                ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] :
+                selectedTimeRange === 'Month' ?
+                ['Week 1', 'Week 2', 'Week 3', 'Week 4'] :
+                ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            occupancyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Occupancy %',
+                        data: data,
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#3B82F6',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateComparisonChart(data) {
+            const ctx = document.getElementById('roomComparisonChart').getContext('2d');
+            
+            if (comparisonChart) {
+                comparisonChart.destroy();
+            }
+
+            comparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['< 30min', '30-60min', '1-2h', '2-3h', '> 3h'],
+                    datasets: [{
+                        label: 'Number of Bookings',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(168, 85, 247, 0.8)',
+                            'rgba(192, 132, 252, 0.8)'
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 5
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = './login.html';
+            }
+        }
+    </script>
+</body>
+</html>

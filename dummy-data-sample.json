@@ -1,0 +1,98 @@
+{
+  "amenities": [
+    {
+      "amenity_id": "a1e4f8c2-1234-4567-89ab-cdef12345671",
+      "amenityName": "PROJECTOR",
+      "creditCost": 5,
+      "is_active": true
+    },
+    {
+      "amenity_id": "a1e4f8c2-1234-4567-89ab-cdef12345672",
+      "amenityName": "WIFI",
+      "creditCost": 10,
+      "is_active": true
+    },
+    {
+      "amenity_id": "a1e4f8c2-1234-4567-89ab-cdef12345673",
+      "amenityName": "CONFERENCE_CALL",
+      "creditCost": 15,
+      "is_active": true
+    },
+    {
+      "amenity_id": "a1e4f8c2-1234-4567-89ab-cdef12345674",
+      "amenityName": "WHITEBOARD",
+      "creditCost": 5,
+      "is_active": true
+    },
+    {
+      "amenity_id": "a1e4f8c2-1234-4567-89ab-cdef12345675",
+      "amenityName": "WATER_DISPENSER",
+      "creditCost": 5,
+      "is_active": true
+    },
+    {
+      "amenity_id": "a1e4f8c2-1234-4567-89ab-cdef12345676",
+      "amenityName": "TV",
+      "creditCost": 10,
+      "is_active": true
+    },
+    {
+      "amenity_id": "a1e4f8c2-1234-4567-89ab-cdef12345677",
+      "amenityName": "COFFEE_MACHINE",
+      "creditCost": 10,
+      "is_active": true
+    }
+  ],
+  "rooms": [
+    {
+      "roomId": "649cc30f-622b-462d-8ff4-e3dafb2b9195",
+      "roomName": "Bhimtal",
+      "roomType": "Huddle",
+      "seatingCapacity": 20,
+      "perHourCost": 100,
+      "amenities": ["COFFEE_MACHINE", "WIFI"],
+      "roomCost": 120,
+      "isActive": true
+    },
+    {
+      "roomId": "749cc30f-622b-462d-8ff4-e3dafb2b9196",
+      "roomName": "Nainital",
+      "roomType": "Conference",
+      "seatingCapacity": 50,
+      "perHourCost": 200,
+      "amenities": ["PROJECTOR", "WIFI", "WHITEBOARD", "CONFERENCE_CALL"],
+      "roomCost": 235,
+      "isActive": true
+    },
+    {
+      "roomId": "849cc30f-622b-462d-8ff4-e3dafb2b9197",
+      "roomName": "Ranikhet",
+      "roomType": "Meeting",
+      "seatingCapacity": 30,
+      "perHourCost": 150,
+      "amenities": ["TV", "WIFI", "WATER_DISPENSER"],
+      "roomCost": 175,
+      "isActive": true
+    },
+    {
+      "roomId": "949cc30f-622b-462d-8ff4-e3dafb2b9198",
+      "roomName": "Mussoorie",
+      "roomType": "Board Room",
+      "seatingCapacity": 100,
+      "perHourCost": 300,
+      "amenities": ["PROJECTOR", "CONFERENCE_CALL", "TV", "WIFI", "COFFEE_MACHINE"],
+      "roomCost": 345,
+      "isActive": true
+    },
+    {
+      "roomId": "a49cc30f-622b-462d-8ff4-e3dafb2b9199",
+      "roomName": "Dehradun",
+      "roomType": "Huddle",
+      "seatingCapacity": 15,
+      "perHourCost": 80,
+      "amenities": ["WHITEBOARD", "WIFI"],
+      "roomCost": 95,
+      "isActive": true
+    }
+  ]
+}

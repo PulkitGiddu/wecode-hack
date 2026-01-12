@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookit - Automated Meeting Room Management</title>
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/homepage.css">
+</head>
+<body>
+    <!-- Improved Loader -->
+    <div class="preloader" id="preloader">
+        <div class="loader-content">
+            <div class="loader-logo">BOOKIT</div>
+            <div class="loader-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <span class="closebtn" onclick="closeSidebar()">&times;</span>
+        <a href="#highlights">Highlights</a>
+        <a href="#working">See Working</a>
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+        <a href="./login.html">Login</a>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg">
+                <span class="menu-toggle" onclick="openSidebar()">
+                    <i class="fas fa-bars"></i>
+                </span>
+                <a class="navbar-brand" href="./homepage.html">
+                    <img src="./assets/img/bookitlogo.png" alt="Bookit">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item"><a class="nav-link" href="#highlights">Highlights</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#working">See Working</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                        <li class="nav-item"><a href="./login.html" class="btn btn-login">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1>Streamline Your Meeting Room Management</h1>
+                    <p>Efficiently manage your meeting rooms and enhance collaboration with Bookit's Meeting Room Management Solution</p>
+                    <a href="./login.html" class="btn btn-hero">Get Started</a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="./assets/img/businesspeople-working-together.png" alt="Business Meeting" draggable="false">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Improved Key Highlights -->
+    <section id="highlights" class="highlights">
+        <div class="container">
+            <h2 class="text-center">Key Highlights of Bookit's Rooms</h2>
+            <p class="section-subtitle">Discover the powerful features that make room management effortless</p>
+            
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <div class="highlight-icon">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <h4>Add Amenities</h4>
+                    <p>Assign different rooms with different amenities to enable informed decisions and optimal space utilization. Each room can be configured with specific features like projectors, whiteboards, video conferencing, and more.</p>
+                </div>
+
+                <div class="highlight-card">
+                    <div class="highlight-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>Customize Room Availability</h4>
+                    <p>Customize room availability by deciding on the days and times for booking with flexible scheduling options. Set recurring schedules, block off maintenance periods, and manage availability with ease.</p>
+                </div>
+
+                <div class="highlight-card">
+                    <div class="highlight-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Set Room Capacity</h4>
+                    <p>Set the maximum number of people the room can occupy for better space management. Ensure optimal utilization and prevent overcrowding with intelligent capacity planning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="working" class="how-it-works">
+        <div class="container">
+            <h2 class="text-center">How It Works</h2>
+            <p class="section-subtitle">Simple, efficient, and powerful room management in three steps</p>
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="work-card">
+                        <i class="fas fa-building"></i>
+                        <h5>Easily Create Rooms</h5>
+                        <p>Create rooms on Bookit's web portal with all necessary details and configurations.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="work-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <h5>Efficiently Book Meeting Rooms</h5>
+                        <p>Book rooms with ease through the web portal or mobile app with real-time availability.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="work-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h5>Informed Decisions via Analytics</h5>
+                        <p>Utilize analytics to optimize room usage, booking patterns, and resource allocation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="text-center">Key Features</h2>
+            <p class="section-subtitle">Everything you need for seamless meeting room management</p>
+            <div class="row mt-5">
+                <div class="col-md-3">
+                    <div class="feature-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h5>Room Booking</h5>
+                        <p>Enable employees to book meeting rooms easily with intuitive interface.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h5>Room Amenities</h5>
+                        <p>Choose meeting rooms with the required amenities for your needs.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card">
+                        <i class="fas fa-user-plus"></i>
+                        <h5>Invite Easily</h5>
+                        <p>Send invites to employees and visitors seamlessly for meetings.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-card">
+                        <i class="fas fa-clock"></i>
+                        <h5>Room Availability</h5>
+                        <p>Quickly find available times for booking rooms in real-time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Improved FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="text-center">Frequently Asked Questions</h2>
+            <p class="section-subtitle"></p>
+           <p class="section-subtitle"></p>
+            <p class="section-subtitle"></p>
+            
+            <div class="faq-container">
+                <div class="faq-item active">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h5 class="faq-question-text">How does Bookit's Meeting Room Management solution work?</h5>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer" style="max-height: 200px;">
+                        <div class="faq-answer-content">
+                            Bookit's solution allows you to efficiently manage meeting rooms by providing a centralized platform for booking, analytics, and management with real-time updates. Our intuitive interface makes it easy for employees to find and book the perfect meeting space.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h5 class="faq-question-text">What kind of reports can Bookit generate?</h5>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Generate detailed reports on room usage, booking patterns, peak hours, and utilization metrics to optimize resource allocation. Our analytics dashboard provides insights into booking trends, popular rooms, and helps you make data-driven decisions.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h5 class="faq-question-text">How long does implementation take?</h5>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Implementation time varies based on organization size and customization needs, typically taking 2-4 weeks for complete setup. Our dedicated support team will guide you through every step of the process.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h5 class="faq-question-text">Is Bookit available on mobile devices?</h5>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! Bookit is fully responsive and available as a mobile app for both iOS and Android platforms. Book rooms on the go, check availability, and manage your meetings from anywhere.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Footer -->
+    <footer>
+        <div class="footer-main">
+            <div class="container">
+                <div class="row">
+                    <!-- Brand Column -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="footer-brand">
+                            <a href="./homepage.html" class="footer-logo">BOOKIT</a>
+                            <p class="footer-tagline">
+                                Streamlining meeting room management with innovative solutions. Transform the way your organization books and manages spaces.
+                            </p>
+                            <div class="footer-social">
+                                <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h5>Quick Links</h5>
+                            <ul class="footer-links">
+                                <li><a href="#highlights">Highlights</a></li>
+                                <li><a href="#working">How It Works</a></li>
+                                <li><a href="#features">Features</a></li>
+                                <li><a href="#faq">FAQ</a></li>
+                                <li><a href="./login.html">Login</a></li>
+                            </ul>
+                        </div>
+                    </div>      
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <p class="footer-copyright">
+                        © 2024 Bookit. All rights reserved.
+                    </p>
+                    <div class="footer-legal-links">
+                        <a href="#">Terms & Conditions</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Cookie Policy</a>
+                        <a href="#">Manage Cookies</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/homepage.js"></script>
+</body>
+</html>
